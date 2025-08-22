@@ -13,6 +13,9 @@ import Usuarios from "./pages/usuarios";
 import Notificaciones from "./pages/notificaciones";
 import CambiosUrgentes from "./pages/cambios-urgentes";
 import CalendarioPersonal from "./pages/calendario";
+import AprobacionPage from "./pages/aprobacion";
+import AuditoriaPage from "./pages/auditoria";
+import ConfiguracionPage from "./pages/configuracion";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,9 +37,9 @@ const App = () => (
             <Route path="usuarios" element={<Usuarios />} />
             <Route path="notificaciones" element={<Notificaciones />} />
             <Route path="cambios-urgentes" element={<CambiosUrgentes />} />
-            <Route path="aprobacion" element={<div className="p-8 text-center text-muted-foreground">Aprobación & Publicación - Próximamente</div>} />
-            <Route path="auditoria" element={<div className="p-8 text-center text-muted-foreground">Auditoría - Próximamente</div>} />
-            <Route path="configuracion" element={<div className="p-8 text-center text-muted-foreground">Configuración - Próximamente</div>} />
+            <Route path="aprobacion" element={<AprobacionPage />} />
+            <Route path="auditoria" element={<AuditoriaPage />} />
+            <Route path="configuracion" element={<ConfiguracionPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
