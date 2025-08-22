@@ -14,7 +14,8 @@ import {
   CheckCircle,
   Plus,
   MoreHorizontal,
-  Settings
+  Settings,
+  MessageSquare
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -22,6 +23,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SuggestionsDrawer } from "@/components/planeacion/suggestions-drawer";
+import { GeneratePlanningModal } from "@/components/planeacion/generate-planning-modal";
 
 const materias = [
   {
@@ -91,9 +94,12 @@ export default function Planeacion() {
   const [materiaSeleccionada, setMateriaSeleccionada] = useState(1);
   const [cursoActivo, setCursoActivo] = useState(1);
   const [drawerAbierto, setDrawerAbierto] = useState(false);
+  const [modalPlaneacion, setModalPlaneacion] = useState(false);
+
+  const materiaActual = materias.find(m => m.id === materiaSeleccionada);
 
   return (
-    <div className="h-full flex gap-6">
+    <div className="h-full flex gap-6 relative">
       {/* Panel Izquierdo - Materias */}
       <div className="w-1/4 space-y-4">
         <div className="flex items-center justify-between">
@@ -152,11 +158,15 @@ export default function Planeacion() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Planeación de Cursos</h1>
-            <p className="text-muted-foreground">Gestión Estratégica - GES001</p>
+            <p className="text-muted-foreground">
+              {materiaActual?.nombre} - {materiaActual?.codigo}
+            </p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline">Validar</Button>
-            <Button>Generar planeación</Button>
+            <Button onClick={() => setModalPlaneacion(true)}>
+              Generar planeación
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon">
@@ -305,14 +315,14 @@ export default function Planeacion() {
                   {/* Sample sessions */}
                   <div className="space-y-2">
                     {index === 2 && (
-                      <div className="bg-primary/10 border border-primary/20 rounded p-2 h-24">
+                      <div className="bg-primary/10 border border-primary/20 rounded p-2 h-24 cursor-pointer hover:bg-primary/20 transition-colors">
                         <div className="text-xs font-medium">GES001-01</div>
                         <div className="text-xs text-muted-foreground">Dr. Mendoza</div>
                         <div className="text-xs">Aula 204</div>
                       </div>
                     )}
                     {index === 4 && (
-                      <div className="bg-destructive/10 border border-destructive/20 rounded p-2 h-24">
+                      <div className="bg-destructive/10 border border-destructive/20 rounded p-2 h-24 cursor-pointer hover:bg-destructive/20 transition-colors">
                         <div className="text-xs font-medium">GES001-02</div>
                         <div className="text-xs text-muted-foreground">Dra. García</div>
                         <div className="text-xs flex items-center gap-1">
@@ -379,21 +389,40 @@ export default function Planeacion() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Sugerencias Drawer Trigger */}
-        <div className="fixed right-0 top-1/2 transform -translate-y-1/2 z-40">
-          <Button
-            variant="outline"
-            className="rounded-l-lg rounded-r-none shadow-elegant"
-            onClick={() => setDrawerAbierto(true)}
-          >
-            <div className="writing-vertical-rl text-sm font-medium">
-              Sugerencias/Cambios
-              <Badge className="ml-2 bg-destructive text-destructive-foreground">3</Badge>
-            </div>
-          </Button>
-        </div>
       </div>
+
+      {/* Sugerencias Drawer Trigger */}
+      <div className="fixed right-0 top-1/2 transform -translate-y-1/2 z-40">
+        <Button
+          variant="outline"
+          className="rounded-l-lg rounded-r-none shadow-elegant bg-card border-r-0 pr-4"
+          onClick={() => setDrawerAbierto(true)}
+        >
+          <div className="flex items-center gap-2">
+            <MessageSquare className="h-4 w-4" />
+            <div className="writing-vertical-rl text-sm font-medium whitespace-nowrap">
+              Sugerencias/Cambios
+            </div>
+            <Badge className="bg-destructive text-destructive-foreground text-xs">3</Badge>
+          </div>
+        </Button>
+      </div>
+
+      {/* Modales y Drawers */}
+      <SuggestionsDrawer 
+        open={drawerAbierto} 
+        onOpenChange={setDrawerAbierto} 
+      />
+      
+      <GeneratePlanningModal
+        open={modalPlaneacion}
+        onOpenChange={setModalPlaneacion}
+        curso={materiaActual ? {
+          nombre: materiaActual.nombre,
+          codigo: materiaActual.codigo,
+          grupo: "01"
+        } : undefined}
+      />
     </div>
   );
 }
