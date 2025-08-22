@@ -2,95 +2,115 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Icesi Posgrados Design System - All colors MUST be HSL */
 
 @layer base {
   :root {
+    /* Icesi Brand Colors */
+    --icesi-primary: 247 85% 61%; /* #5555EA */
+    --icesi-primary-light: 240 100% 95%; /* #E4E9FF */
+    --icesi-primary-foreground: 0 0% 100%; /* white */
+    
+    /* Text Colors */
+    --icesi-text-primary: 236 25% 32%; /* #3F4159 */
+    --icesi-text-black: 0 0% 0%; /* #000000 */
+    
+    /* Status Colors */
+    --icesi-success: 153 75% 35%; /* #12985A */
+    --icesi-success-support: 143 51% 55%; /* #4CB979 */
+    --icesi-alert: 16 74% 55%; /* #E9683B */
+    --icesi-accent: 66 73% 65%; /* #E4EB60 */
+    
+    /* Neutral Colors */
+    --icesi-border: 235 18% 90%; /* #E3E4EC */
+    --icesi-neutral-light: 240 43% 97%; /* #F7F8FE */
+    --icesi-neutral-muted: 218 18% 68%; /* #ABB8C3 */
+    
+    /* Semantic Mappings */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    --foreground: var(--icesi-text-primary);
+    
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: var(--icesi-text-primary);
+    
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --popover-foreground: var(--icesi-text-primary);
+    
+    --primary: var(--icesi-primary);
+    --primary-foreground: var(--icesi-primary-foreground);
+    
+    --secondary: var(--icesi-primary-light);
+    --secondary-foreground: var(--icesi-primary);
+    
+    --muted: var(--icesi-neutral-light);
+    --muted-foreground: var(--icesi-neutral-muted);
+    
+    --accent: var(--icesi-accent);
+    --accent-foreground: var(--icesi-text-black);
+    
+    --destructive: var(--icesi-alert);
+    --destructive-foreground: var(--icesi-primary-foreground);
+    
+    --success: var(--icesi-success);
+    --success-foreground: var(--icesi-primary-foreground);
+    
+    --border: var(--icesi-border);
+    --input: var(--icesi-border);
+    --ring: var(--icesi-primary);
+    
+    --radius: 0.75rem; /* 12px as specified */
+    
+    /* Custom Shadows */
+    --shadow-elegant: 0 6px 20px hsl(0 0% 0% / 0.06);
+    --shadow-soft: 0 2px 8px hsl(0 0% 0% / 0.04);
+    
+    /* Sidebar specific */
+    --sidebar-background: var(--icesi-neutral-light);
+    --sidebar-foreground: var(--icesi-text-primary);
+    --sidebar-primary: var(--icesi-primary);
+    --sidebar-primary-foreground: var(--icesi-primary-foreground);
+    --sidebar-accent: var(--icesi-primary-light);
+    --sidebar-accent-foreground: var(--icesi-primary);
+    --sidebar-border: var(--icesi-border);
+    --sidebar-ring: var(--icesi-primary);
+    
+    /* State specific colors */
+    --status-draft: 45 93% 90%; /* #FFF8E6 */
+    --status-approved: 145 44% 89%; /* #E6F7EF */
+    --status-published: var(--icesi-primary-light);
+    --status-conflict: 0 69% 93%; /* #FDECEC */
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --background: var(--icesi-text-primary);
+    --foreground: var(--icesi-primary-foreground);
+    
+    --card: var(--icesi-text-primary);
+    --card-foreground: var(--icesi-primary-foreground);
+    
+    --popover: var(--icesi-text-primary);
+    --popover-foreground: var(--icesi-primary-foreground);
+    
+    --primary: var(--icesi-primary-foreground);
+    --primary-foreground: var(--icesi-primary);
+    
+    --secondary: 236 25% 25%;
+    --secondary-foreground: var(--icesi-primary-foreground);
+    
+    --muted: 236 25% 25%;
+    --muted-foreground: var(--icesi-neutral-muted);
+    
+    --border: 236 25% 25%;
+    --input: 236 25% 25%;
+    --ring: var(--icesi-primary);
+    
+    --sidebar-background: 236 25% 20%;
+    --sidebar-foreground: var(--icesi-primary-foreground);
+    --sidebar-primary: var(--icesi-primary);
+    --sidebar-primary-foreground: var(--icesi-primary-foreground);
+    --sidebar-accent: 236 25% 25%;
+    --sidebar-accent-foreground: var(--icesi-primary-foreground);
+    --sidebar-border: 236 25% 25%;
   }
 }
 
@@ -100,6 +120,11 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+
+  .writing-vertical-rl {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
   }
 }
