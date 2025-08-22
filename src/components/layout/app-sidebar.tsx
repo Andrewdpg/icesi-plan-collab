@@ -3,6 +3,8 @@ import {
   Home, 
   Layers3, 
   Upload,
+  Users,
+  Bell,
   CheckCircle,
   History,
   Settings
@@ -26,6 +28,8 @@ const navigationItems = [
   { title: "Calendario", url: "/calendario", icon: Calendar },
   { title: "Planeación", url: "/planeacion", icon: Layers3 },
   { title: "Datos", url: "/datos", icon: Upload },
+  { title: "Usuarios & Permisos", url: "/usuarios", icon: Users },
+  { title: "Notificaciones", url: "/notificaciones", icon: Bell },
   { title: "Aprobación & Publicación", url: "/aprobacion", icon: CheckCircle },
   { title: "Auditoría", url: "/auditoria", icon: History },
   { title: "Configuración", url: "/configuracion", icon: Settings },
