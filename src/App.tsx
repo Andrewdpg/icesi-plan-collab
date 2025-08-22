@@ -9,12 +9,9 @@ import Dashboard from "./pages/dashboard";
 import PlaneacionIndex from "./pages/planeacion-index";
 import Planeacion from "./pages/planeacion";
 import Datos from "./pages/datos";
-import Usuarios from "./pages/usuarios";
-import Notificaciones from "./pages/notificaciones";
 import CambiosUrgentes from "./pages/cambios-urgentes";
 import CalendarioPersonal from "./pages/calendario";
 import AprobacionPage from "./pages/aprobacion";
-import AuditoriaPage from "./pages/auditoria";
 import ConfiguracionPage from "./pages/configuracion";
 import NotFound from "./pages/NotFound";
 
@@ -34,11 +31,8 @@ const App = () => (
             <Route path="planeacion/:id" element={<Planeacion />} />
             <Route path="calendario" element={<CalendarioPersonal />} />
             <Route path="datos" element={<Datos />} />
-            <Route path="usuarios" element={<Usuarios />} />
-            <Route path="notificaciones" element={<Notificaciones />} />
             <Route path="cambios-urgentes" element={<CambiosUrgentes />} />
             <Route path="aprobacion" element={<AprobacionPage />} />
-            <Route path="auditoria" element={<AuditoriaPage />} />
             <Route path="configuracion" element={<ConfiguracionPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />

@@ -15,7 +15,8 @@ import {
   Plus,
   MoreHorizontal,
   Settings,
-  MessageSquare
+  MessageSquare,
+  History
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -392,18 +393,43 @@ export default function Planeacion() {
       </div>
 
       {/* Sugerencias Drawer Trigger */}
-      <div className="fixed right-0 top-1/2 transform -translate-y-1/2 z-40">
+      <div className="flex flex-col fixed right-0 top-3/4 transform -translate-y-full z-40">
         <Button
           variant="outline"
-          className="rounded-l-lg rounded-r-none shadow-elegant bg-card border-r-0 pr-4"
+          className="rounded-bl-none rounded-r-none shadow-elegant bg-card border-r-0 flex justify-start items-center gap-2"
           onClick={() => setDrawerAbierto(true)}
         >
           <div className="flex items-center gap-2">
             <MessageSquare className="h-4 w-4" />
-            <div className="writing-vertical-rl text-sm font-medium whitespace-nowrap">
+            <div className="text-sm font-medium whitespace-nowrap">
               Sugerencias/Cambios
             </div>
             <Badge className="bg-destructive text-destructive-foreground text-xs">3</Badge>
+          </div>
+        </Button>
+        <Button
+          variant="outline"
+          className="rounded-l-none rounded-r-none shadow-elegant bg-card border-r-0 flex justify-start items-center gap-2"
+          onClick={() => setDrawerAbierto(true)}
+        >
+            <History className="h-4 w-4" />
+            <div className="text-sm font-medium whitespace-nowrap">
+              Historial de versiones
+            </div>
+            
+        </Button>
+        <Button
+          variant="outline"
+          className="rounded-tl-none rounded-r-none shadow-elegant bg-card border-r-0 flex justify-start items-center gap-2"
+          onClick={() => setDrawerAbierto(true)}
+        >
+          <div className="flex items-center justify-start gap-2">
+            <MessageSquare className="h-4 w-4" />
+            <Badge className="bg-destructive text-destructive-foreground text-xs">3</Badge>
+            <div className="text-sm font-medium whitespace-nowrap">
+              Sugerencias/Cambios
+            </div>
+            
           </div>
         </Button>
       </div>
