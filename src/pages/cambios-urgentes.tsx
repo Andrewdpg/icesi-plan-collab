@@ -67,9 +67,9 @@ export default function CambiosUrgentes() {
   const [paso, setPaso] = useState(1);
   const [filtros, setFiltros] = useState({
     busqueda: "",
-    programa: "",
+    programa: "all",
     curso: "",
-    docente: "",
+    docente: "all",
     fecha: ""
   });
   const [sesionSeleccionada, setSesionSeleccionada] = useState<any>(null);
@@ -89,7 +89,8 @@ export default function CambiosUrgentes() {
     return (
       (sesion.nombre.toLowerCase().includes(filtros.busqueda.toLowerCase()) ||
        sesion.codigo.toLowerCase().includes(filtros.busqueda.toLowerCase())) &&
-      (filtros.docente === "" || sesion.docente.includes(filtros.docente)) &&
+      (filtros.programa === "all" || filtros.programa === "" || sesion.codigo.includes(filtros.programa)) &&
+      (filtros.docente === "all" || filtros.docente === "" || sesion.docente.includes(filtros.docente)) &&
       (filtros.fecha === "" || sesion.fecha === filtros.fecha)
     );
   });
@@ -154,7 +155,7 @@ export default function CambiosUrgentes() {
                 <SelectValue placeholder="Todos" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos</SelectItem>
+                <SelectItem value="all">Todos</SelectItem>
                 <SelectItem value="mba">MBA</SelectItem>
                 <SelectItem value="finanzas">Esp. Finanzas</SelectItem>
                 <SelectItem value="mercadeo">Maestría Mercadeo</SelectItem>
@@ -169,7 +170,7 @@ export default function CambiosUrgentes() {
                 <SelectValue placeholder="Todos" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos</SelectItem>
+                <SelectItem value="all">Todos</SelectItem>
                 <SelectItem value="Mendoza">Dr. Carlos Mendoza</SelectItem>
                 <SelectItem value="García">Dra. Ana García</SelectItem>
                 <SelectItem value="Pérez">Dr. Luis Pérez</SelectItem>

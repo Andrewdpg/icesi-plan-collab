@@ -152,8 +152,8 @@ const registrosAcceso = [
 export default function Usuarios() {
   const [filtros, setFiltros] = useState({
     busqueda: "",
-    rol: "",
-    estado: ""
+    rol: "all",
+    estado: "all"
   });
   const [modalNuevo, setModalNuevo] = useState(false);
   const [nuevoUsuario, setNuevoUsuario] = useState({
@@ -169,8 +169,8 @@ export default function Usuarios() {
       usuario.nombre.toLowerCase().includes(filtros.busqueda.toLowerCase()) ||
       usuario.correo.toLowerCase().includes(filtros.busqueda.toLowerCase())
     ) &&
-    (filtros.rol === "" || usuario.roles.includes(filtros.rol)) &&
-    (filtros.estado === "" || usuario.estado === filtros.estado);
+    (filtros.rol === "all" || filtros.rol === "" || usuario.roles.includes(filtros.rol)) &&
+    (filtros.estado === "all" || filtros.estado === "" || usuario.estado === filtros.estado);
   });
 
   return (
@@ -218,7 +218,7 @@ export default function Usuarios() {
                       <SelectValue placeholder="Todos" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Todos</SelectItem>
+                      <SelectItem value="all">Todos</SelectItem>
                       <SelectItem value="Director">Director</SelectItem>
                       <SelectItem value="Docente">Docente</SelectItem>
                       <SelectItem value="Oficina de Posgrados">Oficina de Posgrados</SelectItem>
@@ -234,7 +234,7 @@ export default function Usuarios() {
                       <SelectValue placeholder="Todos" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Todos</SelectItem>
+                      <SelectItem value="all">Todos</SelectItem>
                       <SelectItem value="activo">Activo</SelectItem>
                       <SelectItem value="inactivo">Inactivo</SelectItem>
                     </SelectContent>

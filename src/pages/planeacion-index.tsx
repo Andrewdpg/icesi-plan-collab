@@ -110,9 +110,9 @@ export default function PlaneacionIndex() {
   const navigate = useNavigate();
   const [filtros, setFiltros] = useState({
     busqueda: "",
-    periodo: "",
-    programa: "",
-    estado: ""
+    periodo: "all",
+    programa: "all", 
+    estado: "all"
   });
   const [modalNueva, setModalNueva] = useState(false);
   const [nuevaPlaneacion, setNuevaPlaneacion] = useState({
@@ -127,9 +127,9 @@ export default function PlaneacionIndex() {
   const planeacionesFiltradas = planeaciones.filter(planeacion => {
     return (
       planeacion.nombre.toLowerCase().includes(filtros.busqueda.toLowerCase()) &&
-      (filtros.periodo === "" || planeacion.periodo === filtros.periodo) &&
-      (filtros.programa === "" || planeacion.programa === filtros.programa) &&
-      (filtros.estado === "" || planeacion.estado === filtros.estado)
+      (filtros.periodo === "all" || filtros.periodo === "" || planeacion.periodo === filtros.periodo) &&
+      (filtros.programa === "all" || filtros.programa === "" || planeacion.programa === filtros.programa) &&
+      (filtros.estado === "all" || filtros.estado === "" || planeacion.estado === filtros.estado)
     );
   });
 
@@ -272,7 +272,7 @@ export default function PlaneacionIndex() {
                   <SelectValue placeholder="Todos" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos</SelectItem>
+                  <SelectItem value="all">Todos</SelectItem>
                   <SelectItem value="2026-01">2026-01</SelectItem>
                   <SelectItem value="2026-02">2026-02</SelectItem>
                 </SelectContent>
@@ -286,7 +286,7 @@ export default function PlaneacionIndex() {
                   <SelectValue placeholder="Todos" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos</SelectItem>
+                  <SelectItem value="all">Todos</SelectItem>
                   <SelectItem value="MBA">MBA</SelectItem>
                   <SelectItem value="Esp. Finanzas">Esp. Finanzas</SelectItem>
                   <SelectItem value="Maestría Mercadeo">Maestría Mercadeo</SelectItem>
@@ -301,7 +301,7 @@ export default function PlaneacionIndex() {
                   <SelectValue placeholder="Todos" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos</SelectItem>
+                  <SelectItem value="all">Todos</SelectItem>
                   <SelectItem value="borrador">Borrador</SelectItem>
                   <SelectItem value="en-revision">En revisión</SelectItem>
                   <SelectItem value="aprobada">Aprobada</SelectItem>
