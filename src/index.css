@@ -58,7 +58,7 @@
     --input: var(--icesi-border);
     --ring: var(--icesi-primary);
     
-    --radius: 0.75rem; /* 12px as specified */
+    --radius: 0; /* 0px - Sin bordes redondeados para estilo Icesi */
     
     /* Custom Shadows */
     --shadow-elegant: 0 6px 20px hsl(0 0% 0% / 0.06);
@@ -126,5 +126,27 @@
   .writing-vertical-rl {
     writing-mode: vertical-rl;
     text-orientation: mixed;
+  }
+}
+
+/* Estilos adicionales para el diseño Icesi simplificado */
+@layer components {
+  /* Efectos de hover para cards */
+  .card-icesi-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  /* Botones con estilo Icesi - Sin bordes redondeados */
+  .btn-icesi-primary {
+    @apply bg-[#5555ea] hover:bg-[#4a4ad9] text-white font-semibold py-3 px-6 transition-colors duration-200;
+  }
+  
+  .btn-icesi-accent {
+    @apply bg-[#e4eb60] hover:bg-[#d4db50] text-black font-semibold py-3 px-6 transition-colors duration-200;
+  }
+  
+  /* Efectos de hover para elementos interactivos */
+  .hover-icesi {
+    @apply transition-all duration-200 hover:scale-105 hover:shadow-lg;
   }
 }

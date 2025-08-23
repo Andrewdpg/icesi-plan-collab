@@ -117,25 +117,25 @@ export default function Datos() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-[#f7f8fe] p-6">
       <div>
-        <h1 className="text-3xl font-bold">Importar/Exportar Datos</h1>
-        <p className="text-muted-foreground mt-2">
+        <h1 className="text-3xl font-bold text-[#3f4159]">Importar/Exportar Datos</h1>
+        <p className="text-[#596b88] mt-2">
           Gestiona la carga y descarga de información institucional
         </p>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2 max-w-md">
-          <TabsTrigger value="importar">Importar</TabsTrigger>
-          <TabsTrigger value="exportar">Exportar</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 max-w-md bg-white border-[#e3e4ec]">
+          <TabsTrigger value="importar" className="data-[state=active]:bg-[#5555ea] data-[state=active]:text-white data-[state=inactive]:text-[#596b88] data-[state=inactive]:hover:text-[#5555ea]">Importar</TabsTrigger>
+          <TabsTrigger value="exportar" className="data-[state=active]:bg-[#5555ea] data-[state=active]:text-white data-[state=inactive]:text-[#596b88] data-[state=inactive]:hover:text-[#5555ea]">Exportar</TabsTrigger>
         </TabsList>
 
         <TabsContent value="importar" className="space-y-6">
-          <Card>
+          <Card className="border-[#e3e4ec] bg-white shadow-sm">
             <CardHeader>
-              <CardTitle>Seleccionar Entidad</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-[#3f4159]">Seleccionar Entidad</CardTitle>
+              <CardDescription className="text-[#596b88]">
                 Elige el tipo de datos que deseas importar
               </CardDescription>
             </CardHeader>
@@ -146,8 +146,8 @@ export default function Datos() {
                   return (
                     <Card
                       key={entidad.id}
-                      className={`cursor-pointer transition-all hover:shadow-soft ${
-                        selectedEntity === entidad.id ? 'ring-2 ring-primary' : ''
+                      className={`cursor-pointer transition-all hover:shadow-md border-[#e3e4ec] bg-white ${
+                        selectedEntity === entidad.id ? 'ring-2 ring-[#5555ea]' : ''
                       }`}
                       onClick={() => {
                         setSelectedEntity(entidad.id);
@@ -155,10 +155,10 @@ export default function Datos() {
                       }}
                     >
                       <CardContent className="p-4 text-center space-y-3">
-                        <Icon className="h-8 w-8 mx-auto text-primary" />
+                        <Icon className="h-8 w-8 mx-auto text-[#5555ea]" />
                         <div>
-                          <h3 className="font-medium">{entidad.title}</h3>
-                          <p className="text-xs text-muted-foreground mt-1">
+                          <h3 className="font-medium text-[#3f4159]">{entidad.title}</h3>
+                          <p className="text-xs text-[#596b88] mt-1">
                             {entidad.description}
                           </p>
                         </div>
@@ -171,14 +171,14 @@ export default function Datos() {
           </Card>
 
           {/* Wizard Steps */}
-          <Card>
+          <Card className="border-[#e3e4ec] bg-white shadow-sm">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>
+                  <CardTitle className="text-[#3f4159]">
                     Importar {entidades.find(e => e.id === selectedEntity)?.title}
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-[#596b88]">
                     Paso {currentStep} de 4
                   </CardDescription>
                 </div>
@@ -186,12 +186,12 @@ export default function Datos() {
                   {importSteps.map((step) => (
                     <div
                       key={step.id}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${
+                      className={`w-8 h-8 flex items-center justify-center text-xs font-medium ${
                         step.id === currentStep
-                          ? 'bg-primary text-primary-foreground'
+                          ? 'bg-[#5555ea] text-white'
                           : step.id < currentStep
-                          ? 'bg-success text-success-foreground'
-                          : 'bg-muted text-muted-foreground'
+                          ? 'bg-[#4fb37b] text-white'
+                          : 'bg-[#f7f8fe] text-[#596b88]'
                       }`}
                     >
                       {step.id < currentStep ? (
@@ -207,17 +207,18 @@ export default function Datos() {
             <CardContent className="space-y-6">
               {currentStep === 1 && (
                 <div className="space-y-4">
-                  <div className="border-2 border-dashed border-border rounded-lg p-8 text-center space-y-4">
-                    <Upload className="h-12 w-12 mx-auto text-muted-foreground" />
+                  <div className="border-2 border-dashed border-[#e3e4ec] p-8 text-center space-y-4 bg-[#f7f8fe]">
+                    <Upload className="h-12 w-12 mx-auto text-[#596b88]" />
                     <div>
-                      <h3 className="font-medium">Arrastra tu archivo aquí</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <h3 className="font-medium text-[#3f4159]">Arrastra tu archivo aquí</h3>
+                      <p className="text-sm text-[#596b88]">
                         o haz clic para seleccionar (Excel, CSV)
                       </p>
                     </div>
                     <Button
                       onClick={() => document.getElementById('file-upload')?.click()}
                       disabled={isProcessing}
+                      className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white"
                     >
                       {isProcessing ? (
                         <>
@@ -243,23 +244,23 @@ export default function Datos() {
                   {isProcessing && (
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span>Procesando archivo...</span>
-                        <span>{uploadProgress}%</span>
+                        <span className="text-[#3f4159]">Procesando archivo...</span>
+                        <span className="text-[#596b88]">{uploadProgress}%</span>
                       </div>
-                      <Progress value={uploadProgress} />
+                      <Progress value={uploadProgress} className="bg-[#e3e4ec]" />
                     </div>
                   )}
 
-                  <div className="bg-muted p-4 rounded-lg">
-                    <h4 className="font-medium mb-2">Columnas esperadas:</h4>
+                  <div className="bg-[#f7f8fe] p-4 border border-[#e3e4ec]">
+                    <h4 className="font-medium mb-2 text-[#3f4159]">Columnas esperadas:</h4>
                     <div className="flex flex-wrap gap-2">
                       {entidades.find(e => e.id === selectedEntity)?.columns.map((col, index) => (
-                        <Badge key={index} variant="outline">{col}</Badge>
+                        <Badge key={index} variant="outline" className="border-[#e3e4ec] text-[#596b88] bg-white">{col}</Badge>
                       ))}
                     </div>
                     <Button
                       variant="link"
-                      className="p-0 h-auto mt-2"
+                      className="p-0 h-auto mt-2 text-[#5555ea] hover:text-[#4a4ad9]"
                       onClick={() => handleDownloadTemplate(
                         entidades.find(e => e.id === selectedEntity)?.template || ""
                       )}
@@ -350,9 +351,9 @@ export default function Datos() {
                             </div>
                           </div>
                           <div className="flex gap-2">
-                            <Button variant="outline" size="sm">Mantener existente</Button>
-                            <Button variant="outline" size="sm">Sobrescribir</Button>
-                            <Button variant="outline" size="sm">Fusionar</Button>
+                            <Button variant="outline" size="sm" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">Mantener existente</Button>
+                            <Button variant="outline" size="sm" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">Sobrescribir</Button>
+                            <Button variant="outline" size="sm" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">Fusionar</Button>
                           </div>
                         </div>
                       ))}
@@ -360,10 +361,10 @@ export default function Datos() {
                   </div>
 
                   <div className="flex justify-between">
-                    <Button variant="outline" onClick={() => setCurrentStep(2)}>
+                    <Button variant="outline" onClick={() => setCurrentStep(2)} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
                       Anterior
                     </Button>
-                    <Button onClick={() => setCurrentStep(4)}>
+                    <Button onClick={() => setCurrentStep(4)} className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white">
                       Continuar
                     </Button>
                   </div>
@@ -372,26 +373,26 @@ export default function Datos() {
 
               {currentStep === 4 && (
                 <div className="space-y-4 text-center">
-                  <CheckCircle className="h-16 w-16 text-success mx-auto" />
+                  <CheckCircle className="h-16 w-16 text-[#4fb37b] mx-auto" />
                   <div>
-                    <h3 className="text-lg font-semibold">¡Import Complete!</h3>
-                    <p className="text-muted-foreground">
+                    <h3 className="text-lg font-semibold text-[#3f4159]">¡Import Complete!</h3>
+                    <p className="text-[#596b88]">
                       Se han importado 25 docentes exitosamente
                     </p>
                   </div>
-                  <div className="bg-muted p-4 rounded-lg text-left max-w-md mx-auto">
+                  <div className="bg-[#f7f8fe] p-4 border border-[#e3e4ec] text-left max-w-md mx-auto">
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span>Creados:</span>
-                        <span className="font-medium">20</span>
+                        <span className="text-[#596b88]">Creados:</span>
+                        <span className="font-medium text-[#3f4159]">20</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Actualizados:</span>
-                        <span className="font-medium">3</span>
+                        <span className="text-[#596b88]">Actualizados:</span>
+                        <span className="font-medium text-[#3f4159]">3</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Omitidos:</span>
-                        <span className="font-medium">2</span>
+                        <span className="text-[#596b88]">Omitidos:</span>
+                        <span className="font-medium text-[#3f4159]">2</span>
                       </div>
                     </div>
                   </div>
@@ -409,18 +410,18 @@ export default function Datos() {
 
         <TabsContent value="exportar" className="space-y-6">
           <div className="grid gap-6">
-            <Card>
+            <Card className="border-[#e3e4ec] bg-white shadow-sm">
               <CardHeader>
-                <CardTitle>Filtros de Exportación</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-[#3f4159]">Filtros de Exportación</CardTitle>
+                <CardDescription className="text-[#596b88]">
                   Selecciona los datos que deseas exportar
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="text-sm font-medium">Programa</label>
-                    <select className="w-full mt-1 p-2 border rounded-lg">
+                    <label className="text-sm font-medium text-[#3f4159]">Programa</label>
+                    <select className="w-full mt-1 p-2 border border-[#e3e4ec] bg-white text-[#3f4159] focus:border-[#5555ea] focus:outline-none">
                       <option>Todos los programas</option>
                       <option>Maestría en Gestión</option>
                       <option>MBA</option>
@@ -428,8 +429,8 @@ export default function Datos() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-sm font-medium">Cohorte</label>
-                    <select className="w-full mt-1 p-2 border rounded-lg">
+                    <label className="text-sm font-medium text-[#3f4159]">Cohorte</label>
+                    <select className="w-full mt-1 p-2 border border-[#e3e4ec] bg-white text-[#3f4159] focus:border-[#5555ea] focus:outline-none">
                       <option>Todas las cohortes</option>
                       <option>2024-2</option>
                       <option>2024-1</option>
@@ -437,8 +438,8 @@ export default function Datos() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-sm font-medium">Período</label>
-                    <select className="w-full mt-1 p-2 border rounded-lg">
+                    <label className="text-sm font-medium text-[#3f4159]">Período</label>
+                    <select className="w-full mt-1 p-2 border border-[#e3e4ec] bg-white text-[#3f4159] focus:border-[#5555ea] focus:outline-none">
                       <option>Período actual</option>
                       <option>Histórico completo</option>
                     </select>
@@ -448,66 +449,66 @@ export default function Datos() {
             </Card>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card>
+              <Card className="border-[#e3e4ec] bg-white shadow-sm">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-[#3f4159]">
                     <FileSpreadsheet className="h-5 w-5" />
                     Banner (CSV/XLSX)
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-[#596b88]">
                     Exporta la planeación en formato compatible con Banner para carga masiva.
                   </p>
-                  <Alert>
+                  <Alert className="border-[#e9683b] bg-[#fdecec] text-[#e9683b]">
                     <AlertTriangle className="h-4 w-4" />
                     <AlertDescription>
                       Requiere planeación aprobada sin conflictos
                     </AlertDescription>
                   </Alert>
-                  <Button className="w-full">
+                  <Button className="w-full bg-[#5555ea] hover:bg-[#4a4ad9] text-white">
                     <Download className="h-4 w-4 mr-2" />
                     Generar Banner
                   </Button>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="border-[#e3e4ec] bg-white shadow-sm">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-[#3f4159]">
                     <FileSpreadsheet className="h-5 w-5" />
                     Preferencias de Aulas
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-[#596b88]">
                     Exporta los requerimientos de espacio por curso para coordinación con Planeación.
                   </p>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-xs text-[#596b88]">
                     Incluye: modalidad, capacidad, recursos especiales
                   </div>
-                  <Button className="w-full" variant="outline">
+                  <Button className="w-full border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]" variant="outline">
                     <Download className="h-4 w-4 mr-2" />
                     Exportar XLSX
                   </Button>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="border-[#e3e4ec] bg-white shadow-sm">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-[#3f4159]">
                     <FileText className="h-5 w-5" />
                     PDF Oficial
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-[#596b88]">
                     Genera un reporte oficial en PDF con la planeación completa del semestre.
                   </p>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-xs text-[#596b88]">
                     Incluye: horarios, docentes, modalidades, estadísticas
                   </div>
-                  <Button className="w-full" variant="outline">
+                  <Button className="w-full border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]" variant="outline">
                     <FileText className="h-4 w-4 mr-2" />
                     Generar PDF
                   </Button>

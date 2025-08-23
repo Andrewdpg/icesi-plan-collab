@@ -5,25 +5,25 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5555ea] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-soft",
+        default: "bg-[#5555ea] text-white hover:bg-[#4a4ad9] shadow-sm",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-soft",
+          "bg-[#e9683b] text-white hover:bg-[#d85a2e] shadow-sm",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-soft",
+          "border border-[#e3e4ec] bg-white text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] shadow-sm",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-soft",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        success: "bg-success text-success-foreground hover:bg-success/90 shadow-soft",
+          "bg-[#f7f8fe] text-[#3f4159] hover:bg-[#e4e9ff] shadow-sm",
+        ghost: "hover:bg-[#e4e9ff] hover:text-[#5555ea] text-[#3f4159]",
+        link: "text-[#5555ea] underline-offset-4 hover:underline",
+        success: "bg-[#4fb37b] text-white hover:bg-[#45a06f] shadow-sm",
       },
       size: {
         default: "h-11 px-6 py-2",
-        sm: "h-8 rounded-lg px-3 text-xs",
-        lg: "h-12 rounded-xl px-8 text-base",
+        sm: "h-8 px-3 text-xs",
+        lg: "h-12 px-8 text-base",
         icon: "h-10 w-10",
       },
     },

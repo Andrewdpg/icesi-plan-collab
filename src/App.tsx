@@ -11,7 +11,6 @@ import Planeacion from "./pages/planeacion";
 import Datos from "./pages/datos";
 import CambiosUrgentes from "./pages/cambios-urgentes";
 import CalendarioPersonal from "./pages/calendario";
-import AprobacionPage from "./pages/aprobacion";
 import ConfiguracionPage from "./pages/configuracion";
 import NotFound from "./pages/NotFound";
 
@@ -32,7 +31,6 @@ const App = () => (
             <Route path="calendario" element={<CalendarioPersonal />} />
             <Route path="datos" element={<Datos />} />
             <Route path="cambios-urgentes" element={<CambiosUrgentes />} />
-            <Route path="aprobacion" element={<AprobacionPage />} />
             <Route path="configuracion" element={<ConfiguracionPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />

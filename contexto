@@ -1,0 +1,444 @@
+Contexto del problema
+La Oficina de Posgrados de la Universidad Icesi enfrenta un desafío significativo en su proceso de planeación académica semestral. Actualmente, este proceso es manual y fragmentado, basado en la consolidación de datos de múltiples fuentes (listas de cursos, disponibilidad de docentes, fechas institucionales) a través de hojas de cálculo, correos electrónicos y documentos compartidos.
+Esta metodología actual genera varios problemas:
+Ineficiencia: El proceso es lento y consume mucho tiempo cada semestre, ya que requiere de un gran esfuerzo manual para recopilar y organizar la información.
+Errores humanos: La consolidación manual de datos lleva a inconsistencias, duplicidades y errores en la asignación de horarios y docentes.
+Falta de trazabilidad: Es difícil saber quién hizo qué cambió, cuándo y por qué, lo que complica la gestión de las versiones de la planeación.
+Comunicación deficiente: Las notificaciones a docentes y estudiantes se realizan de forma manual por correo, lo que dificulta el seguimiento y la confirmación de la información.
+Visualización limitada: La planeación en Excel no permite una vista clara tipo calendario, lo que hace difícil identificar conflictos y tomar decisiones informadas.
+
+Solución propuesta
+El objetivo del proyecto es transformar este proceso manual en un flujo centralizado, automatizado y colaborativo. El producto final será un sistema digital que actúe como una única fuente de verdad para toda la planeación de posgrados.
+Las funcionalidades clave que el sistema deberá tener son:
+Centralización de datos: Importar y almacenar la información de docentes, cursos y estudiantes en una base de datos única.
+Generación y gestión de propuestas: Generar una propuesta de horario inicial de forma automática, permitiendo a la Oficina de Posgrados y a los Directores de Programa ajustar la planeación de forma colaborativa en una interfaz de calendario intuitiva.
+Validación en tiempo real: Detectar y alertar sobre posibles conflictos, como cruces de horarios de docentes o clases programadas en días festivos.
+Notificaciones automáticas: Enviar alertas instantáneas por correo electrónico y WhatsApp a docentes y estudiantes cuando la planeación final sea publicada o cuando se realice cualquier cambio.
+Trazabilidad y control de versiones: Registrar el historial de todos los cambios para saber quién, cuándo y por qué se realizó una modificación.
+
+Historias de Usuario:
+
+Épica A — Fundaciones (acceso, datos, roles) — MVP
+ 
+Título:
+Inicio de sesión institucional
+Descripción:
+Como usuario institucional, quiero iniciar sesión con mi correo y contraseña institucional para acceder de forma segura según mi rol.
+Criterios de Aceptación:
+Se acepta solo correo @icesi.edu.co (o dominio institucional configurado). 
+Tras autenticarse, el usuario ve solo módulos permitidos por su rol. 
+Sesión expira por inactividad (configurable, p. ej. 30 min).
+Prioridad:
+Alta
+Estimación:
+—
+Notas
+Adicionales:
+Esto está por debatirse porque hay otras formas de implementarlo (lo debatirá en clase)
+
+
+
+
+Título:
+Definir roles y permisos
+Descripción:
+Como administradora de Posgrados, quiero gestionar roles para controlar permisos de ver/editar/aprobar/notificar.
+Criterios de Aceptación:
+Roles preconfigurados con permisos por módulo/acción. 
+Director y Docente: no pueden aprobar ni publicar; pueden proponer (ver Épica C).
+Estudiante: solo visualización y suscripción a calendario.
+Coordinador/a: aprobación/publicación/notificación.
+Prioridad:
+Alta
+Estimación:
+—
+Notas
+Adicionales:
+Aunque los roles de los que hablamos deben ir pre-configurados, estos deben ser modificables para efectos prácticos¿?
+
+
+
+Título:
+Importar catálogo de docentes desde Excel/CSV
+Descripción:
+Como coordinador, quiero importar la lista de docentes desde un archivo (descargado de sistemas institucionales) para no digitarlos manualmente.
+Criterios de Aceptación:
+Plantilla soporta: 
+nombre completo
+identificación
+correo
+modalidad preferida (opcional). 
+Validación de formato y duplicados; 
+En caso de duplicados, se debe informar y permitir decidir al usuario cuales mantener o actualizar.
+Prioridad:
+Alta
+Estimación:
+—
+Notas
+Adicionales:
+Se solicita importar datos “tal cualˮ se descargan para evitar edición manual.
+Los datos de la plantilla hay que evaluarlos con el cliente.
+
+
+
+Título:
+Importar catálogo de cursos/mallas
+Descripción:
+Como coordinador, quiero importar cursos/malla (código, nombre, intensidad/horas, sesiones) para preparar la planeación.
+Criterios de Aceptación:
+Plantilla soporta: 
+código de materia
+nombre
+horas totales
+#sesiones
+modalidad. 
+Validación de consistencia.
+En caso de duplicados, se debe informar y permitir decidir al usuario cuales mantener o actualizar.
+Prioridad:
+Alta
+Estimación:
+—
+Notas
+Adicionales:
+Se solicita importar datos “tal cualˮ se descargan para evitar edición manual. 
+Los datos de la plantilla hay que evaluarlos con el cliente.
+
+
+
+Título:
+Importar listas de estudiantes por curso (para notificaciones)
+Descripción:
+Como coordinador, quiero importar listas de estudiantes (correo; teléfono opcional) por curso para poder notificarles cambios.
+Criterios de Aceptación:
+Importa por curso/cohorte; 
+Valida correos y duplicados.
+En caso de duplicados, se debe informar y permitir decidir al usuario cuales mantener o actualizar.
+Prioridad:
+Media
+Estimación:
+—
+Notas
+Adicionales:
+Se solicita importar datos “tal cualˮ se descargan para evitar edición manual. 
+Los datos de la plantilla hay que evaluarlos con el cliente.
+
+
+
+Épica B — Planeación y calendario — MVP
+
+Título:
+Biblioteca de festivos y fechas no programables
+Descripción:
+Como coordinadora, quiero que el sistema permita registrar festivos y fechas especiales (p. ej., velitas, Semana Santa) para evitar programar y me alerte si intento hacerlo.
+Criterios de Aceptación:
+Calendario de festivos Colombia precargado + fechas institucionales configurables.
+Alerta en creación/edición; opción “forzarˮ con justificación. 
+Reporte de colisiones con festivos.
+Prioridad:
+Alta
+Estimación:
+—
+Notas
+Adicionales:
+
+
+
+
+
+Título:
+Crear planeación por curso/cohorte
+Descripción:
+Como coordinadora, quiero generar una propuesta de planeación inicial por curso y cohorte/semestre para tener un punto de partida y reducir el trabajo manual.
+Criterios de Aceptación:
+Debe tener en cuenta:
+Cuantos grupos va a abrir
+Días base de la semana (ej, viernes), con su espacio preferente, duración y su repetición (ej, cada semana, cada dos semanas, cada 3).
+Respetar el número de sesiones.
+Disponibilidad del docente seleccionado/sugerido.
+Excepciones (las que apliquen únicamente a ese/esos grupos, no las excepciones globales como festivos)
+Debe mostrarse antes de confirmarse para ser modificada.
+Debe registrar auditoría.
+Prioridad:
+Alta
+Estimación:
+—
+Notas
+Adicionales:
+
+
+
+
+Título:
+Vista planeación con filtros
+Descripción:
+Como usuaria con acceso a planeación, quiero ver la planeación en un calendario navegable y filtrable por programa, curso y/o docente para identificar rápidamente cruces de horario, festivos y otras particularidades.
+Criterios de Aceptación:
+Vista semanal/mensual;
+Filtros: programa, curso, docente;
+Diferencia modalidad (presencial/híbrida/sincrónica).
+Fechas especiales como festivos, excepciones institucionales y/o vacaciones.
+Vista de cada curso: 
+Docente
+horario
+espacio.
+Prioridad:
+Alta
+Estimación:
+—
+Notas
+Adicionales:
+Visualización clara solicitada por oficina y directores.
+
+
+Título:
+Duplicar grupo Grupo 2 por alta demanda
+Descripción:
+Como coordinadora, quiero poder duplicar un curso con otro docente/horario para atender sobredemanda.
+Criterios de Aceptación:
+Acción “Duplicar grupoˮ copia sesiones y permite elegir nuevo docente/horario. 
+Valida cruces de docentes al confirmar.
+Prioridad:
+Media/Baja
+Estimación:
+—
+Notas Adicionales:
+Necesidad de abrir el segundo grupo cuando se llena.
+
+
+Épica C — Cambios, propuestas y aprobación — MVP
+
+Título:
+Propuesta de cambio o comentario del docente
+Descripción:
+Como docente, quiero comentar un curso o clase por eventualidad (ej, cambio de fecha/hora), para que Posgrados lo evalúe.
+Criterios de Aceptación:
+Datos vinculados: curso, fecha afectada, propuesta, motivo, adjunto
+Estado: Propuesta (docente)  Revisión Posgrados) → Aprobada/Rechazada.
+Prioridad:
+Alta
+Estimación:
+—
+Notas
+Adicionales:
+
+
+
+
+Título:
+Sugerencia del director
+Descripción:
+Como director, quiero sugerir ajustes sobre la planeación, sin editar, para verificar que se ajuste a nuestras necesidades.
+Criterios de Aceptación:
+Debe poder realizar los cambios y comentarlos.
+Los cambios no se efectuarán hasta que sean aprobados.
+Historial de comentarios, estado atendido/no atendido. 
+Sin permisos de edición directa.
+Prioridad:
+Media
+Estimación:
+—
+Notas Adicionales:
+Director colabora, no edita; Posgrados decide.
+
+
+Título:
+Aprobación de cambios sugeridos
+Descripción:
+Como Oficina de Posgrados, quiero aprobar o rechazar los cambios sugeridos, para garantizar coherencia y control de la planeación.
+Criterios de Aceptación:
+Al registrarse una sugerencia del Director, se crea un ítem en “Cambios pendientes” y se envía alerta por correo a Posgrados.
+Posgrados puede aprobar o rechazar cada sugerencia de forma individual, dejando comentario obligatorio si la rechaza
+Si aprueba, el cambio se aplica a la planeación y se valida (horas totales, cruces, festivos); si hay conflicto, se bloquea la aprobación y se muestran detalles.
+Si rechaza, la planeación permanece sin cambios (o se descartan los cambios en borrador), y el Director recibe notificación con el motivo.
+Toda la decisión queda en bitácora (quién, qué, cuándo, motivo).
+Prioridad:
+Alta(cambiar)
+Estimación:
+Pendiente
+Notas Adicionales:
+Requiere módulo de sugerencias/comentarios por Director y estados Pendiente/Resuelto.
+
+
+Épica D — Comunicación y publicación — MVP
+
+Título:
+Publicación de la planeación final aprobada
+Descripción:
+Como Oficina de Posgrados, quiero publicar la planeación aprobada para que quede visible y se notifique a docentes y estudiantes.
+Criterios de Aceptación:
+Existe un botón “Publicar” disponible solo cuando la planeación está en estado Aprobada y sin conflictos abiertos.
+Al publicar, el sistema crea una Versión (número, fecha/hora, responsable).
+Al publicar, el sistema notifica automáticamente a docentes y estudiantes.
+Prioridad:
+Alta (revisar)
+Estimación:
+—-
+Notas Adicionales:
+Registro en auditoría.
+
+
+Título:
+Notificar cambios a estudiantes y docentes
+Descripción:
+Como coordinador, quiero notificar por correo (y WhatsApp si hay número) los cambios confirmados para mantener informados a los involucrados.
+Criterios de Aceptación:
+Plantillas de correo; 
+envío por curso/afectados; 
+registro de entrega.
+Opcional WhatsApp si teléfono cargado(revisar); si no, solo email. 
+Prioridad:
+Alta
+Estimación:
+—
+Notas
+Adicionales:
+Sustituye correos manuales repetitivos.
+
+
+Título:
+Notificaciones al Director sobre el estado de sus sugerencias
+Descripción:
+Como Director de Programa, quiero recibir notificaciones sobre el estado (aprobado/rechazado) de mis sugerencias, para dar seguimiento oportuno.
+Criterios de Aceptación:
+El sistema envía notificación cuando Posgrados aprueba o rechaza una sugerencia.
+La notificación incluye: estado, motivo del rechazo (si aplica), y un resumen del cambio (antes/después, fechas afectadas).
+
+
+Prioridad:
+Media
+Estimación:
+Pendiente
+Notas Adicionales:
+Formatos de notificación: correo y bandeja interna; 
+futuro: push/WhatsApp si hay datos y permisos.
+
+
+Título:
+Vista de agenda para Docentes y Estudiantes
+Descripción:
+Como Docente o Estudiante, quiero contar con una vista de calendario del semestre y recibir mi horario al publicarse la planeación, para consultar mis clases y sincronizarlas con mi calendario personal.
+Criterios de Aceptación:
+Al publicarse la planeación, el sistema notifica por correo a docentes y estudiantes. (Una historia de usuario diferente)
+El sistema ofrece sincronización mediante archivo ICS descargable y enlaces “Agregar a Google/Outlook”; los eventos usan zona horaria America/Bogota.
+Cuando hay cambios confirmados en una clase, el calendario se actualiza y se envía notificación a los afectados. (Una historia de usuario diferente)
+Prioridad:
+Alta
+Estimación:
+—
+Notas Adicionales:
+
+
+
+
+Épica E — Exportaciones y soporte a Banner — MVP
+Título:
+Exportar planeación a plantilla para Banner
+Descripción:
+Como Coordinador, quiero exportar la planeación en una plantilla exacta para su carga en Banner.
+Criterios de Aceptación:
+Mapea campos requeridos (fechas/hora inicio-fin, curso, grupo, docente, marcadores L/S para laboratorio/espacio, etc.). 
+Valida formato; bloquea exportación si hay conflictos abiertos.
+Descarga CSV/Excel con encabezados exactos esperados.
+Prioridad:
+Alta
+Estimación:
+—
+Notas
+Adicionales:
+Alineado a proceso de gestores.
+Falta definir el formato con el cliente.
+
+ 
+
+Requerimientos:
+Requerimientos Funcionales
+Estos requerimientos describen las funcionalidades específicas que el sistema debe realizar.
+Gestión de Datos y Planeación
+RF1. Importación masiva:
+ El sistema debe permitir la importación masiva de datos de docentes, cursos y estudiantes mediante archivos .csv o .xlsx basados en plantillas predefinidas.
+RF2. Validación de datos:
+ El sistema debe validar el formato de los archivos importados y notificar al usuario sobre errores o datos inconsistentes, indicando fila/columna, causa y acción sugerida.
+RF3. Almacenamiento centralizado:
+ El sistema debe almacenar de forma centralizada la información de los 14 programas de posgrado, con capacidad de segmentar por programa, cohorte/semestre y modalidad (presencial, virtual sincrónica, combinada).
+RF4. Creación manual de planeación:
+ El sistema debe permitir la creación manual de una nueva planeación académica.
+RF5. Propuesta de planeación inicial:
+ El sistema debe generar una propuesta de planeación inicial considerando restricciones como: días y horarios preferentes, disponibilidad docente y tipo de espacio requerido.
+RF6. Edición y ajuste manual:
+ El sistema debe permitir la edición y ajuste manual de la planeación, incluyendo la asignación de docentes, horarios, días y aulas.
+RF7. Detección de conflictos:
+ El sistema debe detectar y alertar sobre posibles conflictos en la planeación (ej. cruce de horario de un docente, clases en días festivos).
+RF8. Configuración de festivos y no programables:
+ El sistema debe permitir cargar/gestionar un calendario de festivos y fechas no programables por año y programa.
+RF9. Preferencias/requerimientos de sala:
+ Permitir registrar por curso/sesión requerimientos de aula (p. ej., híbrido, laboratorio, TV/proyector), sin asignar salón, para incluirlos en exportes a Planeación.
+RF10. Versionado de planeaciones:
+ El sistema debe guardar versiones sucesivas de la planeación académica y permitir comparar cambios entre versiones y restaurar versiones anteriores si es necesario.
+
+Interfaz de Usuario y Colaboración
+RF11. Interfaz de calendario:
+ El sistema debe ofrecer una interfaz de calendario visual con vistas por semana y por mes.
+RF12. Filtrado en calendario:
+ La interfaz de calendario debe permitir filtrar la visualización por programa, cohorte/semestre, docente y curso.
+RF13. Sugerencias y comentarios de Directores de Programa:
+ El sistema debe permitir que los Directores de Programa sugieran cambios y comenten sobre la propuesta de planeación.
+RF14. Aprobación de cambios por Oficina de Posgrados:
+ El sistema debe permitir a la Oficina de Posgrados aprobar o rechazar los cambios sugeridos por los Directores de Programa, y si son aprobados, se deben aplicar y notificar.
+RF15. Ciclo de vida de la planeación:
+ El sistema debe manejar estados de planeación: Borrador → En revisión → Aprobada para Gestor → Publicada → En curso → Cerrada, con transiciones controladas y bloqueos según estado.
+
+Publicación y Notificaciones
+RF16. Publicación de planeación final:
+ El sistema debe permitir la publicación de una planeación final, generando una vista de solo lectura para docentes y estudiantes.
+RF17. Notificaciones automáticas:
+ El sistema debe notificar automáticamente a docentes y estudiantes (por correo electrónico o WhatsApp) cuando la planeación es publicada o cuando se realiza un cambio.
+RF18. Contenido de notificaciones a docentes:
+El sistema debe permitir que las notificaciones a docentes incluyan cursos asignados, fechas/horas, modalidad, enlaces (p. ej., Zoom si aplica) y adjuntar documentos (mosaico, lista de clase, etc.).
+RF19. Sincronización con calendarios externos:
+ El sistema debe permitir la sincronización de horarios con calendarios externos como Google Calendar y Outlook.
+RF20. Plantillas de mensajes:
+ El sistema debe permitir plantillas editables para correos/WhatsApp y envíos masivos segmentando por programa, curso, docente o cohorte.
+RF21. Registro de preferencia de espacios:
+ El sistema debe permitir registrar preferencias de aula por curso o sesión (ej. híbrido, laboratorio, sala con proyector), aunque la asignación final de espacios sea realizada por otra dependencia. Estas preferencias deben ser exportables y visibles para la Oficina de Planeación.
+
+Trazabilidad y Documentación
+RF22. Historial de cambios:
+ El sistema debe registrar un historial de cambios en la planeación, incluyendo el autor, la fecha y el motivo de cada modificación.
+RF23. Reportes en PDF:
+ El sistema debe generar un reporte de planeación en formato PDF para su documentación y archivo.
+
+Requerimientos No Funcionales
+Estos requerimientos describen las cualidades y restricciones del sistema.
+Usabilidad y Accesibilidad
+RNF1. Facilidad de uso:
+ El sistema debe ser intuitivo y fácil de usar, minimizando la curva de aprendizaje para todos los roles de usuario (Oficina de Posgrados, Directores, Docentes y Estudiantes).
+RNF2. Accesibilidad web:
+ El sistema debe ser accesible desde cualquier navegador web moderno y adaptarse a distintos tamaños de pantalla (desktop, tablet, móvil).
+
+Seguridad y Permisos
+RNF3. Gestión de roles y permisos:
+ El sistema debe implementar un sistema de roles y permisos diferenciados para cada tipo de usuario (Oficina de Posgrados, Director de Programa, Docente, Estudiante).
+RNF4. Restricción de edición:
+ Los usuarios con permisos de solo consulta (Docentes, Estudiantes) no podrán editar información del sistema.
+
+Rendimiento y Escalabilidad
+RNF5. Rendimiento:
+ El sistema debe tener un buen rendimiento al importar grandes volúmenes de datos y al cargar el calendario.
+RNF6. Escalabilidad:
+ La arquitectura debe ser escalable, soportando la futura inclusión de otros niveles de planeación (pregrado, educación continua, cursos cortos) y un número creciente de usuarios concurrentes.
+
+Integración
+RNF7. Integración con sistemas externos:
+ El sistema debe integrarse con sistemas externos como Banner para importar información de profesores, cursos y estudiantes, y con calendarios externos (Google Calendar, Outlook).
+RNF8. Compatibilidad de formatos:
+ El sistema debe soportar archivos .csv y .xlsx para importaciones y exportaciones, manteniendo la integridad de los datos.
+
+Trazabilidad y Calidad
+RNF9. Trazabilidad completa:
+ El sistema debe garantizar la trazabilidad completa de cada cambio para poder auditar el proceso de planeación.
+RNF10. Calidad de código y pruebas:
+ El sistema debe contar con pruebas unitarias y de integración automatizadas que cubran al menos el 80% del código, asegurando un alto nivel de confiabilidad.
+RNF11. Documentación:
+ El sistema debe incluir documentación técnica y de usuario actualizada, incluyendo manuales, guías de configuración y descripción de APIs.
+
+

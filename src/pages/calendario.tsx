@@ -201,15 +201,15 @@ export default function CalendarioPersonal() {
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={handleExportICS}>
+          <Button variant="outline" size="sm" onClick={handleExportICS} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
             <Download className="h-4 w-4 mr-2" />
             Descargar ICS
           </Button>
-          <Button variant="outline" size="sm" onClick={handleCopyICSLink}>
+          <Button variant="outline" size="sm" onClick={handleCopyICSLink} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
             <Link className="h-4 w-4 mr-2" />
             Copiar enlace
           </Button>
-          <Button variant="outline" size="sm" onClick={handlePrint}>
+          <Button variant="outline" size="sm" onClick={handlePrint} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
             <Printer className="h-4 w-4 mr-2" />
             Imprimir
           </Button>
@@ -217,24 +217,24 @@ export default function CalendarioPersonal() {
       </div>
 
       {/* Controls */}
-      <Card>
+      <Card className="border-[#e3e4ec] bg-white shadow-sm">
         <CardContent className="p-4">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             {/* Navigation */}
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => navigateMonth('prev')}>
+                <Button variant="outline" size="sm" onClick={() => navigateMonth('prev')} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="sm" onClick={goToToday}>
+                <Button variant="outline" size="sm" onClick={goToToday} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
                   Hoy
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => navigateMonth('next')}>
+                <Button variant="outline" size="sm" onClick={() => navigateMonth('next')} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
               
-              <h2 className="text-xl font-semibold">
+              <h2 className="text-xl font-semibold text-[#3f4159]">
                 {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
               </h2>
             </div>
@@ -246,6 +246,7 @@ export default function CalendarioPersonal() {
                   variant={viewMode === 'month' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setViewMode('month')}
+                  className={viewMode === 'month' ? 'bg-[#5555ea] hover:bg-[#4a4ad9] text-white' : 'border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]'}
                 >
                   Mes
                 </Button>
@@ -253,6 +254,7 @@ export default function CalendarioPersonal() {
                   variant={viewMode === 'week' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setViewMode('week')}
+                  className={viewMode === 'week' ? 'bg-[#5555ea] hover:bg-[#4a4ad9] text-white' : 'border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]'}
                 >
                   Semana
                 </Button>
@@ -262,6 +264,7 @@ export default function CalendarioPersonal() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowFilters(!showFilters)}
+                className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]"
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Filtros
@@ -271,17 +274,17 @@ export default function CalendarioPersonal() {
 
           {/* Filters */}
           {showFilters && (
-            <div className="mt-4 pt-4 border-t space-y-4">
+            <div className="mt-4 pt-4 border-t border-[#e3e4ec] space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                  <Label className="text-sm font-medium">Programa</Label>
+                  <Label className="text-sm font-medium text-[#3f4159]">Programa</Label>
                   <Select value={filters.programa} onValueChange={(value) => 
                     setFilters(prev => ({ ...prev, programa: value }))
                   }>
-                    <SelectTrigger>
+                    <SelectTrigger className="border-[#e3e4ec] bg-white">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="border-[#e3e4ec] bg-white">
                       <SelectItem value="todos">Todos los programas</SelectItem>
                       <SelectItem value="maestria">Maestría en Gestión</SelectItem>
                       <SelectItem value="mba">MBA</SelectItem>
@@ -291,14 +294,14 @@ export default function CalendarioPersonal() {
                 </div>
 
                 <div>
-                  <Label className="text-sm font-medium">Curso</Label>
+                  <Label className="text-sm font-medium text-[#3f4159]">Curso</Label>
                   <Select value={filters.curso} onValueChange={(value) => 
                     setFilters(prev => ({ ...prev, curso: value }))
                   }>
-                    <SelectTrigger>
+                    <SelectTrigger className="border-[#e3e4ec] bg-white">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="border-[#e3e4ec] bg-white">
                       <SelectItem value="todos">Todos los cursos</SelectItem>
                       <SelectItem value="ges001">Gestión Estratégica</SelectItem>
                       <SelectItem value="mkt001">Marketing Digital</SelectItem>
@@ -308,14 +311,14 @@ export default function CalendarioPersonal() {
                 </div>
 
                 <div>
-                  <Label className="text-sm font-medium">Modalidad</Label>
+                  <Label className="text-sm font-medium text-[#3f4159]">Modalidad</Label>
                   <Select value={filters.modalidad} onValueChange={(value) => 
                     setFilters(prev => ({ ...prev, modalidad: value }))
                   }>
-                    <SelectTrigger>
+                    <SelectTrigger className="border-[#e3e4ec] bg-white">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="border-[#e3e4ec] bg-white">
                       <SelectItem value="todas">Todas</SelectItem>
                       <SelectItem value="presencial">Presencial</SelectItem>
                       <SelectItem value="virtual">Virtual</SelectItem>
@@ -325,7 +328,7 @@ export default function CalendarioPersonal() {
                 </div>
 
                 <div>
-                  <Label className="text-sm font-medium mb-2 block">Vista de Rol</Label>
+                  <Label className="text-sm font-medium mb-2 block text-[#3f4159]">Vista de Rol</Label>
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -336,7 +339,7 @@ export default function CalendarioPersonal() {
                           setFilters(prev => ({ ...prev, rol: newRol }));
                         }}
                       />
-                      <Label htmlFor="docente" className="text-sm">Docente</Label>
+                      <Label htmlFor="docente" className="text-sm text-[#3f4159]">Docente</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -347,7 +350,7 @@ export default function CalendarioPersonal() {
                           setFilters(prev => ({ ...prev, rol: newRol }));
                         }}
                       />
-                      <Label htmlFor="estudiante" className="text-sm">Estudiante</Label>
+                      <Label htmlFor="estudiante" className="text-sm text-[#3f4159]">Estudiante</Label>
                     </div>
                   </div>
                 </div>
@@ -358,13 +361,13 @@ export default function CalendarioPersonal() {
       </Card>
 
       {/* Calendar */}
-      <Card>
+      <Card className="border-[#e3e4ec] bg-white shadow-sm">
         <CardContent className="p-0">
           {viewMode === 'month' ? (
-            <div className="grid grid-cols-7 gap-0 border-b">
+            <div className="grid grid-cols-7 gap-0 border-b border-[#e3e4ec]">
               {/* Header */}
               {daysOfWeek.map(day => (
-                <div key={day} className="p-4 text-center font-medium border-r last:border-r-0 bg-muted">
+                <div key={day} className="p-4 text-center font-medium border-r border-[#e3e4ec] last:border-r-0 bg-[#f7f8fe] text-[#3f4159]">
                   {day}
                 </div>
               ))}
@@ -378,11 +381,11 @@ export default function CalendarioPersonal() {
                 return (
                   <div
                     key={index}
-                    className={`min-h-32 p-2 border-r border-b last:border-r-0 ${
-                      !isCurrentMonth ? 'bg-muted/30 text-muted-foreground' : ''
-                    } ${isToday ? 'bg-primary/5' : ''}`}
+                    className={`min-h-32 p-2 border-r border-b border-[#e3e4ec] last:border-r-0 ${
+                      !isCurrentMonth ? 'bg-[#f7f8fe] text-[#596b88]' : ''
+                    } ${isToday ? 'bg-[#e4e9ff]' : ''}`}
                   >
-                    <div className={`text-sm font-medium mb-2 ${isToday ? 'text-primary' : ''}`}>
+                    <div className={`text-sm font-medium mb-2 ${isToday ? 'text-[#5555ea]' : 'text-[#3f4159]'}`}>
                       {date.getDate()}
                     </div>
                     
@@ -390,7 +393,7 @@ export default function CalendarioPersonal() {
                       {events.slice(0, 2).map(event => (
                         <div
                           key={event.id}
-                          className={`text-xs p-1 rounded border cursor-pointer hover:opacity-80 ${
+                          className={`text-xs p-1 border cursor-pointer hover:opacity-80 ${
                             getModalidadColor(event.modalidad)
                           } ${getEstadoIndicator(event.estado)}`}
                           onClick={() => {
@@ -407,7 +410,7 @@ export default function CalendarioPersonal() {
                         </div>
                       ))}
                       {events.length > 2 && (
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-xs text-[#596b88]">
                           +{events.length - 2} más
                         </div>
                       )}
@@ -419,7 +422,7 @@ export default function CalendarioPersonal() {
           ) : (
             // Vista semanal simplificada
             <div className="p-6">
-              <div className="text-center text-muted-foreground">
+              <div className="text-center text-[#596b88]">
                 <Calendar className="h-12 w-12 mx-auto mb-2 opacity-50" />
                 <p>Vista semanal - Próximamente</p>
                 <p className="text-sm">Esta funcionalidad estará disponible en la siguiente versión</p>
@@ -430,27 +433,27 @@ export default function CalendarioPersonal() {
       </Card>
 
       {/* Legend */}
-      <Card>
+      <Card className="border-[#e3e4ec] bg-white shadow-sm">
         <CardHeader>
-          <CardTitle className="text-base">Leyenda</CardTitle>
+          <CardTitle className="text-base text-[#3f4159]">Leyenda</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded border bg-primary/10 border-primary/20"></div>
-              <span className="text-sm">Presencial</span>
+              <div className="w-4 h-4 border border-[#5555ea] bg-[#e4e9ff]"></div>
+              <span className="text-sm text-[#3f4159]">Presencial</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded border bg-blue-50 border-blue-200"></div>
-              <span className="text-sm">Virtual</span>
+              <div className="w-4 h-4 border border-[#4fb37b] bg-[#e6f7ef]"></div>
+              <span className="text-sm text-[#3f4159]">Virtual</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded border bg-purple-50 border-purple-200"></div>
-              <span className="text-sm">Híbrida</span>
+              <div className="w-4 h-4 border border-[#b8860b] bg-[#fff8e6]"></div>
+              <span className="text-sm text-[#3f4159]">Híbrida</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded border border-orange-400 border-l-4 border-l-orange-400"></div>
-              <span className="text-sm">Actualizado recientemente</span>
+              <div className="w-4 h-4 border border-[#e9683b] border-l-4 border-l-[#e9683b]"></div>
+              <span className="text-sm text-[#3f4159]">Actualizado recientemente</span>
             </div>
           </div>
         </CardContent>

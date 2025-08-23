@@ -13,7 +13,8 @@ import {
   CheckCircle,
   TrendingUp,
   BookOpen,
-  UserCheck
+  UserCheck,
+  BarChart3
 } from "lucide-react";
 
 const kpiCards = [
@@ -24,7 +25,8 @@ const kpiCards = [
     description: "Semestre 2024-2",
     icon: BookOpen,
     progress: 87.5,
-    trend: "+6 esta semana"
+    trend: "+6 esta semana",
+    color: "primary"
   },
   {
     title: "Conflictos Abiertos",
@@ -98,152 +100,191 @@ const recentActivity = [
 
 export default function Dashboard() {
   return (
-    <div className="space-y-8">
-      {/* Welcome Header */}
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-foreground">
-          Bienvenida, María
-        </h1>
-        <p className="text-muted-foreground text-lg">
-          Panel de control - Oficina de Posgrados
-        </p>
-      </div>
-
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {kpiCards.map((kpi, index) => (
-          <Card key={index} className="shadow-soft hover:shadow-elegant transition-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {kpi.title}
-              </CardTitle>
-              <kpi.icon className={`h-4 w-4 ${
-                kpi.color === 'destructive' ? 'text-destructive' :
-                kpi.color === 'success' ? 'text-success' :
-                kpi.color === 'secondary' ? 'text-muted-foreground' :
-                'text-primary'
-              }`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {kpi.value}
-                {kpi.total && <span className="text-sm text-muted-foreground">/{kpi.total}</span>}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {kpi.description}
+    <div className="min-h-screen bg-[#f7f8fe]">
+      {/* Main Content */}
+      <div className="container mx-auto px-6 py-8">
+        {/* Welcome Section */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-bold text-[#3f4159] mb-2">
+                Bienvenida, María
+              </h1>
+              <p className="text-[#596b88] text-lg">
+                Panel de control - Oficina de Posgrados
               </p>
-              {kpi.progress && (
-                <Progress value={kpi.progress} className="mt-3" />
-              )}
-              {kpi.trend && (
-                <p className="text-xs text-success mt-2 flex items-center gap-1">
-                  <TrendingUp className="h-3 w-3" />
-                  {kpi.trend}
-                </p>
-              )}
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Quick Actions */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Accesos Rápidos</CardTitle>
-            <CardDescription>
-              Herramientas principales del sistema
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {quickActions.map((action, index) => (
-              <Button
-                key={index}
-                variant="outline"
-                className="h-auto p-6 flex flex-col items-center space-y-3 hover:bg-secondary/50"
-                asChild
-              >
-                <a href={action.href}>
-                  <action.icon className={`h-8 w-8 ${
-                    action.color === 'primary' ? 'text-primary' :
-                    action.color === 'success' ? 'text-success' :
-                    'text-secondary-foreground'
-                  }`} />
-                  <div className="text-center">
-                    <div className="font-medium">{action.title}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {action.description}
-                    </div>
-                  </div>
-                </a>
-              </Button>
-            ))}
-          </CardContent>
-        </Card>
-
-        {/* Recent Activity */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              Actividad Reciente
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {recentActivity.map((activity, index) => (
-              <div key={index} className="flex flex-col space-y-2 pb-3 border-b border-border last:border-0">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium">{activity.action}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {activity.course}
-                    </p>
-                  </div>
-                  <Badge variant="secondary" className="text-xs">
-                    {activity.time}
-                  </Badge>
-                </div>
-                {activity.user !== "Sistema" && (
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <UserCheck className="h-3 w-3" />
-                    {activity.user}
-                  </div>
-                )}
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Current Semester Overview */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Resumen Semestre 2024-2</CardTitle>
-          <CardDescription>
-            Estado general de programas de posgrado
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-primary">14</div>
-              <div className="text-sm text-muted-foreground">Programas</div>
             </div>
-            <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-success">156</div>
-              <div className="text-sm text-muted-foreground">Estudiantes</div>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-secondary-foreground">28</div>
-              <div className="text-sm text-muted-foreground">Docentes</div>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-muted-foreground">1,247</div>
-              <div className="text-sm text-muted-foreground">Horas Total</div>
+            <div className="text-right">
+              <p className="text-sm text-[#abb8c3]">Última actualización</p>
+              <p className="text-lg font-semibold text-[#3f4159]">Hace 5 minutos</p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* KPI Cards - Rediseñadas con colores Icesi */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {kpiCards.map((kpi, index) => (
+            <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-0 bg-white shadow-sm">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-semibold text-[#3f4159]">
+                    {kpi.title}
+                  </CardTitle>
+                  <div className={`p-2 ${kpi.color === 'destructive' ? 'bg-[#fdecec] text-[#e9683b]' :
+                    kpi.color === 'success' ? 'bg-[#e6f7ef] text-[#4fb37b]' :
+                    kpi.color === 'secondary' ? 'bg-[#e4e9ff] text-[#5555ea]' :
+                    'bg-[#f0f860] text-[#000000]'}`}>
+                    <kpi.icon className="h-5 w-5" />
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-[#3f4159] mb-2">
+                  {kpi.value}
+                  {kpi.total && <span className="text-lg text-[#abb8c3]">/{kpi.total}</span>}
+                </div>
+                <p className="text-sm text-[#596b88] mb-3">
+                  {kpi.description}
+                </p>
+                {kpi.progress && (
+                  <div className="mb-3">
+                    <Progress value={kpi.progress} className="h-2" />
+                    <p className="text-xs text-[#abb8c3] mt-1">{kpi.progress}% completado</p>
+                  </div>
+                )}
+                {kpi.trend && (
+                  <div className={`inline-flex items-center px-3 py-1 text-xs font-medium ${
+                    kpi.trend.includes('+') ? 'bg-[#e6f7ef] text-[#4fb37b]' : 'bg-[#e4e9ff] text-[#5555ea]'
+                  }`}>
+                    <TrendingUp className="w-3 h-3 mr-1" />
+                    {kpi.trend}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Quick Actions y Recent Activity */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* Quick Actions */}
+          <div className="lg:col-span-2">
+            <Card className="border-0 bg-white shadow-sm">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-2xl font-bold text-[#3f4159] flex items-center">
+                  <Layers3 className="w-6 h-6 mr-3 text-[#5555ea]" />
+                  Accesos Rápidos
+                </CardTitle>
+                <CardDescription className="text-[#596b88]">
+                  Herramientas principales del sistema de planeación
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {quickActions.map((action, index) => (
+                    <div
+                      key={index}
+                      className="group cursor-pointer p-6 border-2 border-transparent hover:border-[#5555ea] hover:bg-[#e4e9ff] transition-all duration-300"
+                    >
+                      <div className="flex flex-col items-center text-center space-y-3">
+                        <div className={`p-3 ${action.color === 'primary' ? 'bg-[#5555ea] text-white' :
+                          action.color === 'success' ? 'bg-[#4fb37b] text-white' :
+                          'bg-[#e9683b] text-white'}`}>
+                          <action.icon className="h-8 w-8" />
+                        </div>
+                        <div>
+                          <div className="font-semibold text-[#3f4159] group-hover:text-[#5555ea] transition-colors">
+                            {action.title}
+                          </div>
+                          <div className="text-sm text-[#596b88] mt-1">
+                            {action.description}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Recent Activity */}
+          <Card className="border-0 bg-white shadow-sm">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-2xl font-bold text-[#3f4159] flex items-center">
+                <Clock className="w-6 h-6 mr-3 text-[#5555ea]" />
+                Actividad Reciente
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {recentActivity.map((activity, index) => (
+                <div key={index} className="group p-4 hover:bg-[#f7f8fe] transition-colors border-l-4 border-transparent hover:border-[#5555ea]">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="space-y-1">
+                      <p className="text-sm font-semibold text-[#3f4159] group-hover:text-[#5555ea] transition-colors">
+                        {activity.action}
+                      </p>
+                      <p className="text-xs text-[#596b88]">
+                        {activity.course}
+                      </p>
+                    </div>
+                    <Badge variant="secondary" className="text-xs bg-[#e3e4ec] text-[#596b88]">
+                      {activity.time}
+                    </Badge>
+                  </div>
+                  {activity.user !== "Sistema" && (
+                    <div className="flex items-center gap-2 text-xs text-[#abb8c3]">
+                      <UserCheck className="w-3 h-3" />
+                      {activity.user}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Semester Overview */}
+        <Card className="border-0 bg-white shadow-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-2xl font-bold text-[#3f4159] flex items-center">
+              <BarChart3 className="w-6 h-6 mr-3 text-[#5555ea]" />
+              Resumen Semestre 2024-2
+            </CardTitle>
+            <CardDescription className="text-[#596b88]">
+              Estado general de programas de posgrado y métricas clave
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="text-center group">
+                <div className="p-4 bg-[#e4e9ff] text-[#5555ea] mb-3 group-hover:scale-105 transition-transform">
+                  <div className="text-3xl font-bold">14</div>
+                  <div className="text-sm opacity-90">Programas</div>
+                </div>
+              </div>
+              <div className="text-center group">
+                <div className="p-4 bg-[#e6f7ef] text-[#4fb37b] mb-3 group-hover:scale-105 transition-transform">
+                  <div className="text-3xl font-bold">156</div>
+                  <div className="text-sm opacity-90">Estudiantes</div>
+                </div>
+              </div>
+              <div className="text-center group">
+                <div className="p-4 bg-[#f0f860] text-[#000000] mb-3 group-hover:scale-105 transition-transform">
+                  <div className="text-3xl font-bold">28</div>
+                  <div className="text-sm opacity-90">Docentes</div>
+                </div>
+              </div>
+              <div className="text-center group">
+                <div className="p-4 bg-[#fdecec] text-[#e9683b] mb-3 group-hover:scale-105 transition-transform">
+                  <div className="text-3xl font-bold">1,247</div>
+                  <div className="text-sm opacity-90">Horas Total</div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
