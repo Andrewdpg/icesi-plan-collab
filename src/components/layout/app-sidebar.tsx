@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 
+import logo from "@/assets/logo_hotizontal_dc.png";
+
 import {
   Sidebar,
   SidebarContent as SidebarContentUI,
@@ -20,6 +22,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarHeader,
   useSidebar,
 } from "@/components/ui/sidebar";
 
@@ -45,28 +48,31 @@ function SidebarNavigation() {
       : "hover:bg-[#f7f8fe] text-[#3f4159] hover:text-[#5555ea]";
 
   return (
-    <SidebarContentUI className="bg-[#f7f8fe]">
-      <SidebarGroup>
-        <SidebarGroupLabel className={`${collapsed ? "hidden" : "block"} text-[#596b88] font-medium text-sm px-3 py-2`}>
-          Navegación Principal
-        </SidebarGroupLabel>
-        
-        <SidebarGroupContent>
-          <SidebarMenu>
-            {navigationItems.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild tooltip={collapsed ? item.title : undefined}>
-                  <NavLink to={item.url} end className={`flex items-center gap-3 px-3 py-2 transition-colors ${getNavClassName}`}>
-                    <item.icon className="h-4 w-4" />
-                    {!collapsed && <span>{item.title}</span>}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroupContent>
-      </SidebarGroup>
-    </SidebarContentUI>
+    <>
+      <SidebarHeader className="bg-[#f7f8fe] p-4 mb-4">
+          {!collapsed && <img src={logo} alt="Icesi Posgrados" className="w-full h-auto px-8" />}
+      </SidebarHeader>
+      
+      <SidebarContentUI className="bg-[#f7f8fe]">
+        <SidebarGroup>
+          
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {navigationItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild tooltip={collapsed ? item.title : undefined}>
+                    <NavLink to={item.url} end className={`flex items-center gap-3 px-3 py-2 transition-colors ${getNavClassName}`}>
+                      <item.icon className="h-4 w-4" />
+                      {!collapsed && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContentUI>
+    </>
   );
 }
 

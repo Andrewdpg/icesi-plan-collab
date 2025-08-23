@@ -27,23 +27,15 @@ export function AppHeader() {
   const breadcrumb = breadcrumbMap[currentPath] || "Icesi Posgrados";
 
   return (
-    <header className="h-16 border-b border-[#e3e4ec] bg-white flex items-center justify-between px-6 sticky top-0 z-40 shadow-sm">
+    <header className="h-16 border-b border-[#4444cc] bg-[#5555ea] flex items-center justify-between px-6 sticky top-0 z-40 shadow-sm">
       {/* Left section */}
       <div className="flex items-center gap-4">
         <SidebarTrigger />
-        
-        {/* Logo - hidden on mobile, shown on desktop */}
-        <div className="hidden md:flex items-center gap-3">
-          <div className="w-8 h-8 bg-[#5555ea] flex items-center justify-center">
-            <span className="text-white font-bold text-sm">I</span>
-          </div>
-          <span className="font-semibold text-[#3f4159]">Icesi Posgrados</span>
-        </div>
       </div>
 
       {/* Center breadcrumb - hidden on mobile */}
       <div className="hidden md:block">
-        <h1 className="text-lg font-medium text-[#3f4159]">{breadcrumb}</h1>
+        <h1 className="text-lg font-medium text-white">{breadcrumb}</h1>
       </div>
 
       {/* Right actions */}
@@ -51,12 +43,12 @@ export function AppHeader() {
         {/* Program/Cohort selectors for planeacion page */}
         {currentPath === "/planeacion" && (
           <div className="hidden lg:flex items-center gap-2">
-            <select className="px-3 py-1.5 border border-[#e3e4ec] text-sm bg-white text-[#3f4159] focus:border-[#5555ea] focus:outline-none">
+            <select className="px-3 py-1.5 border border-white text-sm bg-white text-[#3f4159] focus:border-[#e3e4ec] focus:outline-none">
               <option>Maestría en Gestión</option>
               <option>MBA</option>
               <option>Doctorado en Ciencias</option>
             </select>
-            <select className="px-3 py-1.5 border border-[#e3e4ec] text-sm bg-white text-[#3f4159] focus:border-[#5555ea] focus:outline-none">
+            <select className="px-3 py-1.5 border border-white text-sm bg-white text-[#3f4159] focus:border-[#e3e4ec] focus:outline-none">
               <option>2024-2</option>
               <option>2024-1</option>
             </select>
@@ -64,8 +56,8 @@ export function AppHeader() {
         )}
 
         {/* Notifications */}
-        <Button variant="ghost" size="icon" className="relative hover:bg-[#e4e9ff]">
-          <Bell className="h-4 w-4 text-[#3f4159]" />
+        <Button variant="ghost" size="icon" className="relative hover:bg-[#4444cc] text-white hover:text-white">
+          <Bell className="h-4 w-4" />
           <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-[#e9683b] text-white">
             3
           </Badge>
@@ -74,10 +66,10 @@ export function AppHeader() {
         {/* User menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-9 w-9 hover:bg-[#e4e9ff]">
+            <Button variant="ghost" className="relative h-9 w-9 hover:bg-[#4444cc] text-white hover:text-white">
               <Avatar className="h-9 w-9">
                 <AvatarImage src="/avatars/user.jpg" alt="Usuario" />
-                <AvatarFallback className="bg-[#5555ea] text-white">
+                <AvatarFallback className="bg-white text-[#5555ea]">
                   <User className="h-4 w-4" />
                 </AvatarFallback>
               </Avatar>
