@@ -7,7 +7,8 @@ import {
   Bell,
   CheckCircle,
   History,
-  Settings
+  Settings,
+  BookOpen
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 
@@ -29,6 +30,7 @@ import {
 const navigationItems = [
   { title: "Inicio", url: "/", icon: Home },
   { title: "Calendario", url: "/calendario", icon: Calendar },
+  { title: "Mi Horario", url: "/mi-horario", icon: BookOpen },
   { title: "Planeación", url: "/planeacion", icon: Layers3 },
   { title: "Datos", url: "/datos", icon: Upload },
   { title: "Configuración", url: "/configuracion", icon: Settings },

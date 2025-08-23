@@ -12,6 +12,7 @@ import Datos from "./pages/datos";
 import CambiosUrgentes from "./pages/cambios-urgentes";
 import CalendarioPersonal from "./pages/calendario";
 import ConfiguracionPage from "./pages/configuracion";
+import MiHorario from "./pages/mi-horario";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="planeacion" element={<PlaneacionIndex />} />
             <Route path="planeacion/:id" element={<Planeacion />} />
             <Route path="calendario" element={<CalendarioPersonal />} />
+            <Route path="mi-horario" element={<MiHorario />} />
             <Route path="datos" element={<Datos />} />
             <Route path="cambios-urgentes" element={<CambiosUrgentes />} />
             <Route path="configuracion" element={<ConfiguracionPage />} />
