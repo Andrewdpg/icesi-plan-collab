@@ -8,7 +8,8 @@ import {
   CheckCircle,
   History,
   Settings,
-  BookOpen
+  BookOpen,
+  Building
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 
@@ -33,6 +34,8 @@ const navigationItems = [
   { title: "Mi Horario", url: "/mi-horario", icon: BookOpen },
   { title: "Planeación", url: "/planeacion", icon: Layers3 },
   { title: "Datos", url: "/datos", icon: Upload },
+  { title: "Cambios Urgentes", url: "/cambios-urgentes", icon: Upload },
+  { title: "Espacios", url: "/espacios", icon: Building },
   { title: "Configuración", url: "/configuracion", icon: Settings },
 ];
 
