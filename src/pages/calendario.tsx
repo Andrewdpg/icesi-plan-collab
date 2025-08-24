@@ -20,6 +20,7 @@ import {
   EyeOff,
   Settings
 } from "lucide-react";
+import { SessionChangeModal } from "@/components/calendario/session-change-modal";
 import {
   Select,
   SelectContent,
@@ -117,6 +118,8 @@ export default function CalendarioPersonal() {
     rol: "ambos"
   });
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const [isChangeModalOpen, setIsChangeModalOpen] = useState(false);
 
   const getModalidadColor = (modalidad: string) => {
     switch (modalidad) {
@@ -187,6 +190,11 @@ export default function CalendarioPersonal() {
   const getEventsForDate = (date: Date) => {
     const dateString = date.toISOString().split('T')[0];
     return mockEvents.filter(event => event.fecha === dateString);
+  };
+
+  const handleEventClick = (event: CalendarEvent) => {
+    setSelectedEvent(event);
+    setIsChangeModalOpen(true);
   };
 
   return (
@@ -393,13 +401,10 @@ export default function CalendarioPersonal() {
                       {events.slice(0, 2).map(event => (
                         <div
                           key={event.id}
-                          className={`text-xs p-1 border cursor-pointer hover:opacity-80 ${
+                          className={`text-xs p-1 border cursor-pointer hover:opacity-80 transition-all hover:scale-105 ${
                             getModalidadColor(event.modalidad)
                           } ${getEstadoIndicator(event.estado)}`}
-                          onClick={() => {
-                            // Mostrar detalles del evento
-                            console.log('Mostrar detalles:', event);
-                          }}
+                          onClick={() => handleEventClick(event)}
                         >
                           <div className="font-medium truncate">
                             {event.codigo}-{event.grupo}
@@ -458,6 +463,13 @@ export default function CalendarioPersonal() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Modal de cambios */}
+      <SessionChangeModal
+        open={isChangeModalOpen}
+        onOpenChange={setIsChangeModalOpen}
+        event={selectedEvent}
+      />
     </div>
   );
 }
