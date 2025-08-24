@@ -9,7 +9,7 @@ import Dashboard from "./pages/dashboard";
 import PlaneacionIndex from "./pages/planeacion-index";
 import Planeacion from "./pages/planeacion";
 import Datos from "./pages/datos";
-
+import CambiosUrgentes from "./pages/cambios-urgentes";
 import CalendarioPersonal from "./pages/calendario";
 import ConfiguracionPage from "./pages/configuracion";
 import MiHorario from "./pages/mi-horario";
@@ -33,7 +33,7 @@ const App = () => (
             <Route path="calendario" element={<CalendarioPersonal />} />
             <Route path="mi-horario" element={<MiHorario />} />
             <Route path="datos" element={<Datos />} />
-            
+            <Route path="cambios-urgentes" element={<CambiosUrgentes />} />
             <Route path="configuracion" element={<ConfiguracionPage />} />
             <Route path="espacios" element={<Espacios />} />
           </Route>
