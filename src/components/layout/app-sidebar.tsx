@@ -31,8 +31,10 @@ import {
 const navigationItems = [
   { title: "Inicio", url: "/", icon: Home },
   { title: "Calendario", url: "/calendario", icon: Calendar },
+  { title: "Mi Horario", url: "/mi-horario", icon: BookOpen },
   { title: "Planeación", url: "/planeacion", icon: Layers3 },
   { title: "Datos", url: "/datos", icon: Upload },
+  { title: "Cambios Urgentes", url: "/cambios-urgentes", icon: Upload },
   { title: "Espacios", url: "/espacios", icon: Building },
   { title: "Configuración", url: "/configuracion", icon: Settings },
 ];
