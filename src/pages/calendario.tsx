@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import SessionChangeModal from "@/components/calendario/session-change-modal";
 
 interface CalendarEvent {
   id: string;
@@ -117,6 +118,8 @@ export default function CalendarioPersonal() {
     rol: "ambos"
   });
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const [showChangeModal, setShowChangeModal] = useState(false);
 
   const getModalidadColor = (modalidad: string) => {
     switch (modalidad) {
@@ -397,8 +400,8 @@ export default function CalendarioPersonal() {
                             getModalidadColor(event.modalidad)
                           } ${getEstadoIndicator(event.estado)}`}
                           onClick={() => {
-                            // Mostrar detalles del evento
-                            console.log('Mostrar detalles:', event);
+                            setSelectedEvent(event);
+                            setShowChangeModal(true);
                           }}
                         >
                           <div className="font-medium truncate">
@@ -458,6 +461,16 @@ export default function CalendarioPersonal() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Modal de cambios */}
+      <SessionChangeModal 
+        event={selectedEvent}
+        isOpen={showChangeModal}
+        onClose={() => {
+          setShowChangeModal(false);
+          setSelectedEvent(null);
+        }}
+      />
     </div>
   );
 }
