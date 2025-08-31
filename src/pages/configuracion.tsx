@@ -848,38 +848,48 @@ export default function ConfiguracionPage() {
               </div>
 
               {/* Holidays List */}
-              <div className="space-y-2">
-                {holidays.map((holiday) => (
-                  <div
-                    key={holiday.id}
-                    className="flex items-center justify-between p-3 border rounded-lg"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <div>
-                        <p className="font-medium">{holiday.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {holiday.date}
-                        </p>
-                      </div>
-                      <Badge
-                        variant={
-                          holiday.type === "nacional" ? "default" : "secondary"
-                        }
-                      >
-                        {holiday.type === "nacional"
-                          ? "Nacional"
-                          : "Institucional"}
-                      </Badge>
-                    </div>
-                    {holiday.type === "institucional" && (
-                      <Button variant="ghost" size="sm">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
-                ))}
-              </div>
+              {/* Holidays List as Table */}
+              <Card>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Nombre</TableHead>
+                        <TableHead>Fecha</TableHead>
+                        <TableHead>Tipo</TableHead>
+                        <TableHead className="w-[150px]">Acciones</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {holidays.map((holiday) => (
+                        <TableRow key={holiday.id}>
+                          <TableCell className="font-medium">{holiday.name}</TableCell>
+                          <TableCell>{holiday.date}</TableCell>
+                          <TableCell>
+                            <Badge
+                              variant={holiday.type === "nacional" ? "default" : "secondary"}
+                            >
+                              {holiday.type === "nacional"
+                                ? "Festivo Nacional"
+                                : "Fecha Especial"}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm">
+                                Editar
+                              </Button>
+                              <Button variant="destructive" size="sm">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
             </CardContent>
           </Card>
         </TabsContent>
