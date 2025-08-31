@@ -126,7 +126,7 @@ export default function Espacios() {
   const estudiantes = useMemo(() => ([
     { id: 'e1', nombre: 'Laura Torres', correo: 'ltorres@correo.edu', cohorte: '2024-2' },
     { id: 'e2', nombre: 'Julián Pérez', correo: 'jperez@correo.edu', cohorte: '2024-2' },
-    { id: 'e3', nombre: 'María Gómez', correo: 'mgomez@correo.edu', cohorte: '2024-1' },
+    { id: 'e3', nombre: 'María Gómez', correo: 'mgomez@correo.edu', cohorte: '2025-1' },
   ]), []);
   const programas = useMemo(() => ([
     { id: 'p1', nombre: 'Maestría en Gestión', cursos: [
@@ -247,7 +247,7 @@ export default function Espacios() {
         </div>
         <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button className="gap-2 rounded-lg">
               <Plus className="h-4 w-4" />
               Nuevo
             </Button>
@@ -269,6 +269,7 @@ export default function Espacios() {
                     value={newSpace.name}
                     onChange={(e) => setNewSpace({ ...newSpace, name: e.target.value })}
                     placeholder="Ej: Aula 101"
+                    className="rounded-lg"
                   />
                 </div>
                 
@@ -278,10 +279,10 @@ export default function Espacios() {
                     value={newSpace.type}
                     onValueChange={(value: 'physical' | 'virtual') => setNewSpace({ ...newSpace, type: value })}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="rounded-lg">
                       <SelectValue placeholder="Seleccionar tipo" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="rounded-lg">
                       <SelectItem value="physical">Físico</SelectItem>
                       <SelectItem value="virtual">Virtual</SelectItem>
                     </SelectContent>
@@ -561,7 +562,7 @@ export default function Espacios() {
                 <div className="col-span-1 md:col-span-2">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="Buscar docente por nombre o correo" className="pl-10" />
+                    <Input placeholder="Buscar docente por nombre o correo" className="pl-10 rounded-lg" />
                   </div>
                 </div>
                 <Select>
@@ -608,7 +609,7 @@ export default function Espacios() {
                 <div className="col-span-1 md:col-span-2">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="Buscar estudiante por nombre o correo" className="pl-10" />
+                    <Input placeholder="Buscar estudiante por nombre o correo" className="pl-10 rounded-lg" />
                   </div>
                 </div>
                 <Select>
@@ -618,7 +619,7 @@ export default function Espacios() {
                   <SelectContent>
                     <SelectItem value="all">Todas</SelectItem>
                     <SelectItem value="2024-2">2024-2</SelectItem>
-                    <SelectItem value="2024-1">2024-1</SelectItem>
+                    <SelectItem value="2025-1">2025-1</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -655,7 +656,7 @@ export default function Espacios() {
                 <div className="col-span-1 md:col-span-2">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="Buscar programa" className="pl-10" />
+                    <Input placeholder="Buscar programa" className="pl-10 rounded-lg" />
                   </div>
                 </div>
                 <Select>

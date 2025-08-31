@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { 
   Clock,
   RotateCcw,
-  X,
   History,
   User,
   FileText,
@@ -107,20 +106,13 @@ export function VersionHistoryDrawer({ open, onOpenChange }: VersionHistoryDrawe
       <SheetContent className="w-[500px] sm:max-w-[500px] p-0">
         <div className="flex flex-col h-full">
           <SheetHeader className="p-6 border-b">
-            <div className="flex items-center justify-between">
-              <div>
-                <SheetTitle className="text-xl flex items-center gap-2">
-                  <History className="h-5 w-5" />
-                  Historial de Versiones
-                </SheetTitle>
-                <SheetDescription>
-                  Versiones publicadas y acciones de reversión disponibles
-                </SheetDescription>
-              </div>
-              <Button variant="ghost" size="icon" onClick={() => onOpenChange(false)}>
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
+            <SheetTitle className="text-xl flex items-center gap-2">
+              <History className="h-5 w-5" />
+              Historial de Versiones
+            </SheetTitle>
+            <SheetDescription>
+              Versiones publicadas y acciones de reversión disponibles
+            </SheetDescription>
           </SheetHeader>
 
           <div className="flex-1 p-6 space-y-4 overflow-y-auto">

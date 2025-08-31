@@ -18,7 +18,10 @@ import {
   Video,
   Eye,
   EyeOff,
-  Settings
+  Settings,
+  List,
+  Grid3X3,
+  CalendarDays
 } from "lucide-react";
 import {
   Select,
@@ -39,6 +42,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface CalendarEvent {
   id: string;
@@ -54,6 +58,7 @@ interface CalendarEvent {
   estado: "publicado" | "actualizado" | "cancelado";
   estudiantes?: number;
   adjuntos?: number;
+  programa?: string;
 }
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
@@ -70,60 +75,64 @@ function generateMockEvents(baseDate: Date): CalendarEvent[] {
   return [
     {
       id: "1",
-      titulo: "Gestión Estratégica",
-      codigo: "GES001",
+      titulo: "MBA - Estrategia",
+      codigo: "MBA001",
       grupo: "01",
       fecha: toISO(d1),
-      horaInicio: "08:00",
-      horaFin: "10:00",
+      horaInicio: "10:00",
+      horaFin: "12:00",
       docente: "Dr. Carlos Mendoza",
       aula: "Aula 204",
       modalidad: "presencial",
       estado: "publicado",
       estudiantes: 25,
-      adjuntos: 2
+      adjuntos: 2,
+      programa: "MBA"
     },
     {
       id: "2",
-      titulo: "Marketing Digital",
-      codigo: "MKT001",
-      grupo: "01",
-      fecha: toISO(d1),
-      horaInicio: "14:00",
-      horaFin: "17:00",
-      docente: "Dra. Ana García",
-      aula: "Virtual",
-      modalidad: "virtual",
-      estado: "actualizado",
-      estudiantes: 30
-    },
-    {
-      id: "3",
-      titulo: "Finanzas Corporativas",
+      titulo: "Finanzas Corp.",
       codigo: "FIN001",
       grupo: "02",
       fecha: toISO(d2),
-      horaInicio: "09:00",
-      horaFin: "12:00",
+      horaInicio: "12:00",
+      horaFin: "14:00",
+      docente: "Dra. Ana García",
+      aula: "Sala Virtual",
+      modalidad: "virtual",
+      estado: "actualizado",
+      estudiantes: 30,
+      programa: "Maestría"
+    },
+    {
+      id: "3",
+      titulo: "Mercadeo Digital",
+      codigo: "MKT001",
+      grupo: "01",
+      fecha: toISO(d3),
+      horaInicio: "14:00",
+      horaFin: "16:00",
       docente: "Dr. Roberto Silva",
       aula: "Sala Híbrida A",
       modalidad: "hibrida",
       estado: "publicado",
       estudiantes: 28,
-      adjuntos: 1
+      adjuntos: 1,
+      programa: "MBA"
     },
     {
       id: "4",
       titulo: "Análisis de Datos",
       codigo: "DAT001",
       grupo: "01",
-      fecha: toISO(d3),
+      fecha: toISO(d1),
       horaInicio: "18:00",
       horaFin: "20:00",
       docente: "Dra. Laura Torres",
       aula: "Aula 101",
       modalidad: "presencial",
       estado: "publicado",
+      programa: "Doctorado"
     }
   ];
 }
@@ -149,44 +158,19 @@ const monthNames = [
 
 export default function CalendarioPersonal() {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [viewMode, setViewMode] = useState<"month" | "week">("month");
-  const [filters, setFilters] = useState({
-    programa: "todos",
-    curso: "todos",
-    modalidad: "todas",
-    rol: "ambos",
-    vista: "mis" as "mis" | "curso",
-  });
+  const [viewMode, setViewMode] = useState<"semana" | "mes" | "lista">("semana");
+  const [selectedProgram, setSelectedProgram] = useState("todos");
   const [showFilters, setShowFilters] = useState(false);
   const mockEvents = useMemo(() => generateMockEvents(currentDate), [currentDate]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
-  const [wizardStep, setWizardStep] = useState<1 | 2 | 3>(1);
-  const [actionType, setActionType] = useState<"reprogramar" | "cambiar-aula" | "cancelar" | "">("");
-  const [changes, setChanges] = useState({
-    nuevaFecha: "",
-    nuevaHora: "",
-    nuevaAula: "",
-    motivo: "",
-    urgencia: "normal",
-    programarEnvio: false,
-    fechaEnvio: "",
-  });
 
   const getModalidadColor = (modalidad: string) => {
     switch (modalidad) {
-      case 'presencial': return 'bg-primary/10 border-primary/20 text-primary';
-      case 'virtual': return 'bg-blue-50 border-blue-200 text-blue-700';
-      case 'hibrida': return 'bg-purple-50 border-purple-200 text-purple-700';
-      default: return 'bg-muted border-border text-foreground';
-    }
-  };
-
-  const getEstadoIndicator = (estado: string) => {
-    switch (estado) {
-      case 'actualizado': return 'border-l-4 border-l-orange-400';
-      case 'cancelado': return 'opacity-60 line-through';
-      default: return '';
+      case 'presencial': return 'bg-[#5555ea] text-white';
+      case 'virtual': return 'bg-gray-500 text-white';
+      case 'hibrida': return 'bg-yellow-500 text-white';
+      default: return 'bg-gray-400 text-white';
     }
   };
 
@@ -207,6 +191,13 @@ export default function CalendarioPersonal() {
     });
   };
 
+  const getWeekRange = (date: Date) => {
+    const weekDates = getWeekDates(date);
+    const start = weekDates[0];
+    const end = weekDates[6];
+    return `${monthNames[start.getMonth()]} ${start.getDate()} - ${end.getDate()}, ${start.getFullYear()}`;
+  };
+
   const getEventsForWeek = (weekDates: Date[]) => {
     const byDate: Record<string, Record<string, CalendarEvent | null>> = {};
     weekDates.forEach(d => {
@@ -217,13 +208,25 @@ export default function CalendarioPersonal() {
       });
     });
 
-    getFilteredEvents(mockEvents).forEach(evt => {
+    mockEvents.forEach(evt => {
       if (byDate[evt.fecha] && evt.horaInicio in byDate[evt.fecha]) {
         byDate[evt.fecha][evt.horaInicio] = evt;
       }
     });
 
     return byDate;
+  };
+
+  const navigateWeek = (direction: 'prev' | 'next') => {
+    setCurrentDate(prev => {
+      const newDate = new Date(prev);
+      if (direction === 'prev') {
+        newDate.setDate(prev.getDate() - 7);
+      } else {
+        newDate.setDate(prev.getDate() + 7);
+      }
+      return newDate;
+    });
   };
 
   const navigateMonth = (direction: 'prev' | 'next') => {
@@ -242,18 +245,12 @@ export default function CalendarioPersonal() {
     setCurrentDate(new Date());
   };
 
-  const handleExportICS = () => {
-    // Simular descarga de archivo ICS
-    console.log("Exportando calendario a ICS...");
+  const handleExportPDF = () => {
+    console.log("Exportando calendario a PDF...");
   };
 
-  const handleCopyICSLink = () => {
-    // Simular copia de enlace ICS
-    console.log("Copiando enlace ICS...");
-  };
-
-  const handlePrint = () => {
-    window.print();
+  const handleSyncOutlook = () => {
+    console.log("Sincronizando con Outlook...");
   };
 
   const generateCalendarDays = () => {
@@ -275,18 +272,10 @@ export default function CalendarioPersonal() {
     return days;
   };
 
-  const getFilteredEvents = useMemo(() => {
-    return (events: CalendarEvent[]) => {
-      let filtered = events;
-      if (filters.vista === 'curso' && filters.curso !== 'todos') {
-        filtered = filtered.filter(ev => ev.codigo.toLowerCase() === filters.curso);
-      }
-      if (filters.modalidad !== 'todas') {
-        filtered = filtered.filter(ev => ev.modalidad === filters.modalidad);
-      }
-      return filtered;
-    };
-  }, [filters.vista, filters.curso, filters.modalidad]);
+  const getFilteredEvents = (events: CalendarEvent[]) => {
+    if (selectedProgram === "todos") return events;
+    return events.filter(event => event.programa?.toLowerCase() === selectedProgram);
+  };
 
   const getEventsForDate = (date: Date) => {
     const dateString = date.toISOString().split('T')[0];
@@ -295,46 +284,34 @@ export default function CalendarioPersonal() {
 
   const openEventDialog = (event: CalendarEvent) => {
     setSelectedEvent(event);
-    setWizardStep(1);
-    setActionType("");
-    setChanges({
-      nuevaFecha: "",
-      nuevaHora: "",
-      nuevaAula: "",
-      motivo: "",
-      urgencia: "normal",
-      programarEnvio: false,
-      fechaEnvio: "",
-    });
     setIsDialogOpen(true);
   };
 
-  const handleConfirmChange = () => {
-    alert("Cambio aplicado exitosamente. Notificaciones enviadas.");
-    setIsDialogOpen(false);
+  const getFilteredEventsForList = () => {
+    return getFilteredEvents(mockEvents).sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-[#f7f8fe] p-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Calendario Personal</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold text-[#3f4159]">Calendario Personal</h1>
+          <p className="text-[#596b88] mt-2">
             Vista personalizada de tu agenda académica
           </p>
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={handleExportICS} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
+          <Button variant="outline" size="sm" onClick={handleExportPDF} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg">
             <Download className="h-4 w-4 mr-2" />
             Descargar ICS
           </Button>
-          <Button variant="outline" size="sm" onClick={handleCopyICSLink} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
+          <Button variant="outline" size="sm" onClick={handleSyncOutlook} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg">
             <Link className="h-4 w-4 mr-2" />
             Copiar enlace
           </Button>
-          <Button variant="outline" size="sm" onClick={handlePrint} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
+          <Button variant="outline" size="sm" onClick={() => window.print()} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg">
             <Printer className="h-4 w-4 mr-2" />
             Imprimir
           </Button>
@@ -342,25 +319,43 @@ export default function CalendarioPersonal() {
       </div>
 
       {/* Controls */}
-      <Card className="border-[#e3e4ec] bg-white shadow-sm">
+      <Card className="border-[#e3e4ec] bg-white shadow-sm rounded-xl">
         <CardContent className="p-4">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             {/* Navigation */}
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => navigateMonth('prev')} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => viewMode === 'semana' ? navigateWeek('prev') : navigateMonth('prev')}
+                  className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg"
+                >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="sm" onClick={goToToday} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={goToToday}
+                  className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg"
+                >
                   Hoy
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => navigateMonth('next')} className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => viewMode === 'semana' ? navigateWeek('next') : navigateMonth('next')}
+                  className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg"
+                >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
               
               <h2 className="text-xl font-semibold text-[#3f4159]">
-                {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+                {viewMode === 'semana' 
+                  ? getWeekRange(currentDate)
+                  : `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`
+                }
               </h2>
             </div>
 
@@ -368,20 +363,28 @@ export default function CalendarioPersonal() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <Button
-                  variant={viewMode === 'month' ? 'default' : 'outline'}
+                  variant={viewMode === 'mes' ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setViewMode('month')}
-                  className={viewMode === 'month' ? 'bg-[#5555ea] hover:bg-[#4a4ad9] text-white' : 'border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]'}
+                  onClick={() => setViewMode('mes')}
+                  className={viewMode === 'mes' ? 'bg-[#5555ea] hover:bg-[#4a4ad9] text-white rounded-lg' : 'border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg'}
                 >
                   Mes
                 </Button>
                 <Button
-                  variant={viewMode === 'week' ? 'default' : 'outline'}
+                  variant={viewMode === 'semana' ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setViewMode('week')}
-                  className={viewMode === 'week' ? 'bg-[#5555ea] hover:bg-[#4a4ad9] text-white' : 'border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]'}
+                  onClick={() => setViewMode('semana')}
+                  className={viewMode === 'semana' ? 'bg-[#5555ea] hover:bg-[#4a4ad9] text-white rounded-lg' : 'border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg'}
                 >
                   Semana
+                </Button>
+                <Button
+                  variant={viewMode === 'lista' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setViewMode('lista')}
+                  className={viewMode === 'lista' ? 'bg-[#5555ea] hover:bg-[#4a4ad9] text-white rounded-lg' : 'border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg'}
+                >
+                  Lista
                 </Button>
               </div>
 
@@ -389,7 +392,7 @@ export default function CalendarioPersonal() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowFilters(!showFilters)}
-                className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]"
+                className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg"
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Filtros
@@ -400,12 +403,10 @@ export default function CalendarioPersonal() {
           {/* Filters */}
           {showFilters && (
             <div className="mt-4 pt-4 border-t border-[#e3e4ec] space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                   <Label className="text-sm font-medium text-[#3f4159]">Vista</Label>
-                  <Select value={filters.vista} onValueChange={(value: "mis" | "curso") => 
-                    setFilters(prev => ({ ...prev, vista: value }))
-                  }>
+                  <Select value="mis" onValueChange={() => {}}>
                     <SelectTrigger className="border-[#e3e4ec] bg-white">
                       <SelectValue />
                     </SelectTrigger>
@@ -417,26 +418,21 @@ export default function CalendarioPersonal() {
                 </div>
                 <div>
                   <Label className="text-sm font-medium text-[#3f4159]">Programa</Label>
-                  <Select value={filters.programa} onValueChange={(value) => 
-                    setFilters(prev => ({ ...prev, programa: value }))
-                  }>
+                  <Select value={selectedProgram} onValueChange={setSelectedProgram}>
                     <SelectTrigger className="border-[#e3e4ec] bg-white">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="border-[#e3e4ec] bg-white">
                       <SelectItem value="todos">Todos los programas</SelectItem>
-                      <SelectItem value="maestria">Maestría en Gestión</SelectItem>
                       <SelectItem value="mba">MBA</SelectItem>
+                      <SelectItem value="maestría">Maestría en Gestión</SelectItem>
                       <SelectItem value="doctorado">Doctorado</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-
-                <div className={filters.vista === 'curso' ? '' : 'opacity-60 pointer-events-none'}>
+                <div>
                   <Label className="text-sm font-medium text-[#3f4159]">Curso</Label>
-                  <Select value={filters.curso} onValueChange={(value) => 
-                    setFilters(prev => ({ ...prev, curso: value }))
-                  }>
+                  <Select value="todos" onValueChange={() => {}}>
                     <SelectTrigger className="border-[#e3e4ec] bg-white">
                       <SelectValue />
                     </SelectTrigger>
@@ -448,12 +444,9 @@ export default function CalendarioPersonal() {
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div>
                   <Label className="text-sm font-medium text-[#3f4159]">Modalidad</Label>
-                  <Select value={filters.modalidad} onValueChange={(value) => 
-                    setFilters(prev => ({ ...prev, modalidad: value }))
-                  }>
+                  <Select value="todas" onValueChange={() => {}}>
                     <SelectTrigger className="border-[#e3e4ec] bg-white">
                       <SelectValue />
                     </SelectTrigger>
@@ -465,22 +458,80 @@ export default function CalendarioPersonal() {
                     </SelectContent>
                   </Select>
                 </div>
-
-                  
               </div>
             </div>
           )}
         </CardContent>
       </Card>
 
-      {/* Calendar */}
+      {/* Calendar Content */}
       <Card className="border-[#e3e4ec] bg-white shadow-sm">
         <CardContent className="p-0">
-          {viewMode === 'month' ? (
-            <div className="grid grid-cols-7 gap-0 border-b border-[#e3e4ec]">
+          {viewMode === 'semana' && (
+            <div className="overflow-x-auto">
+              <div className="grid grid-cols-8 gap-0 min-w-[900px]">
+                {/* Time column */}
+                <div className="bg-[#f7f8fe] border-r border-[#e3e4ec]">
+                  <div className="h-12 border-b border-[#e3e4ec] flex items-center justify-center font-medium text-[#3f4159]">
+                    Hora
+                  </div>
+                  {timeSlots.map(time => (
+                    <div key={time} className="h-16 border-b border-[#e3e4ec] flex items-center justify-center text-sm text-[#596b88] font-medium">
+                      {time}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Days columns */}
+                {getWeekDates(currentDate).map((date, index) => {
+                  const isToday = date.toDateString() === new Date().toDateString();
+                  const dayName = longDaysOfWeek[(date.getDay() + 6) % 7];
+                  const dateKey = date.toISOString().split('T')[0];
+                  const weekData = getEventsForWeek(getWeekDates(currentDate));
+                  
+                  return (
+                    <div key={index} className="border-r border-[#e3e4ec] last:border-r-0">
+                      {/* Day header */}
+                      <div className={`h-12 border-b border-[#e3e4ec] flex items-center justify-center font-medium text-[#3f4159] ${isToday ? 'bg-[#e4e9ff]' : 'bg-[#f7f8fe]'}`}>
+                        <div className="text-center">
+                          <div className="text-sm">{dayName}</div>
+                          <div className="text-lg">{date.getDate()}</div>
+                        </div>
+                      </div>
+
+                      {/* Time slots */}
+                      {timeSlots.map(time => {
+                        const event = weekData[dateKey]?.[time] || null;
+                        return (
+                          <div key={time} className={`h-16 border-b border-[#e3e4ec] p-1 ${isToday ? 'bg-[#e4e9ff]/20' : ''}`}>
+                            {event && (
+                              <div 
+                                className={`h-full rounded p-2 cursor-pointer hover:opacity-80 ${getModalidadColor(event.modalidad)}`}
+                                onClick={() => openEventDialog(event)}
+                              >
+                                <div className="text-xs font-medium truncate">
+                                  {event.titulo}
+                                </div>
+                                <div className="text-xs opacity-90 truncate">
+                                  {event.aula}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {viewMode === 'mes' && (
+            <div className="grid grid-cols-7 gap-0">
               {/* Header */}
               {daysOfWeek.map(day => (
-                <div key={day} className="p-4 text-center font-medium border-r border-[#e3e4ec] last:border-r-0 bg-[#f7f8fe] text-[#3f4159]">
+                <div key={day} className="p-4 text-center font-medium border-r border-b border-[#e3e4ec] last:border-r-0 bg-[#f7f8fe] text-[#3f4159]">
                   {day}
                 </div>
               ))}
@@ -503,25 +554,23 @@ export default function CalendarioPersonal() {
                     </div>
                     
                     <div className="space-y-1">
-                      {events.slice(0, 2).map(event => (
+                      {events.slice(0, 3).map(event => (
                         <div
                           key={event.id}
-                          className={`text-xs p-1 border cursor-pointer hover:opacity-80 ${
-                            getModalidadColor(event.modalidad)
-                          } ${getEstadoIndicator(event.estado)}`}
+                          className={`text-xs p-1 border rounded cursor-pointer hover:opacity-80 ${getModalidadColor(event.modalidad)}`}
                           onClick={() => openEventDialog(event)}
                         >
                           <div className="font-medium truncate">
-                            {event.codigo}-{event.grupo}
+                            {event.titulo}
                           </div>
                           <div className="truncate">
                             {event.horaInicio}-{event.horaFin}
                           </div>
                         </div>
                       ))}
-                      {events.length > 2 && (
+                      {events.length > 3 && (
                         <div className="text-xs text-[#596b88]">
-                          +{events.length - 2} más
+                          +{events.length - 3} más
                         </div>
                       )}
                     </div>
@@ -529,281 +578,102 @@ export default function CalendarioPersonal() {
                 );
               })}
             </div>
-          ) : (
-            <div className="p-4">
-              {(() => {
-                const weekDates = getWeekDates(currentDate);
-                const weekData = getEventsForWeek(weekDates);
-                return (
-                  <div className="overflow-x-auto">
-                    <div className="grid grid-cols-8 gap-1 min-w-[900px]">
-                      {/* Columna vacía para horas */}
-                      <div className="p-2 font-medium text-sm text-muted-foreground"></div>
-                      {weekDates.map(d => (
-                        <div key={d.toDateString()} className="p-2 font-medium text-sm text-center border-b">
-                          {longDaysOfWeek[(d.getDay() + 6) % 7]} {d.getDate()}
-                        </div>
-                      ))}
+          )}
 
-                      {/* Filas de horarios */}
-                      {timeSlots.map(time => (
-                        <>
-                          <div key={`hour-${time}`} className="p-2 text-sm text-muted-foreground font-medium border-r">
-                            {time}
+          {viewMode === 'lista' && (
+            <div className="p-4">
+              <div className="space-y-3">
+                {getFilteredEventsForList().map(event => (
+                  <div
+                    key={event.id}
+                    className="flex items-center justify-between p-4 border border-[#e3e4ec] rounded-lg hover:bg-[#f7f8fe] cursor-pointer"
+                    onClick={() => openEventDialog(event)}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-3 h-3 rounded-full ${getModalidadColor(event.modalidad)}`}></div>
+                      <div>
+                        <div className="font-medium text-[#3f4159]">{event.titulo}</div>
+                        <div className="text-sm text-[#596b88]">{event.codigo} - Grupo {event.grupo}</div>
+                      </div>
+                        </div>
+                    
+                    <div className="flex items-center gap-6 text-sm text-[#596b88]">
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-4 w-4" />
+                        {new Date(event.fecha).toLocaleDateString('es-CO')}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-4 w-4" />
+                        {event.horaInicio} - {event.horaFin}
                           </div>
-                          {weekDates.map(d => {
-                            const dateKey = d.toISOString().split('T')[0];
-                            const evt = weekData[dateKey]?.[time] ?? null;
-                            const isToday = d.toDateString() === new Date().toDateString();
-                            return (
-                              <div key={`${dateKey}-${time}`} className={`p-1 border border-border min-h-[60px] ${isToday ? 'bg-[#e4e9ff]/40' : ''}`}>
-                                {evt && (
-                                  <div className={`bg-white border rounded p-2 h-full ${getEstadoIndicator(evt.estado)}`}>
-                                    <div className="text-xs font-medium truncate">
-                                      {evt.codigo}-{evt.grupo}
+                      <div className="flex items-center gap-1">
+                        <MapPin className="h-4 w-4" />
+                        {event.aula}
                                     </div>
-                                    <div className="text-xs text-muted-foreground truncate">
-                                      {evt.aula}
+                      <div className="flex items-center gap-1">
+                        <User className="h-4 w-4" />
+                        {event.docente}
                                     </div>
-                                    <Badge variant="secondary" className={`text-[10px] mt-1 ${getModalidadColor(evt.modalidad)}`}>
-                                      {evt.modalidad}
+                      <Badge className={getModalidadColor(event.modalidad)}>
+                        {event.modalidad}
                                     </Badge>
                                   </div>
-                                )}
                               </div>
-                            );
-                          })}
-                        </>
                       ))}
                     </div>
-                  </div>
-                );
-              })()}
             </div>
           )}
         </CardContent>
       </Card>
 
-      {/* Dialogo Cambios Urgentes (pasos 2 y 3) */}
+      {/* Event Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>
-              {wizardStep === 1 && 'Detalles del evento'}
-              {wizardStep === 2 && 'Seleccionar acción'}
-              {wizardStep === 3 && 'Confirmar & Notificar'}
-            </DialogTitle>
+            <DialogTitle>Detalles del Evento</DialogTitle>
           </DialogHeader>
 
-          {/* Resumen breve de la sesión seleccionada */}
           {selectedEvent && (
-            <div className="p-3 bg-muted/50 rounded mb-4 text-sm">
-              <div className="font-medium">[{selectedEvent.codigo}] {selectedEvent.titulo} – Grupo {selectedEvent.grupo}</div>
-              <div className="text-muted-foreground">
-                {new Date(selectedEvent.fecha).toLocaleDateString('es-CO')} • {selectedEvent.horaInicio}-{selectedEvent.horaFin} • {selectedEvent.aula} • {selectedEvent.docente}
-              </div>
-            </div>
-          )}
-
-          {wizardStep === 1 && (
             <div className="space-y-6">
-              {/* Información detallada del evento */}
-              {selectedEvent && (
                 <div className="grid md:grid-cols-2 gap-4">
                   <Card>
                     <CardContent className="p-4 space-y-2 text-sm">
-                      <div className="font-medium">Información</div>
-                      <div className="text-muted-foreground">Código: {selectedEvent.codigo} • Grupo {selectedEvent.grupo}</div>
-                      <div className="text-muted-foreground">Docente: {selectedEvent.docente}</div>
-                      <div className="text-muted-foreground">Fecha: {new Date(selectedEvent.fecha).toLocaleDateString('es-CO')}</div>
-                      <div className="text-muted-foreground">Hora: {selectedEvent.horaInicio} - {selectedEvent.horaFin}</div>
-                      <div className="text-muted-foreground">Aula: {selectedEvent.aula}</div>
+                    <div className="font-medium text-[#3f4159]">Información</div>
+                    <div className="text-[#596b88]">Código: {selectedEvent.codigo} • Grupo {selectedEvent.grupo}</div>
+                    <div className="text-[#596b88]">Docente: {selectedEvent.docente}</div>
+                    <div className="text-[#596b88]">Fecha: {new Date(selectedEvent.fecha).toLocaleDateString('es-CO')}</div>
+                    <div className="text-[#596b88]">Hora: {selectedEvent.horaInicio} - {selectedEvent.horaFin}</div>
+                    <div className="text-[#596b88]">Aula: {selectedEvent.aula}</div>
                       <div>
-                        <Badge className={`${getModalidadColor(selectedEvent.modalidad)} text-xs`}>{selectedEvent.modalidad}</Badge>
+                      <Badge className={`${getModalidadColor(selectedEvent.modalidad)} text-xs`}>
+                        {selectedEvent.modalidad}
+                      </Badge>
                       </div>
                     </CardContent>
                   </Card>
                   <Card>
                     <CardContent className="p-4 space-y-2 text-sm">
-                      <div className="font-medium">Estado</div>
-                      <div className="text-muted-foreground capitalize">{selectedEvent.estado}</div>
+                    <div className="font-medium text-[#3f4159]">Estado</div>
+                    <div className="text-[#596b88] capitalize">{selectedEvent.estado}</div>
                       {typeof selectedEvent.estudiantes === 'number' && (
-                        <div className="text-muted-foreground">Estudiantes: {selectedEvent.estudiantes}</div>
+                      <div className="text-[#596b88]">Estudiantes: {selectedEvent.estudiantes}</div>
                       )}
                       {typeof selectedEvent.adjuntos === 'number' && (
-                        <div className="text-muted-foreground">Adjuntos: {selectedEvent.adjuntos}</div>
+                      <div className="text-[#596b88]">Adjuntos: {selectedEvent.adjuntos}</div>
                       )}
                     </CardContent>
                   </Card>
-                </div>
-              )}
-
-              {/* Acciones rápidas y modificar */}
-              <div className="flex flex-wrap gap-2 justify-between">
-                <div className="flex flex-wrap gap-2">
-                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cerrar</Button>
-                </div>
-                <div className="flex gap-2">
-                  <Button onClick={() => setWizardStep(2)}>Modificar</Button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {wizardStep === 2 && (
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <div className="font-medium">¿Qué tipo de cambio necesitas hacer?</div>
-                <div className="grid md:grid-cols-3 gap-3">
-                  <Card 
-                    className={`cursor-pointer transition-all ${actionType === 'reprogramar' ? 'ring-2 ring-primary' : ''}`}
-                    onClick={() => setActionType('reprogramar')}
-                  >
-                    <CardContent className="p-4">
-                      <div className="font-medium">Reprogramar</div>
-                      <div className="text-sm text-muted-foreground">Cambiar fecha y/u hora</div>
-                    </CardContent>
-                  </Card>
-                  <Card 
-                    className={`cursor-pointer transition-all ${actionType === 'cambiar-aula' ? 'ring-2 ring-primary' : ''}`}
-                    onClick={() => setActionType('cambiar-aula')}
-                  >
-                    <CardContent className="p-4">
-                      <div className="font-medium">Cambiar aula</div>
-                      <div className="text-sm text-muted-foreground">Asignar nueva aula</div>
-                    </CardContent>
-                  </Card>
-                  <Card 
-                    className={`cursor-pointer transition-all ${actionType === 'cancelar' ? 'ring-2 ring-primary' : ''}`}
-                    onClick={() => setActionType('cancelar')}
-                  >
-                    <CardContent className="p-4">
-                      <div className="font-medium">Cancelar</div>
-                      <div className="text-sm text-muted-foreground">Cancelar la sesión</div>
-                    </CardContent>
-                  </Card>
-                </div>
               </div>
 
               <div className="flex gap-2 justify-end">
-                <Button variant="outline" onClick={() => setWizardStep(1)}>← Volver</Button>
-                <Button disabled={!actionType} onClick={() => setWizardStep(3)}>Continuar →</Button>
-              </div>
-            </div>
-          )}
-
-          {wizardStep === 3 && (
-            <div className="space-y-6">
-              {/* Detalles del cambio */}
-              <div className="space-y-4">
-                {actionType === 'reprogramar' && (
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>Nueva fecha</Label>
-                      <Input type="date" value={changes.nuevaFecha} onChange={(e) => setChanges(prev => ({ ...prev, nuevaFecha: e.target.value }))} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Nueva hora</Label>
-                      <Input placeholder="08:00-10:00" value={changes.nuevaHora} onChange={(e) => setChanges(prev => ({ ...prev, nuevaHora: e.target.value }))} />
-                    </div>
-                  </div>
-                )}
-                {actionType === 'cambiar-aula' && (
-                  <div className="space-y-2">
-                    <Label>Nueva aula</Label>
-                    <Select value={changes.nuevaAula} onValueChange={(value) => setChanges(prev => ({ ...prev, nuevaAula: value }))}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccionar aula" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Aula 301">Aula 301</SelectItem>
-                        <SelectItem value="Aula 302">Aula 302</SelectItem>
-                        <SelectItem value="Laboratorio 1">Laboratorio 1</SelectItem>
-                        <SelectItem value="Auditorio">Auditorio Principal</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  <Label>Motivo del cambio</Label>
-                  <Textarea
-                    placeholder={actionType === 'cancelar' ? 'Motivo de la cancelación (requerido)' : 'Breve explicación del cambio'}
-                    value={changes.motivo}
-                    onChange={(e) => setChanges(prev => ({ ...prev, motivo: e.target.value }))}
-                    rows={3}
-                  />
-                </div>
-              </div>
-
-              {/* Configuración de notificación */}
-              <div className="border-t pt-4 space-y-4">
-                <div className="space-y-2">
-                  <Label>Urgencia</Label>
-                  <Select value={changes.urgencia} onValueChange={(value) => setChanges(prev => ({ ...prev, urgencia: value }))}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="normal">Normal</SelectItem>
-                      <SelectItem value="urgente">Urgente</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {changes.programarEnvio && (
-                  <div className="grid md:grid-cols-2 gap-4 ml-6">
-                    <div className="space-y-2">
-                      <Label>Fecha de envío</Label>
-                      <Input type="date" value={changes.fechaEnvio} onChange={(e) => setChanges(prev => ({ ...prev, fechaEnvio: e.target.value }))} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Hora de envío</Label>
-                      <Input type="time" onChange={(e) => setChanges(prev => ({ ...prev, fechaEnvio: e.target.value }))} />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Acciones */}
-              <div className="flex gap-2 justify-between">
-                <Button variant="outline" onClick={() => setWizardStep(2)}>← Volver</Button>
-                <div className="flex gap-2">
-                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>
-                  <Button onClick={handleConfirmChange}>Aplicar cambio & Notificar</Button>
-                </div>
+                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                  Cerrar
+                </Button>
               </div>
             </div>
           )}
         </DialogContent>
       </Dialog>
-
-      {/* Legend */}
-      <Card className="border-[#e3e4ec] bg-white shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-base text-[#3f4159]">Leyenda</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 border border-[#5555ea] bg-[#e4e9ff]"></div>
-              <span className="text-sm text-[#3f4159]">Presencial</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 border border-[#4fb37b] bg-[#e6f7ef]"></div>
-              <span className="text-sm text-[#3f4159]">Virtual</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 border border-[#b8860b] bg-[#fff8e6]"></div>
-              <span className="text-sm text-[#3f4159]">Híbrida</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 border border-[#e9683b] border-l-4 border-l-[#e9683b]"></div>
-              <span className="text-sm text-[#3f4159]">Actualizado recientemente</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

@@ -43,6 +43,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { VersionHistoryDrawer } from "@/components/planeacion/version-history-drawer";
 
 // Mock data for planeaciones semestrales
 const planeaciones = [
@@ -51,7 +52,7 @@ const planeaciones = [
     nombre: "Planeación Académica 2024-2",
     periodo: "2024-2",
     fechaInicio: "2024-08-15",
-    fechaFin: "2024-12-15",
+    fechaFin: "2025-12-15",
     estado: "publicada",
     programasIncluidos: [
       { nombre: "MBA", cursosPlaneados: 8, cursosTotal: 10 },
@@ -137,6 +138,8 @@ export default function PlaneacionIndex() {
     estado: "all"
   });
   const [modalNueva, setModalNueva] = useState(false);
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
+  const [selectedPlanningId, setSelectedPlanningId] = useState<number | null>(null);
   const [nuevaPlaneacion, setNuevaPlaneacion] = useState({
     nombre: "",
     periodo: "",
@@ -156,12 +159,17 @@ export default function PlaneacionIndex() {
   const handleCrearPlaneacion = () => {
     // Simular creación y redirigir al constructor
     const nuevaId = Math.max(...planeaciones.map(p => p.id)) + 1;
-    navigate(`/planeacion/${nuevaId}`);
+    navigate(`/app/planeacion/${nuevaId}`);
     setModalNueva(false);
   };
 
   const handleAbrirPlaneacion = (id: number) => {
-    navigate(`/planeacion/${id}`);
+    navigate(`/app/planeacion/${id}`);
+  };
+
+  const handleVerHistorial = (id: number) => {
+    setSelectedPlanningId(id);
+    setShowVersionHistory(true);
   };
 
   const getProgresoTotal = (planeacion: typeof planeaciones[0]) => {
@@ -180,7 +188,7 @@ export default function PlaneacionIndex() {
         </div>
         <Dialog open={modalNueva} onOpenChange={setModalNueva}>
           <DialogTrigger asChild>
-            <Button>
+            <Button className="rounded-lg">
               <Plus className="h-4 w-4 mr-2" />
               Nueva planeación semestral
             </Button>
@@ -217,6 +225,7 @@ export default function PlaneacionIndex() {
                     type="date"
                     value={nuevaPlaneacion.fechaInicio}
                     onChange={(e) => setNuevaPlaneacion(prev => ({ ...prev, fechaInicio: e.target.value }))}
+                    className="rounded-lg"
                   />
                 </div>
                 <div className="space-y-2">
@@ -225,6 +234,7 @@ export default function PlaneacionIndex() {
                     type="date"
                     value={nuevaPlaneacion.fechaFin}
                     onChange={(e) => setNuevaPlaneacion(prev => ({ ...prev, fechaFin: e.target.value }))}
+                    className="rounded-lg"
                   />
                 </div>
               </div>
@@ -235,6 +245,7 @@ export default function PlaneacionIndex() {
                   placeholder="Se generará automáticamente como 'Planeación Académica [Periodo]'"
                   value={nuevaPlaneacion.nombre}
                   onChange={(e) => setNuevaPlaneacion(prev => ({ ...prev, nombre: e.target.value }))}
+                  className="rounded-lg"
                 />
               </div>
 
@@ -265,10 +276,10 @@ export default function PlaneacionIndex() {
               </Card>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setModalNueva(false)}>
+              <Button variant="outline" onClick={() => setModalNueva(false)} className="rounded-lg">
                 Cancelar
               </Button>
-              <Button onClick={handleCrearPlaneacion}>
+              <Button onClick={handleCrearPlaneacion} className="rounded-lg">
                 Crear planeación
               </Button>
             </div>
@@ -287,7 +298,7 @@ export default function PlaneacionIndex() {
                 <Input
                   id="busqueda"
                   placeholder="Buscar por nombre o periodo..."
-                  className="pl-10"
+                  className="pl-10 rounded-lg"
                   value={filtros.busqueda}
                   onChange={(e) => setFiltros(prev => ({ ...prev, busqueda: e.target.value }))}
                 />
@@ -337,7 +348,7 @@ export default function PlaneacionIndex() {
         <Card>
           <CardContent className="p-12 text-center">
             <div className="space-y-4">
-              <div className="mx-auto w-12 h-12 bg-muted rounded-full flex items-center justify-center">
+                              <div className="mx-auto w-12 h-12 bg-muted rounded-xl flex items-center justify-center">
                 <Search className="h-6 w-6 text-muted-foreground" />
               </div>
               <div>
@@ -367,14 +378,14 @@ export default function PlaneacionIndex() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <h3 className="font-semibold text-lg">{planeacion.nombre}</h3>
-                      <Badge className={getEstadoColor(planeacion.estado)}>
+                      <Badge className={`${getEstadoColor(planeacion.estado)} rounded-lg`}>
                         <div className="flex items-center gap-1">
                           {getEstadoIcon(planeacion.estado)}
                           {planeacion.estado}
                         </div>
                       </Badge>
                       {planeacion.conflictos > 0 && (
-                        <Badge variant="destructive">
+                        <Badge variant="destructive" className="rounded-lg">
                           <AlertTriangle className="h-3 w-3 mr-1" />
                           {planeacion.conflictos} conflictos
                         </Badge>
@@ -384,17 +395,18 @@ export default function PlaneacionIndex() {
                       <Button 
                         onClick={() => handleAbrirPlaneacion(planeacion.id)}
                         variant="default"
+                        className="rounded-lg"
                       >
                         <Eye className="h-4 w-4 mr-2" />
                         Abrir
                       </Button>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
+                          <Button variant="ghost" size="icon" className="rounded-lg">
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align="end" className="rounded-xl">
                           <DropdownMenuItem onClick={() => handleAbrirPlaneacion(planeacion.id)}>
                             <Eye className="h-4 w-4 mr-2" />
                             Abrir
@@ -407,7 +419,7 @@ export default function PlaneacionIndex() {
                             <Download className="h-4 w-4 mr-2" />
                             Exportar
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleVerHistorial(planeacion.id)}>
                             <History className="h-4 w-4 mr-2" />
                             Ver historial
                           </DropdownMenuItem>
@@ -453,6 +465,12 @@ export default function PlaneacionIndex() {
           ))}
         </div>
       )}
+
+      {/* Version History Drawer */}
+      <VersionHistoryDrawer 
+        open={showVersionHistory} 
+        onOpenChange={setShowVersionHistory}
+      />
     </div>
   );
 }

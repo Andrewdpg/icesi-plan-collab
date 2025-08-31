@@ -1,290 +1,426 @@
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { 
-  Calendar,
-  Users,
-  AlertTriangle,
-  Clock,
-  FileText,
-  Layers3,
-  Upload,
-  CheckCircle,
-  TrendingUp,
+  Calendar, 
+  Upload, 
+  CheckCircle, 
+  AlertTriangle, 
+  Clock, 
+  Users, 
   BookOpen,
-  UserCheck,
-  BarChart3
+  Building,
+  Activity,
+  TrendingUp,
+  AlertCircle,
+  CheckSquare,
+  XCircle,
+  Eye,
+  ArrowRight,
+  FileText,
+  Settings,
+  Database,
+  Zap,
+  Target,
+  BarChart3,
+  Shield,
+  Timer,
+  Star
 } from "lucide-react";
 
-const kpiCards = [
-  {
-    title: "Cursos Planeados",
-    value: "42",
-    total: "48",
-    description: "Semestre 2024-2",
-    icon: BookOpen,
-    progress: 87.5,
-    trend: "+6 esta semana",
-    color: "primary"
-  },
-  {
-    title: "Conflictos Abiertos",
-    value: "3",
-    description: "Requieren atención",
-    icon: AlertTriangle,
-    color: "destructive",
-    trend: "-2 resueltos hoy"
-  },
-  {
-    title: "Sugerencias Pendientes",
-    value: "8",
-    description: "De directores",
-    icon: Clock,
-    color: "secondary",
-    trend: "2 nuevas"
-  },
-  {
-    title: "Próximos Hitos",
-    value: "5 días",
-    description: "Publicación semestre",
-    icon: Calendar,
-    color: "success"
-  }
-];
-
-const quickActions = [
-  {
-    title: "Planeación de Cursos",
-    description: "Gestionar horarios y asignaciones",
-    icon: Layers3,
-    href: "/planeacion",
-    color: "primary"
-  },
-  {
-    title: "Importar/Exportar",
-    description: "Cargar datos institucionales",
-    icon: Upload,
-    href: "/datos",
-    color: "secondary"
-  },
-  {
-    title: "Aprobación & Publicación",
-    description: "Revisar y publicar planeación",
-    icon: CheckCircle,
-    href: "/aprobacion",
-    color: "success"
-  }
-];
-
-const recentActivity = [
-  {
-    action: "Planeación actualizada",
-    course: "Maestría en Gestión - Grupo 2",
-    time: "Hace 2 horas",
-    user: "María García"
-  },
-  {
-    action: "Nueva sugerencia",
-    course: "MBA - Marketing Digital",
-    time: "Hace 4 horas",
-    user: "Dr. Carlos Ruiz"
-  },
-  {
-    action: "Conflicto resuelto",
-    course: "Doctorado - Seminario I",
-    time: "Ayer",
-    user: "Sistema"
-  }
-];
-
 export default function Dashboard() {
+  const [selectedProgram, setSelectedProgram] = useState("todos");
+
+  // Mock data - Datos reales vendrían de la API
+  const dashboardData = {
+    // 1. Listo para publicar
+    readyToPublish: {
+      score: 85,
+      status: "Casi listo",
+      blockingReasons: [
+        "2 conflictos críticos",
+        "1 sesión en festivo",
+        "3% sesiones sin confirmar"
+      ],
+      criticalConflicts: 2,
+      unconfirmedSessions: 3
+    },
+
+    // 2. Progreso de planeación
+    planningProgress: {
+      confirmed: 247,
+      total: 260,
+      percentage: 95,
+      byProgram: {
+        "MBA": 98,
+        "MSc": 92,
+        "Especialización": 89
+      }
+    },
+
+    // 3. Aprobaciones & Sugerencias
+    approvals: {
+      pending: 12,
+      dueToday: 3,
+      suggestions: 8,
+      slaHours: 48
+    },
+
+    // 4. Actividad Reciente
+    recentActivity: [
+      {
+        id: 1,
+        type: "planeacion",
+        action: "actualizada",
+        program: "MBA",
+        time: "2h",
+        user: "María González"
+      },
+      {
+        id: 2,
+        type: "sugerencia",
+        action: "nueva",
+        program: "MSc",
+        time: "4h",
+        user: "Carlos Ruiz"
+      },
+      {
+        id: 3,
+        type: "conflicto",
+        action: "resuelto",
+        program: "Especialización",
+        time: "Ayer",
+        user: "Ana López"
+      },
+      {
+        id: 4,
+        type: "aprobacion",
+        action: "aprobada",
+        program: "MBA",
+        time: "Ayer",
+        user: "Juan Pérez"
+      }
+    ]
+  };
+
+  const getStatusColor = (score: number) => {
+    if (score >= 90) return "text-green-600";
+    if (score >= 70) return "text-yellow-600";
+    return "text-red-600";
+  };
+
+  const getStatusIcon = (score: number) => {
+    if (score >= 90) return <CheckCircle className="h-4 w-4 text-green-600" />;
+    if (score >= 70) return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
+    return <AlertCircle className="h-4 w-4 text-red-600" />;
+  };
+
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case "planeacion": return <FileText className="h-4 w-4" />;
+      case "sugerencia": return <CheckSquare className="h-4 w-4" />;
+      case "conflicto": return <AlertTriangle className="h-4 w-4" />;
+      case "aprobacion": return <CheckCircle className="h-4 w-4" />;
+      default: return <Activity className="h-4 w-4" />;
+    }
+  };
+
+  const getActivityColor = (type: string) => {
+    switch (type) {
+      case "planeacion": return "text-blue-600";
+      case "sugerencia": return "text-purple-600";
+      case "conflicto": return "text-red-600";
+      case "aprobacion": return "text-green-600";
+      default: return "text-gray-600";
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#f7f8fe]">
-      {/* Main Content */}
-      <div className="container mx-auto px-6 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
+    <div className="space-y-8 p-6 bg-gray-50 min-h-screen">
+      {/* Título mejorado - Minimalista */}
+      <div className="flex items-center justify-between">
+        <div className="space-y-1">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-[#5555ea] rounded-lg flex items-center justify-center">
+              <BarChart3 className="h-5 w-5 text-white" />
+            </div>
             <div>
-              <h1 className="text-3xl font-bold text-[#3f4159] mb-2">
-                Bienvenida, María
-              </h1>
-              <p className="text-[#596b88] text-lg">
-                Panel de control - Oficina de Posgrados
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-[#abb8c3]">Última actualización</p>
-              <p className="text-lg font-semibold text-[#3f4159]">Hace 5 minutos</p>
+              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+              <p className="text-gray-600 text-sm">Vista general del sistema de planeación académica</p>
             </div>
           </div>
         </div>
-
-        {/* KPI Cards - Rediseñadas con colores Icesi */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {kpiCards.map((kpi, index) => (
-            <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-0 bg-white shadow-sm">
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-semibold text-[#3f4159]">
-                    {kpi.title}
-                  </CardTitle>
-                  <div className={`p-2 ${kpi.color === 'destructive' ? 'bg-[#fdecec] text-[#e9683b]' :
-                    kpi.color === 'success' ? 'bg-[#e6f7ef] text-[#4fb37b]' :
-                    kpi.color === 'secondary' ? 'bg-[#e4e9ff] text-[#5555ea]' :
-                    'bg-[#f0f860] text-[#000000]'}`}>
-                    <kpi.icon className="h-5 w-5" />
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-[#3f4159] mb-2">
-                  {kpi.value}
-                  {kpi.total && <span className="text-lg text-[#abb8c3]">/{kpi.total}</span>}
-                </div>
-                <p className="text-sm text-[#596b88] mb-3">
-                  {kpi.description}
-                </p>
-                {kpi.progress && (
-                  <div className="mb-3">
-                    <Progress value={kpi.progress} className="h-2" />
-                    <p className="text-xs text-[#abb8c3] mt-1">{kpi.progress}% completado</p>
-                  </div>
-                )}
-                {kpi.trend && (
-                  <div className={`inline-flex items-center px-3 py-1 text-xs font-medium ${
-                    kpi.trend.includes('+') ? 'bg-[#e6f7ef] text-[#4fb37b]' : 'bg-[#e4e9ff] text-[#5555ea]'
-                  }`}>
-                    <TrendingUp className="w-3 h-3 mr-1" />
-                    {kpi.trend}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Quick Actions y Recent Activity */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-          {/* Quick Actions */}
-          <div className="lg:col-span-2">
-            <Card className="border-0 bg-white shadow-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-2xl font-bold text-[#3f4159] flex items-center">
-                  <Layers3 className="w-6 h-6 mr-3 text-[#5555ea]" />
-                  Accesos Rápidos
-                </CardTitle>
-                <CardDescription className="text-[#596b88]">
-                  Herramientas principales del sistema de planeación
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {quickActions.map((action, index) => (
-                    <div
-                      key={index}
-                      className="group cursor-pointer p-6 border-2 border-transparent hover:border-[#5555ea] hover:bg-[#e4e9ff] transition-all duration-300"
-                    >
-                      <div className="flex flex-col items-center text-center space-y-3">
-                        <div className={`p-3 ${action.color === 'primary' ? 'bg-[#5555ea] text-white' :
-                          action.color === 'success' ? 'bg-[#4fb37b] text-white' :
-                          'bg-[#e9683b] text-white'}`}>
-                          <action.icon className="h-8 w-8" />
-                        </div>
-                        <div>
-                          <div className="font-semibold text-[#3f4159] group-hover:text-[#5555ea] transition-colors">
-                            {action.title}
-                          </div>
-                          <div className="text-sm text-[#596b88] mt-1">
-                            {action.description}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-2 bg-white rounded-lg border border-gray-200">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm text-gray-600">En tiempo real</span>
           </div>
-
-          {/* Recent Activity */}
-          <Card className="border-0 bg-white shadow-sm">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-2xl font-bold text-[#3f4159] flex items-center">
-                <Clock className="w-6 h-6 mr-3 text-[#5555ea]" />
-                Actividad Reciente
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {recentActivity.map((activity, index) => (
-                <div key={index} className="group p-4 hover:bg-[#f7f8fe] transition-colors border-l-4 border-transparent hover:border-[#5555ea]">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="space-y-1">
-                      <p className="text-sm font-semibold text-[#3f4159] group-hover:text-[#5555ea] transition-colors">
-                        {activity.action}
-                      </p>
-                      <p className="text-xs text-[#596b88]">
-                        {activity.course}
-                      </p>
-                    </div>
-                    <Badge variant="secondary" className="text-xs bg-[#e3e4ec] text-[#596b88]">
-                      {activity.time}
-                    </Badge>
-                  </div>
-                  {activity.user !== "Sistema" && (
-                    <div className="flex items-center gap-2 text-xs text-[#abb8c3]">
-                      <UserCheck className="w-3 h-3" />
-                      {activity.user}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+          <Badge variant="outline" className="text-sm">
+            Última actualización: hace 5 min
+          </Badge>
         </div>
+      </div>
 
-        {/* Semester Overview */}
-        <Card className="border-0 bg-white shadow-sm">
+      {/* Fila 1: 3 tarjetas principales - Reorganizadas */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* 1. Listo para publicar - Mejorado */}
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 rounded-xl">
           <CardHeader className="pb-4">
-            <CardTitle className="text-2xl font-bold text-[#3f4159] flex items-center">
-              <BarChart3 className="w-6 h-6 mr-3 text-[#5555ea]" />
-              Resumen Semestre 2024-2
-            </CardTitle>
-            <CardDescription className="text-[#596b88]">
-              Estado general de programas de posgrado y métricas clave
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-[#5555ea] rounded-lg flex items-center justify-center">
+                  <Target className="h-4 w-4 text-white" />
+                </div>
+                <CardTitle className="text-lg font-semibold text-gray-900">Listo para publicar</CardTitle>
+              </div>
+              {getStatusIcon(dashboardData.readyToPublish.score)}
+            </div>
+            <CardDescription className="text-gray-600">
+              Estado de preparación para publicación
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="text-center group">
-                <div className="p-4 bg-[#e4e9ff] text-[#5555ea] mb-3 group-hover:scale-105 transition-transform">
-                  <div className="text-3xl font-bold">14</div>
-                  <div className="text-sm opacity-90">Programas</div>
+          <CardContent className="space-y-6">
+            {/* Score principal */}
+            <div className="text-center space-y-2">
+              <div className="relative inline-block">
+                <div className={`text-4xl font-bold ${getStatusColor(dashboardData.readyToPublish.score)}`}>
+                  {dashboardData.readyToPublish.score}%
                 </div>
               </div>
-              <div className="text-center group">
-                <div className="p-4 bg-[#e6f7ef] text-[#4fb37b] mb-3 group-hover:scale-105 transition-transform">
-                  <div className="text-3xl font-bold">156</div>
-                  <div className="text-sm opacity-90">Estudiantes</div>
-                </div>
+                              <div className="text-sm font-medium text-gray-700 bg-gray-100 rounded-xl px-3 py-1 inline-block">
+                {dashboardData.readyToPublish.status}
               </div>
-              <div className="text-center group">
-                <div className="p-4 bg-[#f0f860] text-[#000000] mb-3 group-hover:scale-105 transition-transform">
-                  <div className="text-3xl font-bold">28</div>
-                  <div className="text-sm opacity-90">Docentes</div>
-                </div>
+            </div>
+            
+            {/* Bloqueos */}
+            <div className="space-y-3">
+              <div className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 text-red-500" />
+                Bloqueos detectados
               </div>
-              <div className="text-center group">
-                <div className="p-4 bg-[#fdecec] text-[#e9683b] mb-3 group-hover:scale-105 transition-transform">
-                  <div className="text-3xl font-bold">1,247</div>
-                  <div className="text-sm opacity-90">Horas Total</div>
+              <div className="space-y-2">
+                {dashboardData.readyToPublish.blockingReasons.map((reason, index) => (
+                  <div key={index} className="flex items-center gap-3 p-2 bg-gray-50 rounded-xl border border-gray-100">
+                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <span className="text-xs text-gray-700 font-medium">{reason}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+                          <Button className="w-full bg-[#5555ea] hover:bg-[#4a4ad8] text-white font-medium transition-all duration-300 rounded-lg">
+              <Eye className="h-4 w-4 mr-2" />
+              Resolver bloqueos
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* 2. Progreso de planeación - Mejorado */}
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 rounded-xl">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-[#5555ea] rounded-lg flex items-center justify-center">
+                  <TrendingUp className="h-4 w-4 text-white" />
+                </div>
+                <CardTitle className="text-lg font-semibold text-gray-900">Progreso de planeación</CardTitle>
+              </div>
+              <Badge variant="secondary" className="bg-gray-100 text-gray-700 rounded-lg">
+                {dashboardData.planningProgress.percentage}%
+              </Badge>
+            </div>
+            <CardDescription className="text-gray-600">
+              Sesiones confirmadas vs totales
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Métricas principales */}
+            <div className="text-center space-y-3">
+              <div className="text-3xl font-bold text-gray-900">
+                {dashboardData.planningProgress.confirmed}
+                <span className="text-gray-400 text-xl">/{dashboardData.planningProgress.total}</span>
+              </div>
+              <div className="space-y-2">
+                <Progress value={dashboardData.planningProgress.percentage} className="h-2 bg-gray-100" />
+                <div className="text-xs text-gray-600">
+                  {dashboardData.planningProgress.percentage}% completado
                 </div>
               </div>
             </div>
+            
+            {/* Breakdown por programa */}
+            <div className="space-y-3">
+              <div className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <BarChart3 className="h-4 w-4 text-gray-600" />
+                Por programa
+              </div>
+              <div className="space-y-2">
+                {Object.entries(dashboardData.planningProgress.byProgram).map(([program, percentage]) => (
+                  <div key={program} className="flex items-center justify-between p-2 bg-gray-50 rounded-xl">
+                    <span className="text-sm font-medium text-gray-700">{program}</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-[#5555ea] rounded-full transition-all duration-500"
+                          style={{ width: `${percentage}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-xs font-bold text-gray-900 min-w-[2rem]">{percentage}%</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <Button className="w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium transition-all duration-300 rounded-lg">
+              <ArrowRight className="h-4 w-4 mr-2" />
+              Ver pendientes
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* 3. Aprobaciones & Sugerencias - Mejorado */}
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 rounded-xl">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-[#5555ea] rounded-lg flex items-center justify-center">
+                  <CheckSquare className="h-4 w-4 text-white" />
+                </div>
+                <CardTitle className="text-lg font-semibold text-gray-900">Aprobaciones</CardTitle>
+              </div>
+              <Badge variant="secondary" className="bg-gray-100 text-gray-700 rounded-lg">
+                {dashboardData.approvals.pending + dashboardData.approvals.suggestions}
+              </Badge>
+            </div>
+            <CardDescription className="text-gray-600">
+              Pendientes y sugerencias
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Métricas principales */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="text-center p-3 bg-gray-50 rounded-xl border border-gray-100">
+                <div className="text-xl font-bold text-gray-900 mb-1">
+                  {dashboardData.approvals.pending}
+                </div>
+                <div className="text-xs text-gray-600">Pendientes</div>
+              </div>
+              <div className="text-center p-3 bg-gray-50 rounded-xl border border-gray-100">
+                <div className="text-xl font-bold text-orange-600 mb-1">
+                  {dashboardData.approvals.dueToday}
+                </div>
+                <div className="text-xs text-gray-600">Vencen hoy</div>
+              </div>
+            </div>
+            
+            {/* Sugerencias */}
+            <div className="text-center p-3 bg-gray-50 rounded-xl border border-gray-100">
+              <div className="text-lg font-bold text-gray-900 mb-1">
+                {dashboardData.approvals.suggestions}
+              </div>
+              <div className="text-xs text-gray-600">Sugerencias nuevas</div>
+            </div>
+            
+            {/* SLA */}
+            <div className="text-center">
+              <div className="inline-flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-xl border border-gray-200">
+                <Timer className="h-4 w-4 text-gray-500" />
+                <span className="text-xs font-medium text-gray-700">
+                  SLA: {dashboardData.approvals.slaHours}h
+                </span>
+              </div>
+            </div>
+
+            {/* Botones de acción */}
+            <div className="flex gap-2">
+              <Button className="flex-1 bg-[#5555ea] hover:bg-[#4a4ad8] text-white font-medium transition-all duration-300 rounded-lg">
+                <CheckSquare className="h-4 w-4 mr-1" />
+                Aprobar
+              </Button>
+              <Button className="flex-1 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium transition-all duration-300 rounded-lg">
+                <XCircle className="h-4 w-4 mr-1" />
+                Rechazar
+              </Button>
+            </div>
+
+            <Button className="w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium transition-all duration-300 rounded-lg">
+              <ArrowRight className="h-4 w-4 mr-2" />
+              Bandeja completa
+            </Button>
           </CardContent>
         </Card>
       </div>
+
+      {/* Fila 2: Actividad Reciente - Expandida */}
+      <Card className="shadow-sm bg-white border border-gray-200 rounded-xl">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-xl font-semibold text-gray-900">Actividad Reciente</CardTitle>
+              <CardDescription className="text-gray-600">
+                Últimas acciones en el sistema
+              </CardDescription>
+            </div>
+            <Button variant="outline" size="sm" className="border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg">
+              <Activity className="h-4 w-4 mr-2" />
+              Ver toda la actividad
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-gray-700 border-b border-gray-200 pb-2">
+                Hoy
+              </h3>
+              <div className="space-y-4">
+                                 {dashboardData.recentActivity.slice(0, 2).map((activity) => (
+                   <div key={activity.id} className="flex items-start gap-4 p-3 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors">
+                    <div className={`mt-1 p-2 rounded-lg bg-white ${getActivityColor(activity.type)}`}>
+                      {getActivityIcon(activity.type)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-semibold text-gray-900">
+                        {activity.action.charAt(0).toUpperCase() + activity.action.slice(1)} • {activity.program}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {activity.user} • hace {activity.time}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-gray-700 border-b border-gray-200 pb-2">
+                Ayer
+              </h3>
+              <div className="space-y-4">
+                                 {dashboardData.recentActivity.slice(2).map((activity) => (
+                   <div key={activity.id} className="flex items-start gap-4 p-3 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors">
+                    <div className={`mt-1 p-2 rounded-lg bg-white ${getActivityColor(activity.type)}`}>
+                      {getActivityIcon(activity.type)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-semibold text-gray-900">
+                        {activity.action.charAt(0).toUpperCase() + activity.action.slice(1)} • {activity.program}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {activity.user} • hace {activity.time}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

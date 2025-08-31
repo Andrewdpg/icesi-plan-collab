@@ -110,7 +110,7 @@ export function GeneratePlanningModal({ open, onOpenChange, curso }: GeneratePla
     // Mock preview generation
     const mockSessions: SessionPreview[] = [
       {
-        fecha: "2024-10-25",
+        fecha: "2025-10-25",
         dia: "Viernes",
         hora: "08:00-10:00",
         duracion: 2,
@@ -118,14 +118,14 @@ export function GeneratePlanningModal({ open, onOpenChange, curso }: GeneratePla
         festivo: true
       },
       {
-        fecha: "2024-11-01",
+        fecha: "2025-11-01",
         dia: "Viernes", 
         hora: "08:00-10:00",
         duracion: 2,
         espacio: "Aula 204"
       },
       {
-        fecha: "2024-11-08",
+        fecha: "2025-11-08",
         dia: "Viernes",
         hora: "08:00-10:00", 
         duracion: 2,

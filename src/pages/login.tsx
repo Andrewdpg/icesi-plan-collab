@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, AlertCircle } from "lucide-react";
+import logo from "@/assets/logo_hotizontal_dc.png";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function Login() {
     // Simulate login
     setTimeout(() => {
       if (formData.email && formData.password) {
-        navigate("/");
+        navigate("/app");
       } else {
         setError("Credenciales inválidas");
       }
@@ -44,10 +45,10 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/10 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-elegant">
+             <Card className="w-full max-w-md shadow-elegant rounded-xl">
         <CardHeader className="space-y-4 text-center">
-          <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto">
-            <span className="text-primary-foreground font-bold text-2xl">I</span>
+          <div className="flex justify-center">
+            <img src={logo} alt="Universidad Icesi" className="h-16 w-auto" />
           </div>
           <div>
             <CardTitle className="text-2xl font-bold">Sistema de Planeación</CardTitle>
@@ -75,7 +76,7 @@ export default function Login() {
                 value={formData.email}
                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                 required
-                className="h-12"
+                                  className="h-12 rounded-lg"
               />
             </div>
 
@@ -89,7 +90,7 @@ export default function Login() {
                   value={formData.password}
                   onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
                   required
-                  className="h-12 pr-10"
+                  className="h-12 pr-10 rounded-lg"
                 />
                 <Button
                   type="button"
@@ -122,19 +123,19 @@ export default function Login() {
 
             <Button
               type="submit"
-              className="w-full h-12 text-base font-medium"
+              className="w-full h-12 text-base font-medium rounded-lg"
               disabled={isLoading}
             >
               {isLoading ? "Ingresando..." : "Ingresar"}
             </Button>
 
             <div className="text-center space-y-2 pt-4">
-              <a href="#" className="text-sm text-primary hover:underline">
+              <a 
+                href="/recuperar-contrasena" 
+                className="text-sm text-primary hover:underline"
+              >
                 ¿Olvidaste tu contraseña?
               </a>
-              <div className="text-xs text-muted-foreground">
-                ¿Necesitas ayuda? <a href="#" className="text-primary hover:underline">Contactar soporte</a>
-              </div>
             </div>
           </form>
         </CardContent>
