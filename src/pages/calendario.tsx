@@ -164,6 +164,12 @@ export default function CalendarioPersonal() {
   const mockEvents = useMemo(() => generateMockEvents(currentDate), [currentDate]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const [actionType, setActionType] = useState<"cancelar" | "cambiarAula" | "reprogramar" | null>(null);
+  const [motivo, setMotivo] = useState("");
+  const [nuevoAula, setNuevoAula] = useState("");
+  const [nuevaFecha, setNuevaFecha] = useState("");
+  const [nuevaHoraInicio, setNuevaHoraInicio] = useState("");
+  const [nuevaHoraFin, setNuevaHoraFin] = useState("");
 
   const getModalidadColor = (modalidad: string) => {
     switch (modalidad) {
@@ -666,10 +672,100 @@ export default function CalendarioPersonal() {
               </div>
 
               <div className="flex gap-2 justify-end">
+                <Button variant="outline" onClick={() => setActionType("cancelar")}>
+                  Cancelar clase
+                </Button>
+                <Button variant="outline" onClick={() => setActionType("cambiarAula")}>
+                  Cambiar aula
+                </Button>
+                <Button variant="outline" onClick={() => setActionType("reprogramar")}>
+                  Reprogramar
+                </Button>
                 <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Cerrar
                 </Button>
               </div>
+
+              {/* Formulario de acción */}
+              {actionType === "cancelar" && (
+                <div className="space-y-2">
+                  <Label>Motivo de cancelación</Label>
+                  <Textarea
+                    value={motivo}
+                    onChange={e => setMotivo(e.target.value)}
+                    placeholder="Escribe el motivo..."
+                  />
+                  <Button
+                    className="bg-red-600 text-white"
+                    onClick={() => {
+                      // Aquí iría la lógica para cancelar la clase
+                      setActionType(null);
+                      setMotivo("");
+                      setIsDialogOpen(false);
+                    }}
+                  >
+                    Confirmar cancelación
+                  </Button>
+                </div>
+              )}
+
+              {actionType === "cambiarAula" && (
+                <div className="space-y-2">
+                  <Label>Nuevo espacio/aula</Label>
+                  <Input
+                    value={nuevoAula}
+                    onChange={e => setNuevoAula(e.target.value)}
+                    placeholder="Ej: Aula 305"
+                  />
+                  <Button
+                    className="bg-blue-600 text-white"
+                    onClick={() => {
+                      // Aquí iría la lógica para cambiar el aula
+                      setActionType(null);
+                      setNuevoAula("");
+                      setIsDialogOpen(false);
+                    }}
+                  >
+                    Confirmar cambio de aula
+                  </Button>
+                </div>
+              )}
+
+              {actionType === "reprogramar" && (
+                <div className="space-y-2">
+                  <Label>Nueva fecha</Label>
+                  <Input
+                    type="date"
+                    value={nuevaFecha}
+                    onChange={e => setNuevaFecha(e.target.value)}
+                  />
+                  <Label>Hora inicio</Label>
+                  <Input
+                    type="time"
+                    value={nuevaHoraInicio}
+                    onChange={e => setNuevaHoraInicio(e.target.value)}
+                  />
+                  <Label>Hora fin</Label>
+                  <Input
+                    type="time"
+                    value={nuevaHoraFin}
+                    onChange={e => setNuevaHoraFin(e.target.value)}
+                  />
+                  <Button
+                    className="bg-green-600 text-white"
+                    onClick={() => {
+                      // Aquí iría la lógica para reprogramar la clase
+                      setActionType(null);
+                      setNuevaFecha("");
+                      setNuevaHoraInicio("");
+                      setNuevaHoraFin("");
+                      setIsDialogOpen(false);
+                    }}
+                  >
+                    Confirmar reprogramación
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </DialogContent>
