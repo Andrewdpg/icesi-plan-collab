@@ -68,12 +68,17 @@ const entidades = [
   }
 ];
 
+const periodos = [
+  "2021-1", "2021-2", "2022-1", "2023-2", "2024-1", "2024-2", "2025-1", "2025-2", "2026-1", "2026-2"
+];
+
 export default function Datos() {
   const [activeTab, setActiveTab] = useState("importar");
   const [selectedEntity, setSelectedEntity] = useState("docentes");
   const [currentStep, setCurrentStep] = useState(1);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedPeriodo, setSelectedPeriodo] = useState(periodos[0]);
 
   const handleFileUpload = (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -132,6 +137,19 @@ export default function Datos() {
         <p className="text-gray-600 mt-2">
           Gestiona la carga y descarga de información institucional
         </p>
+        {/* Campo de selección de período */}
+        <div className="mt-4 max-w-xs">
+          <label className="block text-sm font-medium text-gray-900 mb-1">Período de importación</label>
+          <select
+            className="w-full p-2 border border-gray-300 bg-white text-gray-900 focus:border-[#5555ea] focus:outline-none rounded"
+            value={selectedPeriodo}
+            onChange={e => setSelectedPeriodo(e.target.value)}
+          >
+            {periodos.map(periodo => (
+              <option key={periodo} value={periodo}>{periodo}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
