@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { toast } from "@/hooks/use-toast";
 import { 
   Search,
   Filter,
@@ -27,7 +29,9 @@ import {
   ChevronLeft,
   FileText,
   Download,
-  Upload
+  Upload,
+  Lock,
+  Unlock
 } from "lucide-react";
 import {
   Select,
@@ -271,6 +275,56 @@ export default function Planeacion() {
     2: true,
     3: true
   });
+
+  // NUEVO: Estado para fase de recomendaciones
+  const [faseRecomendaciones, setFaseRecomendaciones] = useState({
+    activa: true,
+    fechaInicio: "2025-01-01", // Fecha pasada para que esté activa
+    fechaFin: "2025-12-31", // Fecha futura para que esté activa
+    bloqueada: false,
+    forzarApertura: false // NUEVO: Para forzar apertura aunque haya pasado la fecha
+  });
+
+  // NUEVO: Modal para configurar fase de recomendaciones
+  const [modalConfiguracionFase, setModalConfiguracionFase] = useState(false);
+
+  // NUEVO: Función para verificar si la fase está activa
+  const esFaseActiva = () => {
+    const ahora = new Date();
+    const inicio = new Date(faseRecomendaciones.fechaInicio + 'T00:00:00');
+    const fin = new Date(faseRecomendaciones.fechaFin + 'T23:59:59');
+    const dentroDelPeriodo = ahora >= inicio && ahora <= fin;
+    
+    // Si está bloqueada manualmente, no está activa
+    if (faseRecomendaciones.bloqueada) return false;
+    
+    // Si está dentro del período o se fuerza la apertura, está activa
+    return dentroDelPeriodo || faseRecomendaciones.forzarApertura;
+  };
+
+  // NUEVO: Función para obtener el estado de la fase
+  const getEstadoFase = () => {
+    if (faseRecomendaciones.bloqueada) return "bloqueada";
+    
+    const ahora = new Date();
+    const fin = new Date(faseRecomendaciones.fechaFin + 'T23:59:59');
+    const haPasadoLaFecha = ahora > fin;
+    
+    if (haPasadoLaFecha && !faseRecomendaciones.forzarApertura) {
+      return "cerrada";
+    }
+    
+    return "activa";
+  };
+
+  // NUEVO: Función para obtener el tiempo restante
+  const getTiempoRestante = () => {
+    const ahora = new Date();
+    const fin = new Date(faseRecomendaciones.fechaFin);
+    const diferencia = fin.getTime() - ahora.getTime();
+    const dias = Math.ceil(diferencia / (1000 * 60 * 60 * 24));
+    return dias > 0 ? `${dias} días` : "Finalizada";
+  };
 
   // Encontrar la materia actual
   const materiaActual = programas
@@ -667,13 +721,50 @@ export default function Planeacion() {
                 {materiaActual?.nombre} - {materiaActual?.codigo}
               </p>
             </div>
-            <Button 
-              onClick={() => setModalPlaneacion(true)}
-              className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Generar planeación
-            </Button>
+            <div className="flex items-center gap-3">
+              {/* Indicador de fase de recomendaciones */}
+              <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer hover:shadow-sm transition-all ${
+                getEstadoFase() === 'activa' 
+                  ? 'bg-[#e6f7ef] border-[#4fb37b]' 
+                  : getEstadoFase() === 'bloqueada'
+                  ? 'bg-[#fdecec] border-[#e9683b]'
+                  : 'bg-[#fff8e6] border-[#b8860b]'
+              }`}
+              onClick={() => setModalConfiguracionFase(true)}>
+                {getEstadoFase() === 'activa' ? (
+                  <Unlock className="h-4 w-4 text-[#4fb37b]" />
+                ) : (
+                  <Lock className="h-4 w-4 text-[#e9683b]" />
+                )}
+                <div className="text-sm">
+                  <div className={`font-medium ${
+                    getEstadoFase() === 'activa' 
+                      ? 'text-[#4fb37b]' 
+                      : getEstadoFase() === 'bloqueada'
+                      ? 'text-[#e9683b]'
+                      : 'text-[#b8860b]'
+                  }`}>
+                    Fase de Recomendaciones
+                  </div>
+                  <div className="text-xs text-[#596b88]">
+                    {getEstadoFase() === 'activa' 
+                      ? `Hasta ${faseRecomendaciones.fechaFin}` 
+                      : getEstadoFase() === 'bloqueada'
+                      ? 'Bloqueada manualmente'
+                      : 'Cerrada'
+                    }
+                  </div>
+                </div>
+                <Settings className="h-3 w-3 text-[#596b88]" />
+              </div>
+              <Button 
+                onClick={() => setModalPlaneacion(true)}
+                className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Generar planeación
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -924,13 +1015,42 @@ export default function Planeacion() {
       </div>
 
       {/* Panel Flotante de Acciones */}
-             <div className="fixed bottom-6 right-6 w-64">
-         <Card className="border-[#e3e4ec] bg-white shadow-lg rounded-xl">
+      <div className="fixed bottom-6 right-6 w-64">
+        <Card className="border-[#e3e4ec] bg-white shadow-lg rounded-xl">
           <CardContent className="p-4 space-y-3">
+            {/* Estado de fase de recomendaciones */}
+            <div className={`p-3 rounded-lg border ${
+              getEstadoFase() === 'activa' 
+                ? 'bg-[#e6f7ef] border-[#4fb37b]' 
+                : getEstadoFase() === 'bloqueada'
+                ? 'bg-[#fdecec] border-[#e9683b]'
+                : 'bg-[#fff8e6] border-[#b8860b]'
+            }`}>
+              <div className="flex items-center gap-2">
+                {getEstadoFase() === 'activa' ? (
+                  <Unlock className="h-4 w-4 text-[#4fb37b]" />
+                ) : (
+                  <Lock className="h-4 w-4 text-[#e9683b]" />
+                )}
+                <span className={`text-sm font-medium ${
+                  getEstadoFase() === 'activa' 
+                    ? 'text-[#4fb37b]' 
+                    : getEstadoFase() === 'bloqueada'
+                    ? 'text-[#e9683b]'
+                    : 'text-[#b8860b]'
+                }`}>
+                  {getEstadoFase() === 'activa' ? 'Fase Activa' : getEstadoFase() === 'bloqueada' ? 'Fase Bloqueada' : 'Fase Cerrada'}
+                </span>
+              </div>
+            </div>
+            
             <Button 
               variant="ghost" 
-              className="w-full justify-start text-[#3f4159] hover:bg-[#e4e9ff]"
-              onClick={() => setDrawerAbierto(true)}
+              className={`w-full justify-start text-[#3f4159] hover:bg-[#e4e9ff] ${
+                !esFaseActiva() ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              onClick={() => esFaseActiva() && setDrawerAbierto(true)}
+              disabled={!esFaseActiva()}
             >
               <MessageSquare className="h-4 w-4 mr-3" />
               Sugerencias/Cambios
@@ -987,6 +1107,180 @@ export default function Planeacion() {
           grupo: "01"
         } : undefined}
       />
+
+      {/* Modal de configuración de fase de recomendaciones */}
+      <Dialog open={modalConfiguracionFase} onOpenChange={setModalConfiguracionFase}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              Configurar Fase de Recomendaciones
+            </DialogTitle>
+            <DialogDescription>
+              Define las fechas de inicio y fin para que los directores puedan enviar sugerencias
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6">
+            {/* Estado actual */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Estado Actual</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-[#596b88]">Estado:</span>
+                    <div className="flex items-center gap-2">
+                      <Badge className={
+                        getEstadoFase() === 'activa' 
+                          ? 'bg-[#e6f7ef] text-[#4fb37b]' 
+                          : getEstadoFase() === 'bloqueada'
+                          ? 'bg-[#fdecec] text-[#e9683b]'
+                          : 'bg-[#fff8e6] text-[#b8860b]'
+                      }>
+                        {getEstadoFase() === 'activa' ? 'Activa' : getEstadoFase() === 'bloqueada' ? 'Bloqueada' : 'Cerrada'}
+                      </Badge>
+                      {faseRecomendaciones.forzarApertura && (
+                        <Badge className="bg-[#e6f7ef] text-[#4fb37b] text-xs">
+                          Forzada
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-[#596b88]">Fecha de inicio:</span>
+                    <span className="text-sm font-medium">{faseRecomendaciones.fechaInicio}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-[#596b88]">Fecha de fin:</span>
+                    <span className="text-sm font-medium">{faseRecomendaciones.fechaFin}</span>
+                  </div>
+                  {esFaseActiva() && !faseRecomendaciones.forzarApertura && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-[#596b88]">Tiempo restante:</span>
+                      <span className="text-sm font-medium text-[#4fb37b]">{getTiempoRestante()}</span>
+                    </div>
+                  )}
+                  {faseRecomendaciones.forzarApertura && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-[#596b88]">Apertura forzada:</span>
+                      <span className="text-sm font-medium text-[#4fb37b]">Activa</span>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Configuración de fechas */}
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="fechaInicio">Fecha de inicio</Label>
+                  <Input
+                    id="fechaInicio"
+                    type="date"
+                    value={faseRecomendaciones.fechaInicio}
+                    onChange={(e) => setFaseRecomendaciones(prev => ({
+                      ...prev,
+                      fechaInicio: e.target.value
+                    }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="fechaFin">Fecha de fin</Label>
+                  <Input
+                    id="fechaFin"
+                    type="date"
+                    value={faseRecomendaciones.fechaFin}
+                    onChange={(e) => setFaseRecomendaciones(prev => ({
+                      ...prev,
+                      fechaFin: e.target.value
+                    }))}
+                  />
+                </div>
+              </div>
+
+              {/* Control manual de bloqueo */}
+              <div className="flex items-center justify-between p-3 border rounded-lg">
+                <div>
+                  <div className="font-medium text-sm">Bloqueo manual</div>
+                  <div className="text-xs text-[#596b88]">
+                    Bloquear inmediatamente el envío de sugerencias
+                  </div>
+                </div>
+                <Button
+                  variant={faseRecomendaciones.bloqueada ? "destructive" : "outline"}
+                  size="sm"
+                  onClick={() => setFaseRecomendaciones(prev => ({
+                    ...prev,
+                    bloqueada: !prev.bloqueada,
+                    forzarApertura: false // Reset forzar apertura al bloquear
+                  }))}
+                >
+                  {faseRecomendaciones.bloqueada ? "Desbloquear" : "Bloquear"}
+                </Button>
+              </div>
+
+              {/* Control de forzar apertura */}
+              <div className="flex items-center justify-between p-3 border rounded-lg">
+                <div>
+                  <div className="font-medium text-sm">Forzar apertura</div>
+                  <div className="text-xs text-[#596b88]">
+                    Permitir sugerencias aunque haya pasado la fecha límite
+                  </div>
+                </div>
+                <Button
+                  variant={faseRecomendaciones.forzarApertura ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFaseRecomendaciones(prev => ({
+                    ...prev,
+                    forzarApertura: !prev.forzarApertura,
+                    bloqueada: false // Reset bloqueo al forzar apertura
+                  }))}
+                >
+                  {faseRecomendaciones.forzarApertura ? "Desactivar" : "Activar"}
+                </Button>
+              </div>
+            </div>
+
+            {/* Información adicional */}
+            <Card className="bg-[#f7f8fe] border-[#e3e4ec]">
+              <CardContent className="pt-4">
+                <div className="flex items-start gap-2">
+                  <AlertTriangle className="h-4 w-4 text-[#b8860b] mt-0.5" />
+                  <div className="text-sm">
+                    <p className="font-medium text-[#3f4159]">Información importante</p>
+                    <ul className="text-[#596b88] mt-1 space-y-1">
+                      <li>• Los directores recibirán notificación automática cuando se abra la fase</li>
+                      <li>• El sistema bloqueará automáticamente el envío de sugerencias al finalizar</li>
+                      <li>• Puedes bloquear manualmente la fase en cualquier momento</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <DialogFooter className="flex gap-2">
+            <Button variant="outline" onClick={() => setModalConfiguracionFase(false)}>
+              Cancelar
+            </Button>
+            <Button 
+              onClick={() => {
+                // Aquí se guardaría la configuración
+                toast({
+                  title: "Configuración guardada",
+                  description: "Las fechas de la fase de recomendaciones han sido actualizadas",
+                });
+                setModalConfiguracionFase(false);
+              }}
+            >
+              Guardar configuración
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

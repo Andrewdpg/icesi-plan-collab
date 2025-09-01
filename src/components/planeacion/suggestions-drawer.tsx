@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Search,
   Filter,
@@ -15,7 +16,9 @@ import {
   AlertTriangle,
   FileText,
   X,
-  ChevronRight
+  ChevronRight,
+  Lock,
+  Unlock
 } from "lucide-react";
 import {
   Sheet,
@@ -114,6 +117,53 @@ export function SuggestionsDrawer({ open, onOpenChange }: SuggestionsDrawerProps
   const [filterTipo, setFilterTipo] = useState<string>("todos");
   const [searchTerm, setSearchTerm] = useState("");
 
+  // NUEVO: Estado para fase de recomendaciones
+  const [faseRecomendaciones, setFaseRecomendaciones] = useState({
+    activa: true,
+    fechaInicio: "2025-01-01", // Fecha pasada para que esté activa
+    fechaFin: "2025-12-31", // Fecha futura para que esté activa
+    bloqueada: false,
+    forzarApertura: false // NUEVO: Para forzar apertura aunque haya pasado la fecha
+  });
+
+  // NUEVO: Función para verificar si la fase está activa
+  const esFaseActiva = () => {
+    const ahora = new Date();
+    const inicio = new Date(faseRecomendaciones.fechaInicio + 'T00:00:00');
+    const fin = new Date(faseRecomendaciones.fechaFin + 'T23:59:59');
+    const dentroDelPeriodo = ahora >= inicio && ahora <= fin;
+    
+    // Si está bloqueada manualmente, no está activa
+    if (faseRecomendaciones.bloqueada) return false;
+    
+    // Si está dentro del período o se fuerza la apertura, está activa
+    return dentroDelPeriodo || faseRecomendaciones.forzarApertura;
+  };
+
+  // NUEVO: Función para obtener el estado de la fase
+  const getEstadoFase = () => {
+    if (faseRecomendaciones.bloqueada) return "bloqueada";
+    
+    const ahora = new Date();
+    const fin = new Date(faseRecomendaciones.fechaFin + 'T23:59:59');
+    const haPasadoLaFecha = ahora > fin;
+    
+    if (haPasadoLaFecha && !faseRecomendaciones.forzarApertura) {
+      return "cerrada";
+    }
+    
+    return "activa";
+  };
+
+  // NUEVO: Función para obtener el tiempo restante
+  const getTiempoRestante = () => {
+    const ahora = new Date();
+    const fin = new Date(faseRecomendaciones.fechaFin);
+    const diferencia = fin.getTime() - ahora.getTime();
+    const dias = Math.ceil(diferencia / (1000 * 60 * 60 * 24));
+    return dias > 0 ? `${dias} días` : "Finalizada";
+  };
+
   const getEstadoColor = (estado: string) => {
     switch (estado) {
       case 'pendiente': return 'bg-status-draft text-muted-foreground';
@@ -166,6 +216,29 @@ export function SuggestionsDrawer({ open, onOpenChange }: SuggestionsDrawerProps
                 <X className="h-4 w-4" />
               </Button>
             </div>
+            
+            {/* Banner de estado de fase */}
+            {!esFaseActiva() && (
+              <Alert className="mt-4 bg-[#fdecec] border-[#e9683b]">
+                <Lock className="h-4 w-4 text-[#e9683b]" />
+                <AlertDescription className="text-[#e9683b]">
+                  {getEstadoFase() === 'bloqueada' 
+                    ? 'La fase de recomendaciones está bloqueada manualmente. No se pueden enviar nuevas sugerencias.'
+                    : 'La fase de recomendaciones está cerrada. No se pueden enviar nuevas sugerencias.'
+                  }
+                </AlertDescription>
+              </Alert>
+            )}
+            
+            {/* Banner de fase activa */}
+            {esFaseActiva() && (
+              <Alert className="mt-4 bg-[#e6f7ef] border-[#4fb37b]">
+                <Unlock className="h-4 w-4 text-[#4fb37b]" />
+                <AlertDescription className="text-[#4fb37b]">
+                  Fase de recomendaciones activa. Los directores pueden enviar sugerencias hasta el {faseRecomendaciones.fechaFin} ({getTiempoRestante()}).
+                </AlertDescription>
+              </Alert>
+            )}
           </SheetHeader>
 
           {!selectedSuggestion ? (

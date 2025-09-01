@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { 
   Calendar,
@@ -13,7 +14,9 @@ import {
   X,
   MessageSquare,
   AlertTriangle,
-  FileText
+  FileText,
+  Lock,
+  Unlock
 } from "lucide-react";
 import {
   Dialog,
@@ -60,6 +63,44 @@ export function SessionSuggestionModal({ open, onOpenChange, sessionData }: Sess
   const [motivo, setMotivo] = useState("");
   const [descripcion, setDescripcion] = useState("");
 
+  // NUEVO: Estado para fase de recomendaciones
+  const [faseRecomendaciones, setFaseRecomendaciones] = useState({
+    activa: true,
+    fechaInicio: "2025-01-01", // Fecha pasada para que esté activa
+    fechaFin: "2025-12-31", // Fecha futura para que esté activa
+    bloqueada: false,
+    forzarApertura: false // NUEVO: Para forzar apertura aunque haya pasado la fecha
+  });
+
+  // NUEVO: Función para verificar si la fase está activa
+  const esFaseActiva = () => {
+    const ahora = new Date();
+    const inicio = new Date(faseRecomendaciones.fechaInicio + 'T00:00:00');
+    const fin = new Date(faseRecomendaciones.fechaFin + 'T23:59:59');
+    const dentroDelPeriodo = ahora >= inicio && ahora <= fin;
+    
+    // Si está bloqueada manualmente, no está activa
+    if (faseRecomendaciones.bloqueada) return false;
+    
+    // Si está dentro del período o se fuerza la apertura, está activa
+    return dentroDelPeriodo || faseRecomendaciones.forzarApertura;
+  };
+
+  // NUEVO: Función para obtener el estado de la fase
+  const getEstadoFase = () => {
+    if (faseRecomendaciones.bloqueada) return "bloqueada";
+    
+    const ahora = new Date();
+    const fin = new Date(faseRecomendaciones.fechaFin + 'T23:59:59');
+    const haPasadoLaFecha = ahora > fin;
+    
+    if (haPasadoLaFecha && !faseRecomendaciones.forzarApertura) {
+      return "cerrada";
+    }
+    
+    return "activa";
+  };
+
   const resetForm = () => {
     setTipoSugerencia("");
     setNuevaFecha("");
@@ -72,6 +113,18 @@ export function SessionSuggestionModal({ open, onOpenChange, sessionData }: Sess
   };
 
   const handleSubmit = () => {
+    // NUEVO: Validación de fase de recomendaciones
+    if (!esFaseActiva()) {
+      toast({
+        title: "Fase cerrada",
+        description: getEstadoFase() === 'bloqueada' 
+          ? "La fase de recomendaciones está bloqueada manualmente. No se pueden enviar nuevas sugerencias."
+          : "La fase de recomendaciones está cerrada. No se pueden enviar nuevas sugerencias.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     // Validación básica
     if (!tipoSugerencia || !motivo || !descripcion) {
       toast({
@@ -111,6 +164,29 @@ export function SessionSuggestionModal({ open, onOpenChange, sessionData }: Sess
             Propón cambios para esta sesión. Tu sugerencia será revisada por la Oficina de Posgrados.
           </DialogDescription>
         </DialogHeader>
+
+        {/* Banner de advertencia si la fase está cerrada */}
+        {!esFaseActiva() && (
+          <Alert className="mb-4 bg-[#fdecec] border-[#e9683b]">
+            <Lock className="h-4 w-4 text-[#e9683b]" />
+            <AlertDescription className="text-[#e9683b]">
+              {getEstadoFase() === 'bloqueada' 
+                ? "La fase de recomendaciones está bloqueada manualmente. Esta sugerencia no será procesada."
+                : "La fase de recomendaciones está cerrada. Esta sugerencia no será procesada."
+              }
+            </AlertDescription>
+          </Alert>
+        )}
+        
+        {/* Banner de fase activa */}
+        {esFaseActiva() && (
+          <Alert className="mb-4 bg-[#e6f7ef] border-[#4fb37b]">
+            <Unlock className="h-4 w-4 text-[#4fb37b]" />
+            <AlertDescription className="text-[#4fb37b]">
+              Fase de recomendaciones activa. Tu sugerencia será procesada normalmente.
+            </AlertDescription>
+          </Alert>
+        )}
 
         <div className="space-y-6">
           {/* Información de la sesión actual */}
