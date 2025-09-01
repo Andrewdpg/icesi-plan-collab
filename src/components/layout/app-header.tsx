@@ -167,7 +167,7 @@ export function AppHeader() {
               )}
             </Button>
           </DropdownMenuTrigger>
-                     <DropdownMenuContent className="w-80 border-[#e3e4ec] bg-white rounded-xl" align="end" forceMount>
+                     <DropdownMenuContent className="w-80 border-[#e3e4ec] bg-white rounded-lg" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex items-center justify-between">
                 <div className="flex flex-col space-y-1">
@@ -253,7 +253,7 @@ export function AppHeader() {
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-                     <DropdownMenuContent className="w-56 border-[#e3e4ec] bg-white rounded-xl" align="end" forceMount>
+                     <DropdownMenuContent className="w-56 border-[#e3e4ec] bg-white rounded-lg" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none text-[#3f4159]">María García</p>

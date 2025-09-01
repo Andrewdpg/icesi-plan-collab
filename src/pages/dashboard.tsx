@@ -144,7 +144,7 @@ export default function Dashboard() {
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#5555ea] rounded-lg flex items-center justify-center">
+                            <div className="w-10 h-10 bg-[#5555ea] rounded-full flex items-center justify-center">
               <BarChart3 className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -167,13 +167,13 @@ export default function Dashboard() {
       {/* Fila 1: 3 tarjetas principales - Reorganizadas */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* 1. Listo para publicar - Mejorado */}
-        <Card className="group relative overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 rounded-xl">
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 rounded-lg">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-[#5555ea] rounded-lg flex items-center justify-center">
-                  <Target className="h-4 w-4 text-white" />
-                </div>
+                              <div className="w-8 h-8 bg-[#5555ea] rounded-full flex items-center justify-center">
+                <Target className="h-4 w-4 text-white" />
+              </div>
                 <CardTitle className="text-lg font-semibold text-gray-900">Listo para publicar</CardTitle>
               </div>
               {getStatusIcon(dashboardData.readyToPublish.score)}
@@ -190,7 +190,7 @@ export default function Dashboard() {
                   {dashboardData.readyToPublish.score}%
                 </div>
               </div>
-                              <div className="text-sm font-medium text-gray-700 bg-gray-100 rounded-xl px-3 py-1 inline-block">
+                              <div className="text-sm font-medium text-gray-700 bg-gray-100 rounded-lg px-3 py-1 inline-block">
                 {dashboardData.readyToPublish.status}
               </div>
             </div>
@@ -203,7 +203,7 @@ export default function Dashboard() {
               </div>
               <div className="space-y-2">
                 {dashboardData.readyToPublish.blockingReasons.map((reason, index) => (
-                  <div key={index} className="flex items-center gap-3 p-2 bg-gray-50 rounded-xl border border-gray-100">
+                  <div key={index} className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg border border-gray-100">
                     <div className="w-2 h-2 bg-red-500 rounded-full"></div>
                     <span className="text-xs text-gray-700 font-medium">{reason}</span>
                   </div>
@@ -219,13 +219,13 @@ export default function Dashboard() {
         </Card>
 
         {/* 2. Progreso de planeación - Mejorado */}
-        <Card className="group relative overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 rounded-xl">
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 rounded-lg">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-[#5555ea] rounded-lg flex items-center justify-center">
-                  <TrendingUp className="h-4 w-4 text-white" />
-                </div>
+                              <div className="w-8 h-8 bg-[#5555ea] rounded-full flex items-center justify-center">
+                <TrendingUp className="h-4 w-4 text-white" />
+              </div>
                 <CardTitle className="text-lg font-semibold text-gray-900">Progreso de planeación</CardTitle>
               </div>
               <Badge variant="secondary" className="bg-gray-100 text-gray-700 rounded-lg">
@@ -259,7 +259,7 @@ export default function Dashboard() {
               </div>
               <div className="space-y-2">
                 {Object.entries(dashboardData.planningProgress.byProgram).map(([program, percentage]) => (
-                  <div key={program} className="flex items-center justify-between p-2 bg-gray-50 rounded-xl">
+                  <div key={program} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
                     <span className="text-sm font-medium text-gray-700">{program}</span>
                     <div className="flex items-center gap-2">
                       <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -283,13 +283,13 @@ export default function Dashboard() {
         </Card>
 
         {/* 3. Aprobaciones & Sugerencias - Mejorado */}
-        <Card className="group relative overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 rounded-xl">
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 rounded-lg">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-[#5555ea] rounded-lg flex items-center justify-center">
-                  <CheckSquare className="h-4 w-4 text-white" />
-                </div>
+                              <div className="w-8 h-8 bg-[#5555ea] rounded-full flex items-center justify-center">
+                <CheckSquare className="h-4 w-4 text-white" />
+              </div>
                 <CardTitle className="text-lg font-semibold text-gray-900">Aprobaciones</CardTitle>
               </div>
               <Badge variant="secondary" className="bg-gray-100 text-gray-700 rounded-lg">
@@ -303,13 +303,13 @@ export default function Dashboard() {
           <CardContent className="space-y-6">
             {/* Métricas principales */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="text-center p-3 bg-gray-50 rounded-xl border border-gray-100">
+              <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-100">
                 <div className="text-xl font-bold text-gray-900 mb-1">
                   {dashboardData.approvals.pending}
                 </div>
                 <div className="text-xs text-gray-600">Pendientes</div>
               </div>
-              <div className="text-center p-3 bg-gray-50 rounded-xl border border-gray-100">
+              <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-100">
                 <div className="text-xl font-bold text-orange-600 mb-1">
                   {dashboardData.approvals.dueToday}
                 </div>
@@ -318,7 +318,7 @@ export default function Dashboard() {
             </div>
             
             {/* Sugerencias */}
-            <div className="text-center p-3 bg-gray-50 rounded-xl border border-gray-100">
+            <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-100">
               <div className="text-lg font-bold text-gray-900 mb-1">
                 {dashboardData.approvals.suggestions}
               </div>
@@ -327,7 +327,7 @@ export default function Dashboard() {
             
             {/* SLA */}
             <div className="text-center">
-              <div className="inline-flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-xl border border-gray-200">
+              <div className="inline-flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg border border-gray-200">
                 <Timer className="h-4 w-4 text-gray-500" />
                 <span className="text-xs font-medium text-gray-700">
                   SLA: {dashboardData.approvals.slaHours}h
@@ -356,7 +356,7 @@ export default function Dashboard() {
       </div>
 
       {/* Fila 2: Actividad Reciente - Expandida */}
-      <Card className="shadow-sm bg-white border border-gray-200 rounded-xl">
+      <Card className="shadow-sm bg-white border border-gray-200 rounded-lg">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -379,7 +379,7 @@ export default function Dashboard() {
               </h3>
               <div className="space-y-4">
                                  {dashboardData.recentActivity.slice(0, 2).map((activity) => (
-                   <div key={activity.id} className="flex items-start gap-4 p-3 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors">
+                   <div key={activity.id} className="flex items-start gap-4 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:bg-gray-100 transition-colors">
                     <div className={`mt-1 p-2 rounded-lg bg-white ${getActivityColor(activity.type)}`}>
                       {getActivityIcon(activity.type)}
                     </div>
@@ -402,7 +402,7 @@ export default function Dashboard() {
               </h3>
               <div className="space-y-4">
                                  {dashboardData.recentActivity.slice(2).map((activity) => (
-                   <div key={activity.id} className="flex items-start gap-4 p-3 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors">
+                   <div key={activity.id} className="flex items-start gap-4 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:bg-gray-100 transition-colors">
                     <div className={`mt-1 p-2 rounded-lg bg-white ${getActivityColor(activity.type)}`}>
                       {getActivityIcon(activity.type)}
                     </div>

@@ -45,6 +45,7 @@ import { VersionHistoryDrawer } from "@/components/planeacion/version-history-dr
 import { PublishDrawer } from "@/components/planeacion/publish-drawer";
 import { SessionSuggestionModal } from "@/components/planeacion/session-suggestion-modal";
 import { GeneratePlanningModal } from "@/components/planeacion/generate-planning-modal";
+import { ProgrammingConfigModal } from "@/components/planeacion/programming-config-modal";
 
 // Datos de programas y materias
 const programas = [
@@ -287,6 +288,16 @@ export default function Planeacion() {
 
   // NUEVO: Modal para configurar fase de recomendaciones
   const [modalConfiguracionFase, setModalConfiguracionFase] = useState(false);
+  
+  // NUEVO: Modal para configuración de programación por módulos
+  const [modalConfiguracionProgramacion, setModalConfiguracionProgramacion] = useState(false);
+  const [grupoSeleccionado, setGrupoSeleccionado] = useState<{
+    id: number;
+    grupo: string;
+    docente: string;
+    modalidad: string;
+    sesiones: number;
+  } | null>(null);
 
   // NUEVO: Función para verificar si la fase está activa
   const esFaseActiva = () => {
@@ -324,6 +335,42 @@ export default function Planeacion() {
     const diferencia = fin.getTime() - ahora.getTime();
     const dias = Math.ceil(diferencia / (1000 * 60 * 60 * 24));
     return dias > 0 ? `${dias} días` : "Finalizada";
+  };
+
+  // NUEVO: Función para abrir modal de configuración de programación
+  const handleOpenProgrammingConfig = (curso: {
+    id: number;
+    grupo: string;
+    docente: string;
+    modalidad: string;
+    sesiones: number;
+  }) => {
+    setGrupoSeleccionado({
+      id: curso.id,
+      grupo: curso.grupo,
+      docente: curso.docente,
+      modalidad: curso.modalidad,
+      sesiones: curso.sesiones
+    });
+    setModalConfiguracionProgramacion(true);
+  };
+
+  // NUEVO: Función para seleccionar grupo desde la barra izquierda
+  const handleSelectGrupoFromSidebar = (materia: string, grupo: string) => {
+    // Buscar el curso correspondiente
+    const cursoEncontrado = cursos.find(curso => 
+      curso.grupo === grupo && 
+      (materia === 'Gestión Estratégica' || materia === 'Marketing Digital' || materia === 'Liderazgo y Equipos' || materia === 'Finanzas Corporativas')
+    );
+    
+    if (cursoEncontrado) {
+      setCursoActivo(cursoEncontrado.id);
+    }
+  };
+
+  // NUEVO: Función para seleccionar grupo desde el centro
+  const handleSelectGrupoFromCenter = (cursoId: number) => {
+    setCursoActivo(cursoId);
   };
 
   // Encontrar la materia actual
@@ -471,7 +518,7 @@ export default function Planeacion() {
               <div className="ml-4 space-y-2">
                 {/* PRIMER SEMESTRE */}
                 <div className="flex items-center gap-2 py-1">
-                  <div className="w-2 h-2 bg-[#5555ea] rounded-sm"></div>
+                  <div className="w-2 h-2 bg-[#5555ea] rounded-full"></div>
                   <span className="text-xs font-medium text-[#596b88] uppercase">PRIMER SEMESTRE</span>
                 </div>
                 
@@ -487,14 +534,16 @@ export default function Planeacion() {
                         <Button
                           variant="default"
                           size="sm"
-                          className="bg-[#5555ea] text-white text-xs px-2 py-1 h-6"
+                          className="bg-[#5555ea] text-white text-xs px-2 py-1 h-6 rounded-lg cursor-pointer"
+                          onClick={() => handleSelectGrupoFromSidebar('Gestión Estratégica', '01')}
                         >
                           G01
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-[#e9683b] text-[#e9683b] text-xs px-2 py-1 h-6 hover:bg-[#fdecec]"
+                          className="border-[#e9683b] text-[#e9683b] text-xs px-2 py-1 h-6 hover:bg-[#fdecec] rounded-lg cursor-pointer"
+                          onClick={() => handleSelectGrupoFromSidebar('Gestión Estratégica', '02')}
                         >
                           G02
                         </Button>
@@ -515,7 +564,8 @@ export default function Planeacion() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-[#b8860b] text-[#b8860b] text-xs px-2 py-1 h-6 hover:bg-[#fff8e6]"
+                          className="border-[#b8860b] text-[#b8860b] text-xs px-2 py-1 h-6 hover:bg-[#fff8e6] rounded-lg cursor-pointer"
+                          onClick={() => handleSelectGrupoFromSidebar('Marketing Digital', '01')}
                         >
                           G01
                         </Button>
@@ -526,7 +576,7 @@ export default function Planeacion() {
                 
                 {/* SEGUNDO SEMESTRE */}
                 <div className="flex items-center gap-2 py-1">
-                  <div className="w-2 h-2 bg-[#5555ea] rounded-sm"></div>
+                  <div className="w-2 h-2 bg-[#5555ea] rounded-full"></div>
                   <span className="text-xs font-medium text-[#596b88] uppercase">SEGUNDO SEMESTRE</span>
                 </div>
                 
@@ -542,7 +592,8 @@ export default function Planeacion() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-[#5555ea] text-[#5555ea] text-xs px-2 py-1 h-6 hover:bg-[#e4e9ff]"
+                          className="border-[#5555ea] text-[#5555ea] text-xs px-2 py-1 h-6 hover:bg-[#e4e9ff] rounded-lg cursor-pointer"
+                          onClick={() => handleSelectGrupoFromSidebar('Liderazgo y Equipos', '01')}
                         >
                           G01
                         </Button>
@@ -578,7 +629,7 @@ export default function Planeacion() {
                 <div className="ml-4 space-y-2">
                 {/* PRIMER SEMESTRE */}
                 <div className="flex items-center gap-2 py-1">
-                  <div className="w-2 h-2 bg-[#5555ea] rounded-sm"></div>
+                  <div className="w-2 h-2 bg-[#5555ea] rounded-full"></div>
                   <span className="text-xs font-medium text-[#596b88] uppercase">PRIMER SEMESTRE</span>
                 </div>
                 
@@ -594,14 +645,16 @@ export default function Planeacion() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-[#4fb37b] text-[#4fb37b] text-xs px-2 py-1 h-6 hover:bg-[#e6f7ef]"
+                          className="border-[#4fb37b] text-[#4fb37b] text-xs px-2 py-1 h-6 hover:bg-[#e6f7ef] rounded-lg cursor-pointer"
+                          onClick={() => handleSelectGrupoFromSidebar('Finanzas Corporativas', '01')}
                         >
                           G01
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-[#e9683b] text-[#e9683b] text-xs px-2 py-1 h-6 hover:bg-[#fdecec]"
+                          className="border-[#e9683b] text-[#e9683b] text-xs px-2 py-1 h-6 hover:bg-[#fdecec] rounded-lg cursor-pointer"
+                          onClick={() => handleSelectGrupoFromSidebar('Finanzas Corporativas', '02')}
                         >
                           G02
                         </Button>
@@ -771,7 +824,7 @@ export default function Planeacion() {
         {/* Contenido Principal */}
         <div className="flex-1 space-y-6 p-6">
                   {/* Cursos/Grupos */}
-        <Card className="border-[#e3e4ec] bg-white shadow-sm rounded-xl">
+        <Card className="border-[#e3e4ec] bg-white shadow-sm rounded-lg">
             <CardHeader>
               <CardTitle className="text-lg text-[#3f4159]">Cursos/Grupos</CardTitle>
               <CardDescription className="text-[#596b88]">
@@ -782,9 +835,10 @@ export default function Planeacion() {
               {cursos.map((curso) => (
                 <Card 
                   key={curso.id}
-                  className={`border-[#e3e4ec] bg-white shadow-sm ${
+                  className={`border-[#e3e4ec] bg-white shadow-sm cursor-pointer transition-all hover:shadow-md ${
                     curso.id === cursoActivo ? 'border-[#5555ea]' : ''
                   }`}
+                  onClick={() => handleSelectGrupoFromCenter(curso.id)}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
@@ -835,25 +889,51 @@ export default function Planeacion() {
                       </div>
                       
                       <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm" className="hover:bg-[#e4e9ff] text-[#3f4159] rounded-lg">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="hover:bg-[#e4e9ff] text-[#3f4159] rounded-lg"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenProgrammingConfig({
+                              ...curso,
+                              sesiones: parseInt(curso.sesiones)
+                            });
+                          }}
+                          title="Configurar programación"
+                        >
                           <Calendar className="h-4 w-4" />
                         </Button>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm" className="hover:bg-[#e4e9ff] text-[#3f4159] rounded-lg">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="hover:bg-[#e4e9ff] text-[#3f4159] rounded-lg"
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent className="border-[#e3e4ec] bg-white rounded-xl">
-                            <DropdownMenuItem className="text-[#3f4159] hover:bg-[#e4e9ff]">
+                          <DropdownMenuContent className="border-[#e3e4ec] bg-white rounded-lg">
+                            <DropdownMenuItem 
+                              className="text-[#3f4159] hover:bg-[#e4e9ff]"
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               <Calendar className="h-4 w-4 mr-2" />
                               Ver calendario
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-[#3f4159] hover:bg-[#e4e9ff]">
+                            <DropdownMenuItem 
+                              className="text-[#3f4159] hover:bg-[#e4e9ff]"
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               <User className="h-4 w-4 mr-2" />
                               Cambiar docente
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-[#3f4159] hover:bg-[#e4e9ff]">
+                            <DropdownMenuItem 
+                              className="text-[#3f4159] hover:bg-[#e4e9ff]"
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               <Settings className="h-4 w-4 mr-2" />
                               Editar configuración
                             </DropdownMenuItem>
@@ -959,7 +1039,7 @@ export default function Planeacion() {
 
       {/* Panel Derecho - Contextual */}
       <div className="w-1/5 space-y-4 p-6">
-        <Card className="border-[#e3e4ec] bg-white shadow-sm rounded-xl">
+        <Card className="border-[#e3e4ec] bg-white shadow-sm rounded-lg">
           <CardHeader>
             <CardTitle className="text-base text-[#3f4159]">Curso Activo</CardTitle>
           </CardHeader>
@@ -1016,7 +1096,7 @@ export default function Planeacion() {
 
       {/* Panel Flotante de Acciones */}
       <div className="fixed bottom-6 right-6 w-64">
-        <Card className="border-[#e3e4ec] bg-white shadow-lg rounded-xl">
+        <Card className="border-[#e3e4ec] bg-white shadow-lg rounded-lg">
           <CardContent className="p-4 space-y-3">
             {/* Estado de fase de recomendaciones */}
             <div className={`p-3 rounded-lg border ${
@@ -1106,6 +1186,12 @@ export default function Planeacion() {
           codigo: materiaActual.codigo,
           grupo: "01"
         } : undefined}
+      />
+
+      <ProgrammingConfigModal
+        open={modalConfiguracionProgramacion}
+        onOpenChange={setModalConfiguracionProgramacion}
+        grupoData={grupoSeleccionado}
       />
 
       {/* Modal de configuración de fase de recomendaciones */}

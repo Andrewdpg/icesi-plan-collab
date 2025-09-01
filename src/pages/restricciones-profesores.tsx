@@ -366,7 +366,7 @@ export default function RestriccionesProfesores() {
                             <select
                               value={newTimeSlot.dia}
                               onChange={(e) => setNewTimeSlot(prev => ({ ...prev, dia: e.target.value }))}
-                              className="w-full p-2 border border-[#e3e4ec] rounded-md bg-[#f7f8fe]"
+                              className="w-full p-2 border border-[#e3e4ec] rounded-lg bg-[#f7f8fe]"
                             >
                               <option value="">Seleccionar día</option>
                               {diasSemana.map(dia => (
@@ -379,7 +379,7 @@ export default function RestriccionesProfesores() {
                             <select
                               value={newTimeSlot.horaInicio}
                               onChange={(e) => setNewTimeSlot(prev => ({ ...prev, horaInicio: e.target.value }))}
-                              className="w-full p-2 border border-[#e3e4ec] rounded-md bg-[#f7f8fe]"
+                              className="w-full p-2 border border-[#e3e4ec] rounded-lg bg-[#f7f8fe]"
                             >
                               <option value="">Inicio</option>
                               {horasDisponibles.map(hora => (
@@ -392,7 +392,7 @@ export default function RestriccionesProfesores() {
                             <select
                               value={newTimeSlot.horaFin}
                               onChange={(e) => setNewTimeSlot(prev => ({ ...prev, horaFin: e.target.value }))}
-                              className="w-full p-2 border border-[#e3e4ec] rounded-md bg-[#f7f8fe]"
+                              className="w-full p-2 border border-[#e3e4ec] rounded-lg bg-[#f7f8fe]"
                             >
                               <option value="">Fin</option>
                               {horasDisponibles.map(hora => (
@@ -405,7 +405,7 @@ export default function RestriccionesProfesores() {
                             <select
                               value={newTimeSlot.tipo}
                               onChange={(e) => setNewTimeSlot(prev => ({ ...prev, tipo: e.target.value as any }))}
-                              className="w-full p-2 border border-[#e3e4ec] rounded-md bg-[#f7f8fe]"
+                              className="w-full p-2 border border-[#e3e4ec] rounded-lg bg-[#f7f8fe]"
                             >
                               <option value="disponible">Disponible</option>
                               <option value="preferido">Preferido</option>
@@ -413,7 +413,7 @@ export default function RestriccionesProfesores() {
                             </select>
                           </div>
                         </div>
-                        <Button onClick={handleAddTimeSlot} className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white">
+                        <Button onClick={handleAddTimeSlot} className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white rounded-lg">
                           <Plus className="h-4 w-4 mr-2" />
                           Agregar Horario
                         </Button>

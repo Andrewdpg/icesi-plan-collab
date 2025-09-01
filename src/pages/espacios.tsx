@@ -588,7 +588,7 @@ export default function Espacios() {
                       <CardDescription className="text-xs text-[#596b88]">{d.correo}</CardDescription>
                     </CardHeader>
                     <CardContent className="pt-0 flex items-center justify-end gap-2">
-                      <Button size="sm" className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white" onClick={() => { setSelectedDocenteId(d.id); setIsDocenteDialogOpen(true); }}>Ver detalles</Button>
+                      <Button size="sm" className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white rounded-lg" onClick={() => { setSelectedDocenteId(d.id); setIsDocenteDialogOpen(true); }}>Ver detalles</Button>
                     </CardContent>
                   </Card>
                 ))}
@@ -635,7 +635,7 @@ export default function Espacios() {
                       <CardDescription className="text-xs text-[#596b88]">{e.correo}</CardDescription>
                     </CardHeader>
                     <CardContent className="pt-0 flex items-center justify-end gap-2">
-                      <Button size="sm" className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white" onClick={() => { setSelectedEstudianteId(e.id); setIsEstudianteDialogOpen(true); }}>Ver detalles</Button>
+                      <Button size="sm" className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white rounded-lg" onClick={() => { setSelectedEstudianteId(e.id); setIsEstudianteDialogOpen(true); }}>Ver detalles</Button>
                     </CardContent>
                   </Card>
                 ))}
@@ -693,7 +693,7 @@ export default function Espacios() {
                         )}
                       </div>
                       <div className="flex justify-end gap-2">
-                        <Button size="sm" variant="outline" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]" onClick={() => { setSelectedProgramId(p.id); setIsProgramDialogOpen(true); }}>Ver detalles</Button>
+                        <Button size="sm" variant="outline" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg" onClick={() => { setSelectedProgramId(p.id); setIsProgramDialogOpen(true); }}>Ver detalles</Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -715,18 +715,18 @@ export default function Espacios() {
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <div className="font-medium">Materias / Cursos por semestre</div>
-                        <Button size="sm" variant="outline" className="border-[#e3e4ec] hover:bg-[#e4e9ff] hover:border-[#5555ea]"><Plus className="h-4 w-4 mr-1" />Agregar</Button>
+                        <Button size="sm" variant="outline" className="border-[#e3e4ec] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg"><Plus className="h-4 w-4 mr-1" />Agregar</Button>
                       </div>
-                      <div className="border rounded">
-                        {Array.from(new Set(selectedProgram.cursos.map(c => c.semestre))).sort((a,b) => (a as number) - (b as number)).map(sem => (
+                                              <div className="border rounded-lg">
+                          {Array.from(new Set(selectedProgram.cursos.map(c => c.semestre))).sort((a,b) => (a as number) - (b as number)).map(sem => (
                           <div key={`sem-${sem}`} className="">
                             <div className="px-3 py-2 bg-[#f7f8fe] text-[#3f4159] text-sm font-medium border-b">Semestre {sem}</div>
                             {selectedProgram.cursos.filter(c => c.semestre === sem).map(c => (
                               <div key={c.codigo} className="flex items-center justify-between p-2 border-b last:border-b-0">
                                 <div className="text-sm">{c.codigo} - {c.nombre}</div>
                                 <div className="flex gap-2">
-                                  <Button size="icon" variant="outline" className="border-[#e3e4ec] hover:bg-[#e4e9ff] hover:border-[#5555ea]"><Edit className="h-4 w-4" /></Button>
-                                  <Button size="icon" variant="outline" className="border-[#e3e4ec] hover:bg-[#e4e9ff] hover:border-[#5555ea]"><Trash2 className="h-4 w-4" /></Button>
+                                  <Button size="icon" variant="outline" className="border-[#e3e4ec] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg"><Edit className="h-4 w-4" /></Button>
+                                  <Button size="icon" variant="outline" className="border-[#e3e4ec] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg"><Trash2 className="h-4 w-4" /></Button>
                                 </div>
                               </div>
                             ))}
@@ -737,14 +737,14 @@ export default function Espacios() {
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <div className="font-medium">Estudiantes</div>
-                        <Button size="sm" variant="outline" className="border-[#e3e4ec] hover:bg-[#e4e9ff] hover:border-[#5555ea]"><Plus className="h-4 w-4 mr-1" />Agregar</Button>
+                        <Button size="sm" variant="outline" className="border-[#e3e4ec] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg"><Plus className="h-4 w-4 mr-1" />Agregar</Button>
                       </div>
-                      <div className="border rounded">
+                      <div className="border rounded-lg">
                         {selectedProgram.estudiantes.map(e => (
                           <div key={e} className="flex items-center justify-between p-2 border-b last:border-b-0">
                             <div className="text-sm">{e}</div>
                             <div className="flex gap-2">
-                              <Button size="icon" variant="outline" className="border-[#e3e4ec] hover:bg-[#e4e9ff] hover:border-[#5555ea]"><Trash2 className="h-4 w-4" /></Button>
+                              <Button size="icon" variant="outline" className="border-[#e3e4ec] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg"><Trash2 className="h-4 w-4" /></Button>
                             </div>
                           </div>
                         ))}
@@ -773,8 +773,8 @@ export default function Espacios() {
                 <Badge className="bg-[#e4e9ff] text-[#5555ea] border-[#e4e9ff]">{selectedDocente.modalidad}</Badge>
               </div>
               <div className="flex justify-end gap-2 pt-2">
-                <Button variant="outline" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">Editar</Button>
-                <Button className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white">Cerrar</Button>
+                <Button variant="outline" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg">Editar</Button>
+                <Button className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white rounded-lg">Cerrar</Button>
               </div>
             </div>
           )}
@@ -796,8 +796,8 @@ export default function Espacios() {
                 <Badge className="bg-[#e6f7ef] text-[#4fb37b] border-[#e6f7ef]">{selectedEstudiante.cohorte}</Badge>
               </div>
               <div className="flex justify-end gap-2 pt-2">
-                <Button variant="outline" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">Ver historial</Button>
-                <Button className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white">Cerrar</Button>
+                <Button variant="outline" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg">Ver historial</Button>
+                <Button className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white rounded-lg">Cerrar</Button>
               </div>
             </div>
           )}

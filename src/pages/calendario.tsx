@@ -563,7 +563,7 @@ export default function CalendarioPersonal() {
                       {events.slice(0, 3).map(event => (
                         <div
                           key={event.id}
-                          className={`text-xs p-1 border rounded cursor-pointer hover:opacity-80 ${getModalidadColor(event.modalidad)}`}
+                          className={`text-xs p-1 border rounded-lg cursor-pointer hover:opacity-80 ${getModalidadColor(event.modalidad)}`}
                           onClick={() => openEventDialog(event)}
                         >
                           <div className="font-medium truncate">

@@ -141,7 +141,7 @@ export default function Datos() {
         <div className="mt-4 max-w-xs">
           <label className="block text-sm font-medium text-gray-900 mb-1">Período </label>
           <select
-            className="w-full p-2 border border-gray-300 bg-white text-gray-900 focus:border-[#5555ea] focus:outline-none rounded"
+                            className="w-full p-2 border border-gray-300 bg-white text-gray-900 focus:border-[#5555ea] focus:outline-none rounded-lg"
             value={selectedPeriodo}
             onChange={e => setSelectedPeriodo(e.target.value)}
           >

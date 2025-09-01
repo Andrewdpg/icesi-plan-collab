@@ -242,7 +242,7 @@ L201,Laboratorio 201,Laboratorio,20,Ciencias,2,Computadores`
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-[#e4e9ff] rounded-lg">
+                      <div className="p-2 bg-[#e4e9ff] rounded-full">
                         {template.icon}
                       </div>
                       <div>
@@ -330,7 +330,7 @@ L201,Laboratorio 201,Laboratorio,20,Ciencias,2,Computadores`
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-blue-100 rounded-lg">
+                      <div className="p-2 bg-blue-100 rounded-full">
                         {template.icon}
                       </div>
                       <div>
@@ -409,7 +409,7 @@ L201,Laboratorio 201,Laboratorio,20,Ciencias,2,Computadores`
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-green-100 rounded-lg">
+                      <div className="p-2 bg-green-100 rounded-full">
                         {template.icon}
                       </div>
                       <div>
@@ -488,7 +488,7 @@ L201,Laboratorio 201,Laboratorio,20,Ciencias,2,Computadores`
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-purple-100 rounded-lg">
+                      <div className="p-2 bg-purple-100 rounded-full">
                         {template.icon}
                       </div>
                       <div>
@@ -567,7 +567,7 @@ L201,Laboratorio 201,Laboratorio,20,Ciencias,2,Computadores`
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-orange-100 rounded-lg">
+                      <div className="p-2 bg-orange-100 rounded-full">
                         {template.icon}
                       </div>
                       <div>

@@ -273,7 +273,7 @@ export default function BusquedaAvanzada() {
               <Filter className="h-4 w-4 mr-2" />
               Filtros
             </Button>
-            <Button onClick={handleSearch} className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white">
+            <Button onClick={handleSearch} className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white rounded-lg">
               <Search className="h-4 w-4 mr-2" />
               Buscar
             </Button>
@@ -318,7 +318,7 @@ export default function BusquedaAvanzada() {
                 <Label>Tipo</Label>
                 <select
                   onChange={(e) => e.target.value && handleAddFilter('tipo', e.target.value)}
-                  className="w-full p-2 border border-[#e3e4ec] rounded-md bg-[#f7f8fe]"
+                  className="w-full p-2 border border-[#e3e4ec] rounded-lg bg-[#f7f8fe]"
                 >
                   <option value="">Seleccionar tipo</option>
                   {tipos.map(tipo => (
@@ -330,7 +330,7 @@ export default function BusquedaAvanzada() {
                 <Label>Programa</Label>
                 <select
                   onChange={(e) => e.target.value && handleAddFilter('programa', e.target.value)}
-                  className="w-full p-2 border border-[#e3e4ec] rounded-md bg-[#f7f8fe]"
+                  className="w-full p-2 border border-[#e3e4ec] rounded-lg bg-[#f7f8fe]"
                 >
                   <option value="">Seleccionar programa</option>
                   {programas.map(programa => (
@@ -342,7 +342,7 @@ export default function BusquedaAvanzada() {
                 <Label>Estado</Label>
                 <select
                   onChange={(e) => e.target.value && handleAddFilter('estado', e.target.value)}
-                  className="w-full p-2 border border-[#e3e4ec] rounded-md bg-[#f7f8fe]"
+                  className="w-full p-2 border border-[#e3e4ec] rounded-lg bg-[#f7f8fe]"
                 >
                   <option value="">Seleccionar estado</option>
                   {estados.map(estado => (
@@ -530,16 +530,16 @@ export default function BusquedaAvanzada() {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
+                    <Button variant="outline" size="sm" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg">
                       <Eye className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" size="sm" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
+                    <Button variant="outline" size="sm" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg">
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" size="sm" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
+                    <Button variant="outline" size="sm" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg">
                       <Download className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" size="sm" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea]">
+                    <Button variant="outline" size="sm" className="border-[#e3e4ec] text-[#3f4159] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg">
                       <Share2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -555,7 +555,7 @@ export default function BusquedaAvanzada() {
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-4 flex-1">
-                    <div className="p-2 bg-blue-100 rounded-lg text-blue-800">
+                    <div className="p-2 bg-blue-100 rounded-full text-blue-800">
                       <Calendar className="h-4 w-4" />
                     </div>
                     <div className="flex-1 space-y-2">
@@ -611,7 +611,7 @@ export default function BusquedaAvanzada() {
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-4 flex-1">
-                    <div className="p-2 bg-green-100 rounded-lg text-green-800">
+                    <div className="p-2 bg-green-100 rounded-full text-green-800">
                       <BookOpen className="h-4 w-4" />
                     </div>
                     <div className="flex-1 space-y-2">
@@ -667,7 +667,7 @@ export default function BusquedaAvanzada() {
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-4 flex-1">
-                    <div className="p-2 bg-purple-100 rounded-lg text-purple-800">
+                    <div className="p-2 bg-purple-100 rounded-full text-purple-800">
                       <User className="h-4 w-4" />
                     </div>
                     <div className="flex-1 space-y-2">
@@ -723,7 +723,7 @@ export default function BusquedaAvanzada() {
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-4 flex-1">
-                    <div className="p-2 bg-orange-100 rounded-lg text-orange-800">
+                    <div className="p-2 bg-orange-100 rounded-full text-orange-800">
                       <Building className="h-4 w-4" />
                     </div>
                     <div className="flex-1 space-y-2">

@@ -348,7 +348,7 @@ export default function PlaneacionIndex() {
         <Card>
           <CardContent className="p-12 text-center">
             <div className="space-y-4">
-                              <div className="mx-auto w-12 h-12 bg-muted rounded-xl flex items-center justify-center">
+                              <div className="mx-auto w-12 h-12 bg-muted rounded-full flex items-center justify-center">
                 <Search className="h-6 w-6 text-muted-foreground" />
               </div>
               <div>
@@ -406,7 +406,7 @@ export default function PlaneacionIndex() {
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="rounded-xl">
+                        <DropdownMenuContent align="end" className="rounded-lg">
                           <DropdownMenuItem onClick={() => handleAbrirPlaneacion(planeacion.id)}>
                             <Eye className="h-4 w-4 mr-2" />
                             Abrir
