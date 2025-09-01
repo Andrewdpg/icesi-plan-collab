@@ -331,6 +331,7 @@ export default function ConfiguracionPage() {
     maintenanceMode: false,
     emailNotifications: true,
     systemAlerts: true,
+    hourFormat: "24h",
   });
 
   const [modalPlantilla, setModalPlantilla] = useState(false);
@@ -445,6 +446,23 @@ export default function ConfiguracionPage() {
         </TabsList>
 
         <TabsContent value="notificaciones" className="space-y-6">
+           <div className="space-y-2">
+          <Label>Formato de hora</Label>
+          <Select
+            value={settings.hourFormat}
+            onValueChange={(value) =>
+              setSettings((prev) => ({ ...prev, hourFormat: value }))
+            }
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="24h">24 horas (13:00)</SelectItem>
+              <SelectItem value="12h">12 horas (1:00 PM)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
           <Card className="rounded-xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
