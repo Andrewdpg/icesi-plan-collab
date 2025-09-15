@@ -47,29 +47,110 @@ import { SessionSuggestionModal } from "@/components/planeacion/session-suggesti
 import { GeneratePlanningModal } from "@/components/planeacion/generate-planning-modal";
 import { ProgrammingConfigModal } from "@/components/planeacion/programming-config-modal";
 
-// Datos de programas y materias
+// Datos de programas con mallas curriculares
 const programas = [
   {
     id: 1,
-    nombre: "MBA - Maestría en Administración",
-    materias: [
-      { id: 1, nombre: "Gestión Estratégica", codigo: "GES001", semestre: 1 },
-      { id: 2, nombre: "Marketing Digital", codigo: "MKT001", semestre: 1 },
-      { id: 3, nombre: "Liderazgo y Equipos", codigo: "LID001", semestre: 2 },
+    nombre: "Maestría en Ciencia de Datos",
+    mallas: [
+      {
+        id: "mcd-2024-1",
+        periodo: "2024-1",
+        activa: true,
+        materias: [
+          { id: 1, nombre: "Fundamentos de Big Data", codigo: "BIG001", semestre: 1, grupos: ["G01", "G02"] },
+          { id: 2, nombre: "Machine Learning Avanzado", codigo: "ML001", semestre: 1, grupos: ["G01"] },
+          { id: 3, nombre: "Visualización de Datos", codigo: "VIZ001", semestre: 2, grupos: ["G01", "G02", "G03"] },
+          { id: 4, nombre: "Deep Learning", codigo: "DL001", semestre: 2, grupos: ["G01", "G02"] },
+          { id: 5, nombre: "Proyecto Integrador", codigo: "PRO001", semestre: 3, grupos: ["G01"] },
+        ]
+      },
+      {
+        id: "mcd-2023-2",
+        periodo: "2023-2",
+        activa: false,
+        materias: [
+          { id: 1, nombre: "Fundamentos de Big Data", codigo: "BIG001", semestre: 1, grupos: ["G01"] },
+          { id: 2, nombre: "Machine Learning Básico", codigo: "ML001", semestre: 1, grupos: ["G01", "G02"] },
+          { id: 3, nombre: "Visualización de Datos", codigo: "VIZ001", semestre: 2, grupos: ["G01"] },
+          { id: 4, nombre: "Inteligencia Artificial", codigo: "IA001", semestre: 2, grupos: ["G01", "G02"] },
+          { id: 5, nombre: "Proyecto Integrador", codigo: "PRO001", semestre: 3, grupos: ["G01"] },
+        ]
+      },
+      {
+        id: "mcd-2023-1",
+        periodo: "2023-1",
+        activa: false,
+        materias: [
+          { id: 1, nombre: "Introducción a Big Data", codigo: "BIG001", semestre: 1, grupos: ["G01"] },
+          { id: 2, nombre: "Machine Learning Básico", codigo: "ML001", semestre: 1, grupos: ["G01"] },
+          { id: 3, nombre: "Análisis de Datos", codigo: "ANL001", semestre: 2, grupos: ["G01", "G02"] },
+          { id: 4, nombre: "Inteligencia Artificial", codigo: "IA001", semestre: 2, grupos: ["G01"] },
+          { id: 5, nombre: "Proyecto Final", codigo: "PRO001", semestre: 3, grupos: ["G01"] },
+        ]
+      }
     ]
   },
   {
     id: 2,
-    nombre: "Especialización en Finanzas",
-    materias: [
-      { id: 4, nombre: "Finanzas Corporativas", codigo: "FIN001", semestre: 1 },
+    nombre: "Maestría en Ciencias Administrativas",
+    mallas: [
+      {
+        id: "mca-2024-1",
+        periodo: "2024-1",
+        activa: true,
+        materias: [
+          { id: 6, nombre: "Metodología de Investigación", codigo: "MET001", semestre: 1, grupos: ["G01", "G02"] },
+          { id: 7, nombre: "Estadística Aplicada", codigo: "EST001", semestre: 1, grupos: ["G01"] },
+          { id: 8, nombre: "Teoría Organizacional", codigo: "ORG001", semestre: 2, grupos: ["G01", "G02", "G03"] },
+          { id: 9, nombre: "Econometría", codigo: "ECO001", semestre: 2, grupos: ["G01"] },
+          { id: 10, nombre: "Seminario de Tesis I", codigo: "SEM001", semestre: 3, grupos: ["G01"] },
+          { id: 11, nombre: "Seminario de Tesis II", codigo: "SEM002", semestre: 4, grupos: ["G01"] },
+        ]
+      },
+      {
+        id: "mca-2023-2",
+        periodo: "2023-2",
+        activa: false,
+        materias: [
+          { id: 6, nombre: "Metodología de Investigación", codigo: "MET001", semestre: 1, grupos: ["G01"] },
+          { id: 7, nombre: "Estadística Descriptiva", codigo: "EST001", semestre: 1, grupos: ["G01", "G02"] },
+          { id: 8, nombre: "Teoría Organizacional", codigo: "ORG001", semestre: 2, grupos: ["G01"] },
+          { id: 9, nombre: "Economía Aplicada", codigo: "ECO001", semestre: 2, grupos: ["G01", "G02"] },
+          { id: 10, nombre: "Seminario de Tesis I", codigo: "SEM001", semestre: 3, grupos: ["G01"] },
+          { id: 11, nombre: "Seminario de Tesis II", codigo: "SEM002", semestre: 4, grupos: ["G01"] },
+        ]
+      }
     ]
   },
   {
     id: 3,
-    nombre: "Doctorado en Administración",
-    materias: [
-      { id: 5, nombre: "Metodología de Investigación", codigo: "MET001", semestre: 1 },
+    nombre: "Maestría en Ciencias Biotecnología",
+    mallas: [
+      {
+        id: "mcb-2024-1",
+        periodo: "2024-1",
+        activa: true,
+        materias: [
+          { id: 12, nombre: "Biotecnología Molecular", codigo: "BIO001", semestre: 1, grupos: ["G01", "G02"] },
+          { id: 13, nombre: "Biotecnología Industrial", codigo: "BIO002", semestre: 1, grupos: ["G01"] },
+          { id: 14, nombre: "Biotecnología Ambiental", codigo: "BIO003", semestre: 2, grupos: ["G01", "G02", "G03"] },
+          { id: 15, nombre: "Biotecnología Farmacéutica", codigo: "BIO004", semestre: 2, grupos: ["G01"] },
+          { id: 16, nombre: "Proyecto de Investigación", codigo: "INV001", semestre: 3, grupos: ["G01"] },
+        ]
+      },
+      {
+        id: "mcb-2023-2",
+        periodo: "2023-2",
+        activa: false,
+        materias: [
+          { id: 12, nombre: "Biotecnología Molecular", codigo: "BIO001", semestre: 1, grupos: ["G01"] },
+          { id: 13, nombre: "Biotecnología Industrial", codigo: "BIO002", semestre: 1, grupos: ["G01", "G02"] },
+          { id: 14, nombre: "Biotecnología Ambiental", codigo: "BIO003", semestre: 2, grupos: ["G01"] },
+          { id: 15, nombre: "Biotecnología Farmacéutica", codigo: "BIO004", semestre: 2, grupos: ["G01", "G02"] },
+          { id: 16, nombre: "Trabajo de Grado", codigo: "TG001", semestre: 3, grupos: ["G01"] },
+        ]
+      }
     ]
   }
 ];
@@ -102,147 +183,564 @@ const cursos = [
 
 // Datos de sesiones del curso seleccionado
 const sessionData: SessionData[] = [
+  // Maestría en Ciencia de Datos - Fundamentos de Big Data
+  // Grupo 01 - Lunes, Miércoles, Viernes 17:00-21:00
   {
     id: "1",
-    curso: "Gestión Estratégica",
+    curso: "Fundamentos de Big Data",
     grupo: "01",
     docente: "Dr. Carlos Mendoza",
     fecha: "2024-09-02",
-    horaInicio: "08:00",
-    horaFin: "10:00",
+    horaInicio: "17:00",
+    horaFin: "21:00",
     aula: "Aula 204",
     modalidad: "Presencial",
     estado: "normal"
   },
   {
     id: "2",
-    curso: "Gestión Estratégica",
+    curso: "Fundamentos de Big Data",
     grupo: "01",
     docente: "Dr. Carlos Mendoza",
-    fecha: "2024-09-09",
-    horaInicio: "08:00",
-    horaFin: "10:00",
+    fecha: "2024-09-04",
+    horaInicio: "17:00",
+    horaFin: "21:00",
     aula: "Aula 204",
     modalidad: "Presencial",
     estado: "normal"
   },
   {
     id: "3",
-    curso: "Gestión Estratégica",
+    curso: "Fundamentos de Big Data",
     grupo: "01",
     docente: "Dr. Carlos Mendoza",
-    fecha: "2024-09-16",
-    horaInicio: "08:00",
-    horaFin: "10:00",
+    fecha: "2024-09-06",
+    horaInicio: "17:00",
+    horaFin: "21:00",
     aula: "Aula 204",
     modalidad: "Presencial",
-    estado: "conflicto"
+    estado: "normal"
   },
   {
     id: "4",
-    curso: "Gestión Estratégica",
+    curso: "Fundamentos de Big Data",
     grupo: "01",
     docente: "Dr. Carlos Mendoza",
-    fecha: "2024-09-23",
-    horaInicio: "08:00",
-    horaFin: "10:00",
+    fecha: "2024-09-09",
+    horaInicio: "17:00",
+    horaFin: "21:00",
     aula: "Aula 204",
     modalidad: "Presencial",
     estado: "normal"
   },
   {
     id: "5",
-    curso: "Marketing Digital",
+    curso: "Fundamentos de Big Data",
     grupo: "01",
-    docente: "Dra. Ana García",
-    fecha: "2024-09-03",
-    horaInicio: "14:00",
-    horaFin: "16:00",
-    aula: "Aula 301",
+    docente: "Dr. Carlos Mendoza",
+    fecha: "2024-09-11",
+    horaInicio: "17:00",
+    horaFin: "21:00",
+    aula: "Aula 204",
     modalidad: "Presencial",
     estado: "normal"
   },
   {
     id: "6",
-    curso: "Marketing Digital",
+    curso: "Fundamentos de Big Data",
     grupo: "01",
-    docente: "Dra. Ana García",
-    fecha: "2024-09-10",
-    horaInicio: "14:00",
-    horaFin: "16:00",
-    aula: "Aula 301",
+    docente: "Dr. Carlos Mendoza",
+    fecha: "2024-09-13",
+    horaInicio: "17:00",
+    horaFin: "21:00",
+    aula: "Aula 204",
     modalidad: "Presencial",
     estado: "normal"
   },
   {
     id: "7",
-    curso: "Marketing Digital",
+    curso: "Fundamentos de Big Data",
     grupo: "01",
-    docente: "Dra. Ana García",
-    fecha: "2024-09-17",
-    horaInicio: "14:00",
-    horaFin: "16:00",
-    aula: "Aula 301",
+    docente: "Dr. Carlos Mendoza",
+    fecha: "2024-09-16",
+    horaInicio: "17:00",
+    horaFin: "21:00",
+    aula: "Aula 204",
     modalidad: "Presencial",
-    estado: "normal"
+    estado: "conflicto"
   },
   {
     id: "8",
-    curso: "Marketing Digital",
+    curso: "Fundamentos de Big Data",
     grupo: "01",
-    docente: "Dra. Ana García",
-    fecha: "2024-09-24",
-    horaInicio: "14:00",
-    horaFin: "16:00",
-    aula: "Aula 301",
+    docente: "Dr. Carlos Mendoza",
+    fecha: "2024-09-18",
+    horaInicio: "17:00",
+    horaFin: "21:00",
+    aula: "Aula 204",
     modalidad: "Presencial",
     estado: "normal"
   },
   {
     id: "9",
-    curso: "Finanzas Corporativas",
+    curso: "Fundamentos de Big Data",
     grupo: "01",
-    docente: "Dr. Roberto Silva",
-    fecha: "2024-09-05",
-    horaInicio: "10:00",
-    horaFin: "12:00",
-    aula: "Aula 105",
+    docente: "Dr. Carlos Mendoza",
+    fecha: "2024-09-20",
+    horaInicio: "17:00",
+    horaFin: "21:00",
+    aula: "Aula 204",
     modalidad: "Presencial",
     estado: "normal"
   },
   {
     id: "10",
-    curso: "Finanzas Corporativas",
+    curso: "Fundamentos de Big Data",
     grupo: "01",
-    docente: "Dr. Roberto Silva",
-    fecha: "2024-09-12",
-    horaInicio: "10:00",
-    horaFin: "12:00",
-    aula: "Aula 105",
+    docente: "Dr. Carlos Mendoza",
+    fecha: "2024-09-23",
+    horaInicio: "17:00",
+    horaFin: "21:00",
+    aula: "Aula 204",
     modalidad: "Presencial",
     estado: "normal"
   },
   {
     id: "11",
-    curso: "Finanzas Corporativas",
+    curso: "Fundamentos de Big Data",
     grupo: "01",
-    docente: "Dr. Roberto Silva",
-    fecha: "2024-09-19",
-    horaInicio: "10:00",
-    horaFin: "12:00",
-    aula: "Aula 105",
+    docente: "Dr. Carlos Mendoza",
+    fecha: "2024-09-25",
+    horaInicio: "17:00",
+    horaFin: "21:00",
+    aula: "Aula 204",
     modalidad: "Presencial",
     estado: "normal"
   },
   {
     id: "12",
-    curso: "Finanzas Corporativas",
+    curso: "Fundamentos de Big Data",
+    grupo: "01",
+    docente: "Dr. Carlos Mendoza",
+    fecha: "2024-09-27",
+    horaInicio: "17:00",
+    horaFin: "21:00",
+    aula: "Aula 204",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "13",
+    curso: "Fundamentos de Big Data",
+    grupo: "01",
+    docente: "Dr. Carlos Mendoza",
+    fecha: "2024-09-30",
+    horaInicio: "17:00",
+    horaFin: "21:00",
+    aula: "Aula 204",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+
+  // Grupo 02 - Martes, Jueves 18:00-22:00
+  {
+    id: "14",
+    curso: "Fundamentos de Big Data",
+    grupo: "02",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-03",
+    horaInicio: "18:00",
+    horaFin: "22:00",
+    aula: "Aula 205",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "15",
+    curso: "Fundamentos de Big Data",
+    grupo: "02",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-05",
+    horaInicio: "18:00",
+    horaFin: "22:00",
+    aula: "Aula 205",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "16",
+    curso: "Fundamentos de Big Data",
+    grupo: "02",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-10",
+    horaInicio: "18:00",
+    horaFin: "22:00",
+    aula: "Aula 205",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "17",
+    curso: "Fundamentos de Big Data",
+    grupo: "02",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-12",
+    horaInicio: "18:00",
+    horaFin: "22:00",
+    aula: "Aula 205",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "18",
+    curso: "Fundamentos de Big Data",
+    grupo: "02",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-17",
+    horaInicio: "18:00",
+    horaFin: "22:00",
+    aula: "Aula 205",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "19",
+    curso: "Fundamentos de Big Data",
+    grupo: "02",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-19",
+    horaInicio: "18:00",
+    horaFin: "22:00",
+    aula: "Aula 205",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "20",
+    curso: "Fundamentos de Big Data",
+    grupo: "02",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-24",
+    horaInicio: "18:00",
+    horaFin: "22:00",
+    aula: "Aula 205",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "21",
+    curso: "Fundamentos de Big Data",
+    grupo: "02",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-26",
+    horaInicio: "18:00",
+    horaFin: "22:00",
+    aula: "Aula 205",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  // Machine Learning Avanzado - Grupo 01 - Lunes, Miércoles 14:00-18:00
+  {
+    id: "22",
+    curso: "Machine Learning Avanzado",
+    grupo: "01",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-02",
+    horaInicio: "14:00",
+    horaFin: "18:00",
+    aula: "Aula 301",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "23",
+    curso: "Machine Learning Avanzado",
+    grupo: "01",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-04",
+    horaInicio: "14:00",
+    horaFin: "18:00",
+    aula: "Aula 301",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "24",
+    curso: "Machine Learning Avanzado",
+    grupo: "01",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-09",
+    horaInicio: "14:00",
+    horaFin: "18:00",
+    aula: "Aula 301",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "25",
+    curso: "Machine Learning Avanzado",
+    grupo: "01",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-11",
+    horaInicio: "14:00",
+    horaFin: "18:00",
+    aula: "Aula 301",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "26",
+    curso: "Machine Learning Avanzado",
+    grupo: "01",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-16",
+    horaInicio: "14:00",
+    horaFin: "18:00",
+    aula: "Aula 301",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "27",
+    curso: "Machine Learning Avanzado",
+    grupo: "01",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-18",
+    horaInicio: "14:00",
+    horaFin: "18:00",
+    aula: "Aula 301",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "28",
+    curso: "Machine Learning Avanzado",
+    grupo: "01",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-23",
+    horaInicio: "14:00",
+    horaFin: "18:00",
+    aula: "Aula 301",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "29",
+    curso: "Machine Learning Avanzado",
+    grupo: "01",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-25",
+    horaInicio: "14:00",
+    horaFin: "18:00",
+    aula: "Aula 301",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "30",
+    curso: "Machine Learning Avanzado",
+    grupo: "01",
+    docente: "Dra. Ana García",
+    fecha: "2024-09-30",
+    horaInicio: "14:00",
+    horaFin: "18:00",
+    aula: "Aula 301",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  // Visualización de Datos - Grupo 01 - Martes, Jueves 10:00-14:00
+  {
+    id: "31",
+    curso: "Visualización de Datos",
+    grupo: "01",
+    docente: "Dr. Roberto Silva",
+    fecha: "2024-09-03",
+    horaInicio: "10:00",
+    horaFin: "14:00",
+    aula: "Aula 105",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "32",
+    curso: "Visualización de Datos",
+    grupo: "01",
+    docente: "Dr. Roberto Silva",
+    fecha: "2024-09-05",
+    horaInicio: "10:00",
+    horaFin: "14:00",
+    aula: "Aula 105",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "33",
+    curso: "Visualización de Datos",
+    grupo: "01",
+    docente: "Dr. Roberto Silva",
+    fecha: "2024-09-10",
+    horaInicio: "10:00",
+    horaFin: "14:00",
+    aula: "Aula 105",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "34",
+    curso: "Visualización de Datos",
+    grupo: "01",
+    docente: "Dr. Roberto Silva",
+    fecha: "2024-09-12",
+    horaInicio: "10:00",
+    horaFin: "14:00",
+    aula: "Aula 105",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "35",
+    curso: "Visualización de Datos",
+    grupo: "01",
+    docente: "Dr. Roberto Silva",
+    fecha: "2024-09-17",
+    horaInicio: "10:00",
+    horaFin: "14:00",
+    aula: "Aula 105",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "36",
+    curso: "Visualización de Datos",
+    grupo: "01",
+    docente: "Dr. Roberto Silva",
+    fecha: "2024-09-19",
+    horaInicio: "10:00",
+    horaFin: "14:00",
+    aula: "Aula 105",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "37",
+    curso: "Visualización de Datos",
+    grupo: "01",
+    docente: "Dr. Roberto Silva",
+    fecha: "2024-09-24",
+    horaInicio: "10:00",
+    horaFin: "14:00",
+    aula: "Aula 105",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "38",
+    curso: "Visualización de Datos",
     grupo: "01",
     docente: "Dr. Roberto Silva",
     fecha: "2024-09-26",
     horaInicio: "10:00",
-    horaFin: "12:00",
+    horaFin: "14:00",
     aula: "Aula 105",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+
+  // Deep Learning - Grupo 01 - Viernes 16:00-20:00
+  {
+    id: "39",
+    curso: "Deep Learning",
+    grupo: "01",
+    docente: "Dra. María López",
+    fecha: "2024-09-06",
+    horaInicio: "16:00",
+    horaFin: "20:00",
+    aula: "Aula 302",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "40",
+    curso: "Deep Learning",
+    grupo: "01",
+    docente: "Dra. María López",
+    fecha: "2024-09-13",
+    horaInicio: "16:00",
+    horaFin: "20:00",
+    aula: "Aula 302",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "41",
+    curso: "Deep Learning",
+    grupo: "01",
+    docente: "Dra. María López",
+    fecha: "2024-09-20",
+    horaInicio: "16:00",
+    horaFin: "20:00",
+    aula: "Aula 302",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "42",
+    curso: "Deep Learning",
+    grupo: "01",
+    docente: "Dra. María López",
+    fecha: "2024-09-27",
+    horaInicio: "16:00",
+    horaFin: "20:00",
+    aula: "Aula 302",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  // Proyecto Integrador - Grupo 01 - Sábados 08:00-12:00
+  {
+    id: "43",
+    curso: "Proyecto Integrador",
+    grupo: "01",
+    docente: "Dr. Juan Pérez",
+    fecha: "2024-09-07",
+    horaInicio: "08:00",
+    horaFin: "12:00",
+    aula: "Aula 401",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "44",
+    curso: "Proyecto Integrador",
+    grupo: "01",
+    docente: "Dr. Juan Pérez",
+    fecha: "2024-09-14",
+    horaInicio: "08:00",
+    horaFin: "12:00",
+    aula: "Aula 401",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "45",
+    curso: "Proyecto Integrador",
+    grupo: "01",
+    docente: "Dr. Juan Pérez",
+    fecha: "2024-09-21",
+    horaInicio: "08:00",
+    horaFin: "12:00",
+    aula: "Aula 401",
+    modalidad: "Presencial",
+    estado: "normal"
+  },
+  {
+    id: "46",
+    curso: "Proyecto Integrador",
+    grupo: "01",
+    docente: "Dr. Juan Pérez",
+    fecha: "2024-09-28",
+    horaInicio: "08:00",
+    horaFin: "12:00",
+    aula: "Aula 401",
     modalidad: "Presencial",
     estado: "normal"
   }
@@ -264,7 +762,8 @@ interface SessionData {
 export default function Planeacion() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentMonth, setCurrentMonth] = useState(new Date(2024, 8, 1)); // Septiembre 2024
-  const [cursoActivo, setCursoActivo] = useState(1);
+  const [programaActivo, setProgramaActivo] = useState(1); // Programa seleccionado
+  const [mallaActiva, setMallaActiva] = useState("mcd-2024-1"); // Malla seleccionada
   const [drawerAbierto, setDrawerAbierto] = useState(false);
   const [historialAbierto, setHistorialAbierto] = useState(false);
   const [publicarAbierto, setPublicarAbierto] = useState(false);
@@ -276,6 +775,24 @@ export default function Planeacion() {
     2: true,
     3: true
   });
+  const [mallasExpandidas, setMallasExpandidas] = useState<Record<number, boolean>>({
+    1: true,
+    2: false,
+    3: false
+  });
+  
+  // NUEVO: Estado para el modal de selección de malla
+  const [modalSeleccionMalla, setModalSeleccionMalla] = useState(false);
+  
+  // NUEVO: Estados para selección de materia y grupo
+  const [materiaSeleccionada, setMateriaSeleccionada] = useState<string | null>(null);
+  const [grupoSeleccionado, setGrupoSeleccionado] = useState<string | null>(null);
+  
+  // NUEVO: Estado para panel flotante
+  const [panelFlotanteAbierto, setPanelFlotanteAbierto] = useState(false);
+
+  // Debug: Verificar que el componente se está renderizando
+  console.log('Planeacion component rendering...');
 
   // NUEVO: Estado para fase de recomendaciones
   const [faseRecomendaciones, setFaseRecomendaciones] = useState({
@@ -291,7 +808,7 @@ export default function Planeacion() {
   
   // NUEVO: Modal para configuración de programación por módulos
   const [modalConfiguracionProgramacion, setModalConfiguracionProgramacion] = useState(false);
-  const [grupoSeleccionado, setGrupoSeleccionado] = useState<{
+  const [grupoConfiguracion, setGrupoConfiguracion] = useState<{
     id: number;
     grupo: string;
     docente: string;
@@ -345,7 +862,7 @@ export default function Planeacion() {
     modalidad: string;
     sesiones: number;
   }) => {
-    setGrupoSeleccionado({
+    setGrupoConfiguracion({
       id: curso.id,
       grupo: curso.grupo,
       docente: curso.docente,
@@ -355,28 +872,47 @@ export default function Planeacion() {
     setModalConfiguracionProgramacion(true);
   };
 
-  // NUEVO: Función para seleccionar grupo desde la barra izquierda
-  const handleSelectGrupoFromSidebar = (materia: string, grupo: string) => {
-    // Buscar el curso correspondiente
-    const cursoEncontrado = cursos.find(curso => 
-      curso.grupo === grupo && 
-      (materia === 'Gestión Estratégica' || materia === 'Marketing Digital' || materia === 'Liderazgo y Equipos' || materia === 'Finanzas Corporativas')
-    );
-    
-    if (cursoEncontrado) {
-      setCursoActivo(cursoEncontrado.id);
+  // Función para seleccionar programa desde la barra izquierda
+  const handleSelectPrograma = (programaId: number) => {
+    setProgramaActivo(programaId);
+    // Seleccionar automáticamente la malla activa del programa
+    const programa = programas.find(p => p.id === programaId);
+    if (programa) {
+      const mallaActivaPrograma = programa.mallas.find(m => m.activa);
+      if (mallaActivaPrograma) {
+        setMallaActiva(mallaActivaPrograma.id);
+      }
     }
   };
 
-  // NUEVO: Función para seleccionar grupo desde el centro
-  const handleSelectGrupoFromCenter = (cursoId: number) => {
-    setCursoActivo(cursoId);
+  // Función para seleccionar malla
+  const handleSelectMalla = (mallaId: string) => {
+    setMallaActiva(mallaId);
   };
 
-  // Encontrar la materia actual
-  const materiaActual = programas
-    .flatMap(p => p.materias)
-    .find(m => m.id === cursoActivo);
+  // NUEVO: Función para seleccionar materia
+  const handleSelectMateria = (materiaId: string) => {
+    setMateriaSeleccionada(materiaId);
+    setGrupoSeleccionado(null); // Reset grupo al seleccionar materia
+  };
+
+  // NUEVO: Función para seleccionar grupo específico
+  const handleSelectGrupo = (materiaId: string, grupo: string) => {
+    setMateriaSeleccionada(materiaId);
+    setGrupoSeleccionado(grupo);
+  };
+
+  // NUEVO: Función para obtener colores de materias
+  const getMateriaColors = (materiaNombre: string) => {
+    // Todas las materias usan el mismo color azul claro
+    return { bg: 'bg-[#e4e9ff]', border: 'border-[#5555ea]', text: 'text-[#5555ea]', badgeColor: '#5555ea' };
+  };
+
+  // Encontrar el programa actual
+  const programaActual = programas.find(p => p.id === programaActivo);
+  
+  // Encontrar la malla actual
+  const mallaActual = programaActual?.mallas.find(m => m.id === mallaActiva);
 
   const handlePrevMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
@@ -409,7 +945,7 @@ export default function Planeacion() {
     }
     
     // Agregar días del mes siguiente para completar la última semana
-    const remainingDays = 42 - days.length; // 6 semanas * 7 días
+    const remainingDays = 35 - days.length; // 5 semanas * 7 días
     for (let i = 1; i <= remainingDays; i++) {
       days.push(new Date(year, month + 1, i));
     }
@@ -424,16 +960,48 @@ export default function Planeacion() {
   // Filtrar programas basado en búsqueda
   const filteredProgramas = programas.filter(programa =>
     programa.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    programa.materias.some(materia =>
-      materia.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      materia.codigo.toLowerCase().includes(searchTerm.toLowerCase())
+    programa.mallas.some(malla =>
+      malla.materias.some(materia =>
+        materia.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        materia.codigo.toLowerCase().includes(searchTerm.toLowerCase())
+      )
     )
   );
 
-  // Obtener sesiones para una fecha específica
+  // Obtener sesiones para una fecha específica de la malla activa
   const getSessionsForDate = (date: Date) => {
     const dateString = date.toISOString().split('T')[0];
-    return sessionData.filter(session => session.fecha === dateString);
+    if (!mallaActual) return [];
+    
+    // Si hay una materia seleccionada, filtrar por esa materia
+    if (materiaSeleccionada) {
+      const materiaSeleccionadaObj = mallaActual.materias.find(m => m.id.toString() === materiaSeleccionada);
+      if (!materiaSeleccionadaObj) return [];
+      
+      // Si hay un grupo específico seleccionado, filtrar por ese grupo
+      if (grupoSeleccionado) {
+        // Normalizar el formato del grupo (G01 -> 01, G02 -> 02, etc.)
+        const grupoNormalizado = grupoSeleccionado.replace('G', '');
+        return sessionData.filter(session => 
+          session.fecha === dateString && 
+          session.curso === materiaSeleccionadaObj.nombre &&
+          session.grupo === grupoNormalizado
+        );
+      } else {
+        // Si solo hay materia seleccionada, mostrar todos los grupos de esa materia
+        return sessionData.filter(session => 
+          session.fecha === dateString && 
+          session.curso === materiaSeleccionadaObj.nombre
+        );
+      }
+    }
+    
+    // Si no hay selección específica, mostrar todas las materias de la malla activa
+    const materiasDeLaMalla = mallaActual.materias.map(m => m.nombre);
+    return sessionData.filter(session => 
+      session.fecha === dateString && 
+      materiasDeLaMalla.includes(session.curso)
+    );
   };
 
   const getSessionStyle = (estado?: string, curso?: string) => {
@@ -446,12 +1014,40 @@ export default function Planeacion() {
       default:
         // Si no hay conflicto, usar colores por tipo de curso
         switch (curso) {
-          case 'Gestión Estratégica':
+          // Maestría en Ciencia de Datos
+          case 'Fundamentos de Big Data':
             return 'bg-[#e4e9ff] border border-[#5555ea] hover:bg-[#e4e9ff]';
-          case 'Marketing Digital':
+          case 'Machine Learning Avanzado':
             return 'bg-[#e6f7ef] border border-[#4fb37b] hover:bg-[#e6f7ef]';
-          case 'Finanzas Corporativas':
+          case 'Visualización de Datos':
             return 'bg-[#fff2e6] border border-[#ff8c42] hover:bg-[#fff2e6]';
+          case 'Deep Learning':
+            return 'bg-[#f0e6ff] border border-[#8b5cf6] hover:bg-[#f0e6ff]';
+          case 'Proyecto Integrador':
+            return 'bg-[#e6f3ff] border border-[#0ea5e9] hover:bg-[#e6f3ff]';
+          // Maestría en Ciencias Administrativas
+          case 'Metodología de Investigación':
+            return 'bg-[#fef3c7] border border-[#f59e0b] hover:bg-[#fef3c7]';
+          case 'Estadística Aplicada':
+            return 'bg-[#fce7f3] border border-[#ec4899] hover:bg-[#fce7f3]';
+          case 'Teoría Organizacional':
+            return 'bg-[#ecfdf5] border border-[#10b981] hover:bg-[#ecfdf5]';
+          case 'Econometría':
+            return 'bg-[#fef2f2] border border-[#ef4444] hover:bg-[#fef2f2]';
+          case 'Seminario de Tesis I':
+          case 'Seminario de Tesis II':
+            return 'bg-[#f3f4f6] border border-[#6b7280] hover:bg-[#f3f4f6]';
+          // Maestría en Ciencias Biotecnología
+          case 'Biotecnología Molecular':
+            return 'bg-[#dcfce7] border border-[#22c55e] hover:bg-[#dcfce7]';
+          case 'Biotecnología Industrial':
+            return 'bg-[#fef3c7] border border-[#eab308] hover:bg-[#fef3c7]';
+          case 'Biotecnología Ambiental':
+            return 'bg-[#dbeafe] border border-[#3b82f6] hover:bg-[#dbeafe]';
+          case 'Biotecnología Farmacéutica':
+            return 'bg-[#fce7f3] border border-[#ec4899] hover:bg-[#fce7f3]';
+          case 'Proyecto de Investigación':
+            return 'bg-[#f3e8ff] border border-[#a855f7] hover:bg-[#f3e8ff]';
           default:
             return 'bg-[#e4e9ff] border border-[#5555ea] hover:bg-[#e4e9ff]';
         }
@@ -469,6 +1065,9 @@ export default function Planeacion() {
       [programaId]: !prev[programaId]
     }));
   };
+
+  // Debug: Verificar que llegamos al return
+  console.log('About to return JSX...');
 
   return (
     <div className="flex h-screen bg-[#f7f8fe]">
@@ -493,17 +1092,24 @@ export default function Planeacion() {
           </div>
 
           <div className="space-y-3">
-            {/* MBA - Maestría en Administración */}
+            {/* Maestría en Ciencia de Datos */}
             <div className="space-y-2">
               <div 
-                className="flex items-center justify-between p-3 bg-[#f7f8fe] rounded-lg cursor-pointer"
-                onClick={() => setProgramasExpandidos(prev => ({ ...prev, 1: !prev[1] }))}
+                className={`flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all ${
+                  programaActivo === 1 
+                    ? 'bg-[#e4e9ff] border border-[#5555ea]' 
+                    : 'bg-[#f7f8fe] hover:bg-[#e4e9ff]'
+                }`}
+                onClick={() => {
+                  handleSelectPrograma(1);
+                  setProgramasExpandidos(prev => ({ ...prev, 1: !prev[1] }));
+                }}
               >
                 <div className="flex items-center gap-2">
                   <GraduationCap className="h-4 w-4 text-[#5555ea]" />
                   <div>
-                    <h3 className="font-medium text-sm text-[#3f4159]">MBA - Maestría en Administración</h3>
-                    <p className="text-xs text-[#596b88]">MBA</p>
+                    <h3 className="font-medium text-sm text-[#3f4159]">Maestría en Ciencia de Datos</h3>
+                    <p className="text-xs text-[#596b88]">MCD</p>
                   </div>
                 </div>
                 <ChevronDown 
@@ -514,108 +1120,151 @@ export default function Planeacion() {
               </div>
               
               {programasExpandidos[1] && (
-              
-              <div className="ml-4 space-y-2">
-                {/* PRIMER SEMESTRE */}
-                <div className="flex items-center gap-2 py-1">
-                  <div className="w-2 h-2 bg-[#5555ea] rounded-full"></div>
-                  <span className="text-xs font-medium text-[#596b88] uppercase">PRIMER SEMESTRE</span>
+                <div className="ml-4 space-y-2">
+                  {/* Selector de Malla */}
+                  <div className="ml-4 space-y-2">
+                    <div className="flex items-center gap-2 py-1">
+                      <FileText className="h-3 w-3 text-[#5555ea]" />
+                      <span className="text-xs font-medium text-[#596b88] uppercase">Malla Activa</span>
+                  </div>
+                  
+                    {/* Selector compacto de malla */}
+                    <div 
+                      className="flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all bg-gradient-to-r from-[#f7f8fe] to-white border border-[#e3e4ec] hover:border-[#5555ea] hover:shadow-sm"
+                      onClick={() => setModalSeleccionMalla(true)}
+                    >
+                      <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
+                          <div className="text-sm font-semibold text-[#3f4159]">
+                            {programas[0].mallas.find(m => m.id === mallaActiva)?.periodo || 'Seleccionar malla'}
+                          </div>
+                          {programas[0].mallas.find(m => m.id === mallaActiva)?.activa && (
+                            <Badge className="bg-[#4fb37b] text-white text-xs px-2 py-0.5 rounded-full">
+                                Activa
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      <ChevronDown className="h-4 w-4 text-[#596b88]" />
+                    </div>
+                  </div>
+                  
+                  {/* Materias de la malla activa */}
+                  {mallaActiva && programas[0].mallas.find(m => m.id === mallaActiva) && (
+                    <div className="ml-4 space-y-3">
+                      <div className="flex items-center gap-2 py-2">
+                        <div className="w-1 h-4 bg-gradient-to-b from-[#5555ea] to-[#4a4ad9] rounded-full"></div>
+                        <span className="text-xs font-semibold text-[#596b88] uppercase tracking-wide">Materias</span>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        {(() => {
+                          const materias = programas[0].mallas.find(m => m.id === mallaActiva)?.materias || [];
+                          const materiasPorSemestre = materias.reduce((acc, materia) => {
+                            if (!acc[materia.semestre]) {
+                              acc[materia.semestre] = [];
+                            }
+                            acc[materia.semestre].push(materia);
+                            return acc;
+                          }, {} as Record<number, typeof materias>);
+
+                          return Object.keys(materiasPorSemestre)
+                            .sort((a, b) => parseInt(a) - parseInt(b))
+                            .map((semestre) => (
+                              <div key={semestre} className="space-y-3">
+                                {/* Header del semestre */}
+                                <div className="flex items-center gap-2 py-2 border-b border-[#e3e4ec]">
+                                  <div className="w-2 h-2 bg-[#5555ea] rounded-full"></div>
+                                  <h3 className="text-sm font-semibold text-[#5555ea] uppercase tracking-wide">
+                                    Semestre {semestre}
+                                  </h3>
+                                  <div className="flex-1 h-px bg-gradient-to-r from-[#5555ea] to-transparent ml-2"></div>
+                                </div>
+
+                                {/* Materias del semestre */}
+                                <div className="space-y-2 ml-4">
+                                  {materiasPorSemestre[parseInt(semestre)].map((materia) => {
+                                    const colors = getMateriaColors(materia.nombre);
+                                    const isSelected = materiaSeleccionada === materia.id.toString();
+                                    
+                                    return (
+                                      <div 
+                                        key={materia.id} 
+                                        className={`group p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                                          isSelected 
+                                            ? `${colors.bg} ${colors.border} shadow-md` 
+                                            : `bg-white border-[#e3e4ec] hover:${colors.border} hover:shadow-sm`
+                                        }`}
+                                        onClick={() => handleSelectMateria(materia.id.toString())}
+                                      >
+                                        <div className="flex items-start justify-between">
+                                          <div className="flex-1">
+                                            <h4 className={`font-medium text-sm transition-colors ${
+                                              isSelected ? colors.text : 'text-[#3f4159] group-hover:' + colors.text.replace('text-', '')
+                                            }`}>
+                                              {materia.nombre}
+                                            </h4>
+                                            <p className="text-xs text-[#596b88] mt-1">
+                                              {materia.codigo}
+                                            </p>
+                                          </div>
+                                          <div className="flex flex-wrap gap-1 ml-2">
+                                            {materia.grupos?.map((grupo, index) => {
+                                              const isGrupoSelected = isSelected && grupoSeleccionado === grupo;
+                                              
+                                              return (
+                                                <Badge 
+                                                  key={index}
+                                                  className={`text-xs px-2 py-1 rounded-md transition-colors cursor-pointer border-2 ${
+                                                    isGrupoSelected
+                                                      ? 'bg-[#5555ea] text-white border-[#5555ea] shadow-md'
+                                                      : isSelected
+                                                      ? 'bg-white text-[#5555ea] border-[#5555ea] hover:bg-[#5555ea] hover:text-white'
+                                                      : 'bg-white text-[#5555ea] border-[#5555ea] hover:bg-[#5555ea] hover:text-white'
+                                                  }`}
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleSelectGrupo(materia.id.toString(), grupo);
+                                                  }}
+                                                >
+                                                  {grupo}
+                                                </Badge>
+                                              );
+                                            })}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ));
+                        })()}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                
-                {/* Gestión Estratégica */}
-                <Card className="border-l-4 border-[#5555ea] bg-white shadow-sm rounded-lg">
-                  <CardContent className="p-3">
-                    <div className="space-y-2">
-                      <div>
-                        <h4 className="font-medium text-sm text-[#3f4159]">Gestión Estratégica</h4>
-                        <p className="text-xs text-[#596b88]">GES001</p>
-                      </div>
-                      <div className="flex gap-1">
-                        <Button
-                          variant="default"
-                          size="sm"
-                          className="bg-[#5555ea] text-white text-xs px-2 py-1 h-6 rounded-lg cursor-pointer"
-                          onClick={() => handleSelectGrupoFromSidebar('Gestión Estratégica', '01')}
-                        >
-                          G01
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="border-[#e9683b] text-[#e9683b] text-xs px-2 py-1 h-6 hover:bg-[#fdecec] rounded-lg cursor-pointer"
-                          onClick={() => handleSelectGrupoFromSidebar('Gestión Estratégica', '02')}
-                        >
-                          G02
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                                 {/* Marketing Digital */}
-                 <Card className="border-[#e3e4ec] bg-white shadow-sm rounded-lg">
-                   <CardContent className="p-3">
-                    <div className="space-y-2">
-                      <div>
-                        <h4 className="font-medium text-sm text-[#3f4159]">Marketing Digital</h4>
-                        <p className="text-xs text-[#596b88]">MKT001</p>
-                      </div>
-                      <div className="flex gap-1">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="border-[#b8860b] text-[#b8860b] text-xs px-2 py-1 h-6 hover:bg-[#fff8e6] rounded-lg cursor-pointer"
-                          onClick={() => handleSelectGrupoFromSidebar('Marketing Digital', '01')}
-                        >
-                          G01
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                {/* SEGUNDO SEMESTRE */}
-                <div className="flex items-center gap-2 py-1">
-                  <div className="w-2 h-2 bg-[#5555ea] rounded-full"></div>
-                  <span className="text-xs font-medium text-[#596b88] uppercase">SEGUNDO SEMESTRE</span>
-                </div>
-                
-                                 {/* Liderazgo y Equipos */}
-                 <Card className="border-[#e3e4ec] bg-white shadow-sm rounded-lg">
-                   <CardContent className="p-3">
-                    <div className="space-y-2">
-                      <div>
-                        <h4 className="font-medium text-sm text-[#3f4159]">Liderazgo y Equipos</h4>
-                        <p className="text-xs text-[#596b88]">LID001</p>
-                      </div>
-                      <div className="flex gap-1">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="border-[#5555ea] text-[#5555ea] text-xs px-2 py-1 h-6 hover:bg-[#e4e9ff] rounded-lg cursor-pointer"
-                          onClick={() => handleSelectGrupoFromSidebar('Liderazgo y Equipos', '01')}
-                        >
-                          G01
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
               )}
             </div>
             
-            {/* Especialización en Finanzas */}
+            {/* Maestría en Ciencias Administrativas */}
             <div className="space-y-2">
               <div 
-                className="flex items-center justify-between p-3 hover:bg-[#f7f8fe] rounded-lg cursor-pointer"
-                onClick={() => setProgramasExpandidos(prev => ({ ...prev, 2: !prev[2] }))}
+                className={`flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all ${
+                  programaActivo === 2 
+                    ? 'bg-[#e4e9ff] border border-[#5555ea]' 
+                    : 'bg-[#f7f8fe] hover:bg-[#e4e9ff]'
+                }`}
+                onClick={() => {
+                  handleSelectPrograma(2);
+                  setProgramasExpandidos(prev => ({ ...prev, 2: !prev[2] }));
+                }}
               >
                 <div className="flex items-center gap-2">
                   <GraduationCap className="h-4 w-4 text-[#5555ea]" />
                   <div>
-                    <h3 className="font-medium text-sm text-[#3f4159]">Especialización en Finanzas</h3>
-                    <p className="text-xs text-[#596b88]">EFI</p>
+                    <h3 className="font-medium text-sm text-[#3f4159]">Maestría en Ciencias Administrativas</h3>
+                    <p className="text-xs text-[#596b88]">MCA</p>
                   </div>
                 </div>
                 <ChevronDown 
@@ -627,77 +1276,150 @@ export default function Planeacion() {
               
               {programasExpandidos[2] && (
                 <div className="ml-4 space-y-2">
-                {/* PRIMER SEMESTRE */}
-                <div className="flex items-center gap-2 py-1">
-                  <div className="w-2 h-2 bg-[#5555ea] rounded-full"></div>
-                  <span className="text-xs font-medium text-[#596b88] uppercase">PRIMER SEMESTRE</span>
+                  {/* Selector de Malla */}
+                  <div className="ml-4 space-y-2">
+                    <div className="flex items-center gap-2 py-1">
+                      <FileText className="h-3 w-3 text-[#5555ea]" />
+                      <span className="text-xs font-medium text-[#596b88] uppercase">Malla Activa</span>
+                  </div>
+                  
+                    {/* Selector compacto de malla */}
+                    <div 
+                      className="flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all bg-gradient-to-r from-[#f7f8fe] to-white border border-[#e3e4ec] hover:border-[#5555ea] hover:shadow-sm"
+                      onClick={() => setModalSeleccionMalla(true)}
+                    >
+                      <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
+                          <div className="text-sm font-semibold text-[#3f4159]">
+                            {programas[1].mallas.find(m => m.id === mallaActiva)?.periodo || 'Seleccionar malla'}
+                          </div>
+                          {programas[1].mallas.find(m => m.id === mallaActiva)?.activa && (
+                            <Badge className="bg-[#4fb37b] text-white text-xs px-2 py-0.5 rounded-full">
+                                Activa
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      <ChevronDown className="h-4 w-4 text-[#596b88]" />
+                    </div>
+                  </div>
+                  
+                  {/* Materias de la malla activa */}
+                  {mallaActiva && programas[1].mallas.find(m => m.id === mallaActiva) && (
+                    <div className="ml-4 space-y-3">
+                      <div className="flex items-center gap-2 py-2">
+                        <div className="w-1 h-4 bg-gradient-to-b from-[#5555ea] to-[#4a4ad9] rounded-full"></div>
+                        <span className="text-xs font-semibold text-[#596b88] uppercase tracking-wide">Materias</span>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        {(() => {
+                          const materias = programas[1].mallas.find(m => m.id === mallaActiva)?.materias || [];
+                          const materiasPorSemestre = materias.reduce((acc, materia) => {
+                            if (!acc[materia.semestre]) {
+                              acc[materia.semestre] = [];
+                            }
+                            acc[materia.semestre].push(materia);
+                            return acc;
+                          }, {} as Record<number, typeof materias>);
+
+                          return Object.keys(materiasPorSemestre)
+                            .sort((a, b) => parseInt(a) - parseInt(b))
+                            .map((semestre) => (
+                              <div key={semestre} className="space-y-3">
+                                {/* Header del semestre */}
+                                <div className="flex items-center gap-2 py-2 border-b border-[#e3e4ec]">
+                                  <div className="w-2 h-2 bg-[#5555ea] rounded-full"></div>
+                                  <h3 className="text-sm font-semibold text-[#5555ea] uppercase tracking-wide">
+                                    Semestre {semestre}
+                                  </h3>
+                                  <div className="flex-1 h-px bg-gradient-to-r from-[#5555ea] to-transparent ml-2"></div>
+                                </div>
+
+                                {/* Materias del semestre */}
+                                <div className="space-y-2 ml-4">
+                                  {materiasPorSemestre[parseInt(semestre)].map((materia) => {
+                                    const colors = getMateriaColors(materia.nombre);
+                                    const isSelected = materiaSeleccionada === materia.id.toString();
+                                    
+                                    return (
+                                      <div 
+                                        key={materia.id} 
+                                        className={`group p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                                          isSelected 
+                                            ? `${colors.bg} ${colors.border} shadow-md` 
+                                            : `bg-white border-[#e3e4ec] hover:${colors.border} hover:shadow-sm`
+                                        }`}
+                                        onClick={() => handleSelectMateria(materia.id.toString())}
+                                      >
+                                        <div className="flex items-start justify-between">
+                                          <div className="flex-1">
+                                            <h4 className={`font-medium text-sm transition-colors ${
+                                              isSelected ? colors.text : 'text-[#3f4159] group-hover:' + colors.text.replace('text-', '')
+                                            }`}>
+                                              {materia.nombre}
+                                            </h4>
+                                            <p className="text-xs text-[#596b88] mt-1">
+                                              {materia.codigo}
+                                            </p>
+                                          </div>
+                                          <div className="flex flex-wrap gap-1 ml-2">
+                                            {materia.grupos?.map((grupo, index) => {
+                                              const isGrupoSelected = isSelected && grupoSeleccionado === grupo;
+                                              
+                                              return (
+                                                <Badge 
+                                                  key={index}
+                                                  className={`text-xs px-2 py-1 rounded-md transition-colors cursor-pointer border-2 ${
+                                                    isGrupoSelected
+                                                      ? 'bg-[#5555ea] text-white border-[#5555ea] shadow-md'
+                                                      : isSelected
+                                                      ? 'bg-white text-[#5555ea] border-[#5555ea] hover:bg-[#5555ea] hover:text-white'
+                                                      : 'bg-white text-[#5555ea] border-[#5555ea] hover:bg-[#5555ea] hover:text-white'
+                                                  }`}
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleSelectGrupo(materia.id.toString(), grupo);
+                                                  }}
+                                                >
+                                                  {grupo}
+                                                </Badge>
+                                              );
+                                            })}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ));
+                        })()}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                
-                                 {/* Finanzas Corporativas */}
-                 <Card className="border-[#e3e4ec] bg-white shadow-sm rounded-lg">
-                   <CardContent className="p-3">
-                    <div className="space-y-2">
-                      <div>
-                        <h4 className="font-medium text-sm text-[#3f4159]">Finanzas Corporativas</h4>
-                        <p className="text-xs text-[#596b88]">FIN001</p>
-                      </div>
-                      <div className="flex gap-1">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="border-[#4fb37b] text-[#4fb37b] text-xs px-2 py-1 h-6 hover:bg-[#e6f7ef] rounded-lg cursor-pointer"
-                          onClick={() => handleSelectGrupoFromSidebar('Finanzas Corporativas', '01')}
-                        >
-                          G01
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="border-[#e9683b] text-[#e9683b] text-xs px-2 py-1 h-6 hover:bg-[#fdecec] rounded-lg cursor-pointer"
-                          onClick={() => handleSelectGrupoFromSidebar('Finanzas Corporativas', '02')}
-                        >
-                          G02
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                                 {/* Análisis de Inversiones */}
-                 <Card className="border-[#e3e4ec] bg-white shadow-sm rounded-lg">
-                   <CardContent className="p-3">
-                    <div className="space-y-2">
-                      <div>
-                        <h4 className="font-medium text-sm text-[#3f4159]">Análisis de Inversiones</h4>
-                        <p className="text-xs text-[#596b88]">INV001</p>
-                      </div>
-                      <div className="flex gap-1">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="border-[#5555ea] text-[#5555ea] text-xs px-2 py-1 h-6 hover:bg-[#e4e9ff]"
-                        >
-                          G01
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
               )}
             </div>
             
-            {/* Doctorado en Administración */}
+            {/* Maestría en Ciencias Biotecnología */}
             <div className="space-y-2">
               <div 
-                className="flex items-center justify-between p-3 hover:bg-[#f7f8fe] rounded-lg cursor-pointer"
-                onClick={() => setProgramasExpandidos(prev => ({ ...prev, 3: !prev[3] }))}
+                className={`flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all ${
+                  programaActivo === 3 
+                    ? 'bg-[#e4e9ff] border border-[#5555ea]' 
+                    : 'bg-[#f7f8fe] hover:bg-[#e4e9ff]'
+                }`}
+                onClick={() => {
+                  handleSelectPrograma(3);
+                  setProgramasExpandidos(prev => ({ ...prev, 3: !prev[3] }));
+                }}
               >
                 <div className="flex items-center gap-2">
                   <GraduationCap className="h-4 w-4 text-[#5555ea]" />
                   <div>
-                    <h3 className="font-medium text-sm text-[#3f4159]">Doctorado en Administración</h3>
-                    <p className="text-xs text-[#596b88]">DOC</p>
+                    <h3 className="font-medium text-sm text-[#3f4159]">Maestría en Ciencias Biotecnología</h3>
+                    <p className="text-xs text-[#596b88]">MCB</p>
                   </div>
                 </div>
                 <ChevronDown 
@@ -709,54 +1431,129 @@ export default function Planeacion() {
               
               {programasExpandidos[3] && (
                 <div className="ml-4 space-y-2">
-                {/* PRIMER SEMESTRE */}
-                <div className="flex items-center gap-2 py-1">
-                  <div className="w-2 h-2 bg-[#5555ea] rounded-sm"></div>
-                  <span className="text-xs font-medium text-[#596b88] uppercase">PRIMER SEMESTRE</span>
+                  {/* Selector de Malla */}
+                  <div className="ml-4 space-y-2">
+                    <div className="flex items-center gap-2 py-1">
+                      <FileText className="h-3 w-3 text-[#5555ea]" />
+                      <span className="text-xs font-medium text-[#596b88] uppercase">Malla Activa</span>
+                  </div>
+                  
+                    {/* Selector compacto de malla */}
+                    <div 
+                      className="flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all bg-gradient-to-r from-[#f7f8fe] to-white border border-[#e3e4ec] hover:border-[#5555ea] hover:shadow-sm"
+                      onClick={() => setModalSeleccionMalla(true)}
+                    >
+                      <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
+                          <div className="text-sm font-semibold text-[#3f4159]">
+                            {programas[2].mallas.find(m => m.id === mallaActiva)?.periodo || 'Seleccionar malla'}
+                          </div>
+                          {programas[2].mallas.find(m => m.id === mallaActiva)?.activa && (
+                            <Badge className="bg-[#4fb37b] text-white text-xs px-2 py-0.5 rounded-full">
+                                Activa
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      <ChevronDown className="h-4 w-4 text-[#596b88]" />
+                    </div>
+                  </div>
+                  
+                  {/* Materias de la malla activa */}
+                  {mallaActiva && programas[2].mallas.find(m => m.id === mallaActiva) && (
+                    <div className="ml-4 space-y-3">
+                      <div className="flex items-center gap-2 py-2">
+                        <div className="w-1 h-4 bg-gradient-to-b from-[#5555ea] to-[#4a4ad9] rounded-full"></div>
+                        <span className="text-xs font-semibold text-[#596b88] uppercase tracking-wide">Materias</span>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        {(() => {
+                          const materias = programas[2].mallas.find(m => m.id === mallaActiva)?.materias || [];
+                          const materiasPorSemestre = materias.reduce((acc, materia) => {
+                            if (!acc[materia.semestre]) {
+                              acc[materia.semestre] = [];
+                            }
+                            acc[materia.semestre].push(materia);
+                            return acc;
+                          }, {} as Record<number, typeof materias>);
+
+                          return Object.keys(materiasPorSemestre)
+                            .sort((a, b) => parseInt(a) - parseInt(b))
+                            .map((semestre) => (
+                              <div key={semestre} className="space-y-3">
+                                {/* Header del semestre */}
+                                <div className="flex items-center gap-2 py-2 border-b border-[#e3e4ec]">
+                                  <div className="w-2 h-2 bg-[#5555ea] rounded-full"></div>
+                                  <h3 className="text-sm font-semibold text-[#5555ea] uppercase tracking-wide">
+                                    Semestre {semestre}
+                                  </h3>
+                                  <div className="flex-1 h-px bg-gradient-to-r from-[#5555ea] to-transparent ml-2"></div>
+                                </div>
+
+                                {/* Materias del semestre */}
+                                <div className="space-y-2 ml-4">
+                                  {materiasPorSemestre[parseInt(semestre)].map((materia) => {
+                                    const colors = getMateriaColors(materia.nombre);
+                                    const isSelected = materiaSeleccionada === materia.id.toString();
+                                    
+                                    return (
+                                      <div 
+                                        key={materia.id} 
+                                        className={`group p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                                          isSelected 
+                                            ? `${colors.bg} ${colors.border} shadow-md` 
+                                            : `bg-white border-[#e3e4ec] hover:${colors.border} hover:shadow-sm`
+                                        }`}
+                                        onClick={() => handleSelectMateria(materia.id.toString())}
+                                      >
+                                        <div className="flex items-start justify-between">
+                                          <div className="flex-1">
+                                            <h4 className={`font-medium text-sm transition-colors ${
+                                              isSelected ? colors.text : 'text-[#3f4159] group-hover:' + colors.text.replace('text-', '')
+                                            }`}>
+                                              {materia.nombre}
+                                            </h4>
+                                            <p className="text-xs text-[#596b88] mt-1">
+                                              {materia.codigo}
+                                            </p>
+                                          </div>
+                                          <div className="flex flex-wrap gap-1 ml-2">
+                                            {materia.grupos?.map((grupo, index) => {
+                                              const isGrupoSelected = isSelected && grupoSeleccionado === grupo;
+                                              
+                                              return (
+                                                <Badge 
+                                                  key={index}
+                                                  className={`text-xs px-2 py-1 rounded-md transition-colors cursor-pointer border-2 ${
+                                                    isGrupoSelected
+                                                      ? 'bg-[#5555ea] text-white border-[#5555ea] shadow-md'
+                                                      : isSelected
+                                                      ? 'bg-white text-[#5555ea] border-[#5555ea] hover:bg-[#5555ea] hover:text-white'
+                                                      : 'bg-white text-[#5555ea] border-[#5555ea] hover:bg-[#5555ea] hover:text-white'
+                                                  }`}
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleSelectGrupo(materia.id.toString(), grupo);
+                                                  }}
+                                                >
+                                                  {grupo}
+                                                </Badge>
+                                              );
+                                            })}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ));
+                        })()}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                
-                                 {/* Metodología de Investigación */}
-                 <Card className="border-[#e3e4ec] bg-white shadow-sm rounded-lg">
-                   <CardContent className="p-3">
-                    <div className="space-y-2">
-                      <div>
-                        <h4 className="font-medium text-sm text-[#3f4159]">Metodología de Investigación</h4>
-                        <p className="text-xs text-[#596b88]">MET001</p>
-                      </div>
-                      <div className="flex gap-1">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="border-[#b8860b] text-[#b8860b] text-xs px-2 py-1 h-6 hover:bg-[#fff8e6]"
-                        >
-                          G01
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                                 {/* Seminario de Investigación */}
-                 <Card className="border-[#e3e4ec] bg-white shadow-sm rounded-lg">
-                   <CardContent className="p-3">
-                    <div className="space-y-2">
-                      <div>
-                        <h4 className="font-medium text-sm text-[#3f4159]">Seminario de Investigación</h4>
-                        <p className="text-xs text-[#596b88]">SEM001</p>
-                      </div>
-                      <div className="flex gap-1">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="border-[#e9683b] text-[#e9683b] text-xs px-2 py-1 h-6 hover:bg-[#fdecec]"
-                        >
-                          G01
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
               )}
             </div>
           </div>
@@ -771,45 +1568,10 @@ export default function Planeacion() {
             <div>
               <h1 className="text-2xl font-bold text-[#3f4159]">Planeación de Cursos</h1>
               <p className="text-[#596b88]">
-                {materiaActual?.nombre} - {materiaActual?.codigo}
+                {programaActual?.nombre} - Malla {mallaActual?.periodo}
               </p>
             </div>
             <div className="flex items-center gap-3">
-              {/* Indicador de fase de recomendaciones */}
-              <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer hover:shadow-sm transition-all ${
-                getEstadoFase() === 'activa' 
-                  ? 'bg-[#e6f7ef] border-[#4fb37b]' 
-                  : getEstadoFase() === 'bloqueada'
-                  ? 'bg-[#fdecec] border-[#e9683b]'
-                  : 'bg-[#fff8e6] border-[#b8860b]'
-              }`}
-              onClick={() => setModalConfiguracionFase(true)}>
-                {getEstadoFase() === 'activa' ? (
-                  <Unlock className="h-4 w-4 text-[#4fb37b]" />
-                ) : (
-                  <Lock className="h-4 w-4 text-[#e9683b]" />
-                )}
-                <div className="text-sm">
-                  <div className={`font-medium ${
-                    getEstadoFase() === 'activa' 
-                      ? 'text-[#4fb37b]' 
-                      : getEstadoFase() === 'bloqueada'
-                      ? 'text-[#e9683b]'
-                      : 'text-[#b8860b]'
-                  }`}>
-                    Fase de Recomendaciones
-                  </div>
-                  <div className="text-xs text-[#596b88]">
-                    {getEstadoFase() === 'activa' 
-                      ? `Hasta ${faseRecomendaciones.fechaFin}` 
-                      : getEstadoFase() === 'bloqueada'
-                      ? 'Bloqueada manualmente'
-                      : 'Cerrada'
-                    }
-                  </div>
-                </div>
-                <Settings className="h-3 w-3 text-[#596b88]" />
-              </div>
               <Button 
                 onClick={() => setModalPlaneacion(true)}
                 className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white"
@@ -823,134 +1585,6 @@ export default function Planeacion() {
 
         {/* Contenido Principal */}
         <div className="flex-1 space-y-6 p-6">
-                  {/* Cursos/Grupos */}
-        <Card className="border-[#e3e4ec] bg-white shadow-sm rounded-lg">
-            <CardHeader>
-              <CardTitle className="text-lg text-[#3f4159]">Cursos/Grupos</CardTitle>
-              <CardDescription className="text-[#596b88]">
-                Administra los grupos de la materia seleccionada
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {cursos.map((curso) => (
-                <Card 
-                  key={curso.id}
-                  className={`border-[#e3e4ec] bg-white shadow-sm cursor-pointer transition-all hover:shadow-md ${
-                    curso.id === cursoActivo ? 'border-[#5555ea]' : ''
-                  }`}
-                  onClick={() => handleSelectGrupoFromCenter(curso.id)}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-medium text-[#3f4159]">Grupo {curso.grupo}</h3>
-                          <Badge className={
-                            curso.estado === 'planeada' ? 'bg-[#e6f7ef] text-[#4fb37b]' :
-                            curso.estado === 'conflicto' ? 'bg-[#fdecec] text-[#e9683b]' :
-                            'bg-[#fff8e6] text-[#b8860b]'
-                          }>
-                            {curso.estado}
-                          </Badge>
-                        </div>
-                        
-                        <div className="flex items-center gap-4 text-sm text-[#596b88]">
-                          <div className="flex items-center gap-1">
-                            <User className="h-4 w-4" />
-                            {curso.docente}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            {curso.sesiones} sesiones
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <MapPin className="h-4 w-4" />
-                            {curso.modalidad}
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center gap-3">
-                          {curso.conflictos > 0 && (
-                            <Badge className="bg-[#fdecec] text-[#e9683b]">
-                              {curso.conflictos} conflictos
-                            </Badge>
-                          )}
-                          {curso.festivos > 0 && (
-                            <Badge className="bg-[#fff8e6] text-[#b8860b]">
-                              {curso.festivos} festivos
-                            </Badge>
-                          )}
-                          {curso.adjuntos > 0 && (
-                            <Badge className="bg-[#e4e9ff] text-[#5555ea]">
-                              {curso.adjuntos} adjuntos
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="hover:bg-[#e4e9ff] text-[#3f4159] rounded-lg"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenProgrammingConfig({
-                              ...curso,
-                              sesiones: parseInt(curso.sesiones)
-                            });
-                          }}
-                          title="Configurar programación"
-                        >
-                          <Calendar className="h-4 w-4" />
-                        </Button>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              className="hover:bg-[#e4e9ff] text-[#3f4159] rounded-lg"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent className="border-[#e3e4ec] bg-white rounded-lg">
-                            <DropdownMenuItem 
-                              className="text-[#3f4159] hover:bg-[#e4e9ff]"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <Calendar className="h-4 w-4 mr-2" />
-                              Ver calendario
-                            </DropdownMenuItem>
-                            <DropdownMenuItem 
-                              className="text-[#3f4159] hover:bg-[#e4e9ff]"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <User className="h-4 w-4 mr-2" />
-                              Cambiar docente
-                            </DropdownMenuItem>
-                            <DropdownMenuItem 
-                              className="text-[#3f4159] hover:bg-[#e4e9ff]"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <Settings className="h-4 w-4 mr-2" />
-                              Editar configuración
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-              
-              <Button variant="outline" className="w-full border-[#e3e4ec] hover:bg-[#e4e9ff] hover:border-[#5555ea] rounded-lg">
-                <Plus className="h-4 w-4 mr-2" />
-                Agregar nuevo grupo
-              </Button>
-            </CardContent>
-          </Card>
 
           {/* Calendario de Planeación */}
           <Card className="border-[#e3e4ec] bg-white shadow-sm">
@@ -959,7 +1593,13 @@ export default function Planeacion() {
                 <div>
                   <CardTitle className="text-[#3f4159]">Calendario de Planeación</CardTitle>
                   <CardDescription className="text-[#596b88]">
-                    {materiaActual?.nombre} - Grupo {cursos.find(c => c.id === cursoActivo)?.grupo || "01"}
+                    {programaActual?.nombre} - Malla {mallaActual?.periodo} - {
+                      materiaSeleccionada ? (
+                        grupoSeleccionado 
+                          ? `${mallaActual?.materias.find(m => m.id.toString() === materiaSeleccionada)?.nombre} - ${grupoSeleccionado}`
+                          : `${mallaActual?.materias.find(m => m.id.toString() === materiaSeleccionada)?.nombre} - Todos los grupos`
+                      ) : 'Todos los cursos'
+                    }
                   </CardDescription>
                 </div>
                 <div className="flex items-center gap-2">
@@ -1037,75 +1677,43 @@ export default function Planeacion() {
         </div>
       </div>
 
-      {/* Panel Derecho - Contextual */}
-      <div className="w-1/5 space-y-4 p-6">
-        <Card className="border-[#e3e4ec] bg-white shadow-sm rounded-lg">
-          <CardHeader>
-            <CardTitle className="text-base text-[#3f4159]">Curso Activo</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-[#596b88]">Grupo:</span>
-                <span className="text-[#3f4159]">01</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[#596b88]">Docente:</span>
-                <span className="text-[#3f4159]">Dr. Mendoza</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[#596b88]">Sesiones:</span>
-                <span className="text-[#3f4159]">8/10</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[#596b88]">Modalidad:</span>
-                <span className="text-[#3f4159]">Presencial</span>
-              </div>
-            </div>
-            
-            <div className="pt-3 border-t border-[#e3e4ec]">
-              <div className="text-base font-medium text-[#3f4159] mb-3">Validaciones</div>
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-[#4fb37b]">
-                  <CheckCircle className="h-4 w-4" />
-                  <span className="text-sm">Horas cumplidas</span>
-                </div>
-                <div className="flex items-center gap-2 text-[#e9683b]">
-                  <AlertTriangle className="h-4 w-4" />
-                  <span className="text-sm">Cruce de horario</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="pt-4 space-y-3">
+      {/* Panel Flotante - Acciones */}
+      <div className="fixed top-52 right-6 z-50">
+        {/* Botón flotante principal */}
+        <div className="relative">
               <Button 
-                className="w-full bg-[#5555ea] hover:bg-[#4a4ad9] text-white"
+            onClick={() => setPanelFlotanteAbierto(!panelFlotanteAbierto)}
+            className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white rounded-full w-12 h-12 shadow-lg hover:shadow-xl transition-all"
               >
-                Confirmar cambios
+            <MoreHorizontal className="h-5 w-5" />
               </Button>
-              <Button 
-                variant="outline" 
-                className="w-full border-[#e3e4ec] hover:bg-[#e4e9ff] hover:border-[#5555ea]"
-              >
-                Exportar
-              </Button>
+          
+          {/* Indicador de notificaciones */}
+          <div className="absolute -top-1 -right-1 bg-[#e9683b] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            3
             </div>
-          </CardContent>
-        </Card>
       </div>
 
-      {/* Panel Flotante de Acciones */}
-      <div className="fixed bottom-6 right-6 w-64">
-        <Card className="border-[#e3e4ec] bg-white shadow-lg rounded-lg">
-          <CardContent className="p-4 space-y-3">
+        {/* Overlay para cerrar el panel */}
+        {panelFlotanteAbierto && (
+          <div 
+            className="fixed inset-0 z-40" 
+            onClick={() => setPanelFlotanteAbierto(false)}
+          />
+        )}
+
+        {/* Panel expandible */}
+        {panelFlotanteAbierto && (
+          <div className="absolute top-16 right-0 w-64 bg-white rounded-lg shadow-xl border border-[#e3e4ec] p-4 space-y-3 z-50">
             {/* Estado de fase de recomendaciones */}
-            <div className={`p-3 rounded-lg border ${
+            <div className={`p-3 rounded-lg border cursor-pointer hover:shadow-sm transition-all ${
               getEstadoFase() === 'activa' 
                 ? 'bg-[#e6f7ef] border-[#4fb37b]' 
                 : getEstadoFase() === 'bloqueada'
                 ? 'bg-[#fdecec] border-[#e9683b]'
                 : 'bg-[#fff8e6] border-[#b8860b]'
-            }`}>
+            }`}
+            onClick={() => setModalConfiguracionFase(true)}>
               <div className="flex items-center gap-2">
                 {getEstadoFase() === 'activa' ? (
                   <Unlock className="h-4 w-4 text-[#4fb37b]" />
@@ -1119,42 +1727,61 @@ export default function Planeacion() {
                     ? 'text-[#e9683b]'
                     : 'text-[#b8860b]'
                 }`}>
-                  {getEstadoFase() === 'activa' ? 'Fase Activa' : getEstadoFase() === 'bloqueada' ? 'Fase Bloqueada' : 'Fase Cerrada'}
+                  Fase Activa
                 </span>
+                <Settings className="h-4 w-4 text-[#596b88] ml-auto" />
               </div>
             </div>
             
+            {/* Botones de acción */}
+            <div className="space-y-2">
             <Button 
               variant="ghost" 
-              className={`w-full justify-start text-[#3f4159] hover:bg-[#e4e9ff] ${
+                size="sm"
+                className={`w-full justify-start text-sm text-[#3f4159] hover:bg-[#e4e9ff] h-10 ${
                 !esFaseActiva() ? 'opacity-50 cursor-not-allowed' : ''
               }`}
-              onClick={() => esFaseActiva() && setDrawerAbierto(true)}
+                onClick={() => {
+                  if (esFaseActiva()) {
+                    setDrawerAbierto(true);
+                    setPanelFlotanteAbierto(false);
+                  }
+                }}
               disabled={!esFaseActiva()}
             >
               <MessageSquare className="h-4 w-4 mr-3" />
-              Sugerencias/Cambios
-              <Badge className="ml-auto bg-[#e9683b] text-white text-xs">3</Badge>
+                Sugerencias
+                <Badge className="ml-auto bg-[#e9683b] text-white text-xs h-5 w-5 p-0 flex items-center justify-center">3</Badge>
             </Button>
             <Button 
               variant="ghost" 
-              className="w-full justify-start text-[#3f4159] hover:bg-[#e4e9ff]"
-              onClick={() => setHistorialAbierto(true)}
+                size="sm"
+                className="w-full justify-start text-sm text-[#3f4159] hover:bg-[#e4e9ff] h-10"
+                onClick={() => {
+                  setHistorialAbierto(true);
+                  setPanelFlotanteAbierto(false);
+                }}
             >
               <History className="h-4 w-4 mr-3" />
-              Historial de versiones
+                Historial
             </Button>
             <Button 
               variant="ghost" 
-              className="w-full justify-start text-[#3f4159] hover:bg-[#e4e9ff]"
-              onClick={() => setPublicarAbierto(true)}
+                size="sm"
+                className="w-full justify-start text-sm text-[#3f4159] hover:bg-[#e4e9ff] h-10"
+                onClick={() => {
+                  setPublicarAbierto(true);
+                  setPanelFlotanteAbierto(false);
+                }}
             >
               <Send className="h-4 w-4 mr-3" />
               Publicar
             </Button>
-          </CardContent>
-        </Card>
+            </div>
+          </div>
+        )}
       </div>
+
 
       {/* Modales y Drawers */}
       <SuggestionsDrawer 
@@ -1181,17 +1808,17 @@ export default function Planeacion() {
       <GeneratePlanningModal
         open={modalPlaneacion}
         onOpenChange={setModalPlaneacion}
-        curso={materiaActual ? {
-          nombre: materiaActual.nombre,
-          codigo: materiaActual.codigo,
-          grupo: "01"
+        curso={mallaActual ? {
+          nombre: `${programaActual?.nombre} - Malla ${mallaActual.periodo}`,
+          codigo: mallaActual.id,
+          grupo: "Todos"
         } : undefined}
       />
 
       <ProgrammingConfigModal
         open={modalConfiguracionProgramacion}
         onOpenChange={setModalConfiguracionProgramacion}
-        grupoData={grupoSeleccionado}
+        grupoData={grupoConfiguracion}
       />
 
       {/* Modal de configuración de fase de recomendaciones */}
@@ -1363,6 +1990,109 @@ export default function Planeacion() {
               }}
             >
               Guardar configuración
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de Selección de Malla */}
+      <Dialog open={modalSeleccionMalla} onOpenChange={setModalSeleccionMalla}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              Seleccionar Malla Curricular
+            </DialogTitle>
+            <DialogDescription>
+              Elige la malla curricular que deseas visualizar y planificar
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            {/* Información del programa actual */}
+            <Card className="bg-[#f7f8fe] border-[#e3e4ec]">
+              <CardContent className="pt-4">
+                <div className="flex items-center gap-3">
+                  <GraduationCap className="h-5 w-5 text-[#5555ea]" />
+                  <div>
+                    <div className="font-medium text-[#3f4159]">{programaActual?.nombre}</div>
+                    <div className="text-sm text-[#596b88]">
+                      {programaActual?.mallas.length} mallas disponibles
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Lista de mallas */}
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {programaActual?.mallas.map((malla) => (
+                <div
+                  key={malla.id}
+                  className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer transition-all ${
+                    mallaActiva === malla.id
+                      ? 'bg-[#e4e9ff] border-[#5555ea]'
+                      : 'bg-white border-[#e3e4ec] hover:border-[#5555ea] hover:bg-[#f7f8fe]'
+                  }`}
+                  onClick={() => {
+                    handleSelectMalla(malla.id);
+                    setModalSeleccionMalla(false);
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      malla.activa ? 'bg-[#4fb37b]' : 'bg-[#6b7280]'
+                    }`}></div>
+                    <div>
+                      <div className="font-medium text-[#3f4159]">
+                        Malla {malla.periodo}
+                      </div>
+                      <div className="text-sm text-[#596b88]">
+                        {malla.materias.length} materias • {Math.max(...malla.materias.map(m => m.semestre))} semestres
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {malla.activa && (
+                      <Badge className="bg-[#4fb37b] text-white text-xs px-2 py-1">
+                        Activa
+                      </Badge>
+                    )}
+                    {mallaActiva === malla.id && (
+                      <CheckCircle className="h-5 w-5 text-[#5555ea]" />
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Información adicional */}
+            <Card className="bg-[#f7f8fe] border-[#e3e4ec]">
+              <CardContent className="pt-4">
+                <div className="flex items-start gap-2">
+                  <AlertTriangle className="h-4 w-4 text-[#b8860b] mt-0.5" />
+                  <div className="text-sm">
+                    <p className="font-medium text-[#3f4159]">Información</p>
+                    <ul className="text-[#596b88] mt-1 space-y-1">
+                      <li>• Solo puedes planificar cursos de la malla seleccionada</li>
+                      <li>• Las mallas activas son las que están en uso actualmente</li>
+                      <li>• Las mallas históricas son para consulta y referencia</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <DialogFooter className="flex gap-2">
+            <Button variant="outline" onClick={() => setModalSeleccionMalla(false)}>
+              Cancelar
+            </Button>
+            <Button 
+              onClick={() => setModalSeleccionMalla(false)}
+              className="bg-[#5555ea] hover:bg-[#4a4ad9] text-white"
+            >
+              Confirmar selección
             </Button>
           </DialogFooter>
         </DialogContent>
