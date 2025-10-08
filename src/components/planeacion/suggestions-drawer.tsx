@@ -18,7 +18,10 @@ import {
   X,
   ChevronRight,
   Lock,
-  Unlock
+  Unlock,
+  MessageSquare,
+  History,
+  Eye
 } from "lucide-react";
 import {
   Sheet,
@@ -35,6 +38,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { SuggestionReviewModal } from "./suggestion-review-modal";
 
 interface Suggestion {
   id: number;
@@ -51,6 +55,12 @@ interface Suggestion {
   cambiosPropuestos: {
     actual: string;
     propuesto: string;
+  };
+  comentarios?: {
+    aprobacion?: string;
+    rechazo?: string;
+    fechaDecision?: string;
+    revisor?: string;
   };
 }
 
@@ -102,6 +112,53 @@ const mockSugerencias: Suggestion[] = [
     cambiosPropuestos: {
       actual: "Sin sesión programada",
       propuesto: "Miércoles 30 Oct, 6:00-9:00 PM, Virtual"
+    },
+    comentarios: {
+      aprobacion: "Aprobado. La sesión de recuperación es necesaria para mantener el cronograma académico.",
+      fechaDecision: "2025-10-16",
+      revisor: "Dra. María López"
+    }
+  },
+  {
+    id: 4,
+    tipo: "sugerencia_director",
+    curso: "Análisis de Datos",
+    grupo: "01",
+    fechaAfectada: "2025-09-15",
+    solicitante: "Dr. Luis Pérez",
+    resumen: "Cambio de aula por mantenimiento",
+    estado: "rechazada",
+    descripcion: "Solicito cambiar el aula debido a trabajos de mantenimiento programados en el laboratorio de computación.",
+    fechaCreacion: "2025-09-10",
+    cambiosPropuestos: {
+      actual: "Lunes 15 Sep, 2:00-5:00 PM, Lab 101",
+      propuesto: "Lunes 15 Sep, 2:00-5:00 PM, Aula 205"
+    },
+    comentarios: {
+      rechazo: "No se puede aprobar. El aula 205 no tiene la capacidad técnica requerida para el laboratorio de análisis de datos.",
+      fechaDecision: "2025-09-12",
+      revisor: "Ing. Carlos Ruiz"
+    }
+  },
+  {
+    id: 5,
+    tipo: "propuesta_docente",
+    curso: "Metodología de Investigación",
+    grupo: "02",
+    fechaAfectada: "2025-08-20",
+    solicitante: "Dra. Patricia Vega",
+    resumen: "Sesión virtual por viaje académico",
+    estado: "aplicada",
+    descripcion: "Solicito cambiar la sesión presencial a virtual debido a mi participación en un congreso internacional de metodología.",
+    fechaCreacion: "2025-08-15",
+    cambiosPropuestos: {
+      actual: "Martes 20 Ago, 6:00-9:00 PM, Presencial",
+      propuesto: "Martes 20 Ago, 6:00-9:00 PM, Virtual"
+    },
+    comentarios: {
+      aprobacion: "Aprobado y aplicado. La sesión se realizó exitosamente en modalidad virtual.",
+      fechaDecision: "2025-08-16",
+      revisor: "Dr. Miguel Torres"
     }
   }
 ];
@@ -116,6 +173,16 @@ export function SuggestionsDrawer({ open, onOpenChange }: SuggestionsDrawerProps
   const [filterEstado, setFilterEstado] = useState<string>("todas");
   const [filterTipo, setFilterTipo] = useState<string>("todos");
   const [searchTerm, setSearchTerm] = useState("");
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("pendientes");
+
+  // Resetear filtros cuando cambie de tab
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    setSearchTerm("");
+    setFilterEstado("todas");
+    setFilterTipo("todos");
+  };
 
   // NUEVO: Estado para fase de recomendaciones
   const [faseRecomendaciones, setFaseRecomendaciones] = useState({
@@ -166,12 +233,12 @@ export function SuggestionsDrawer({ open, onOpenChange }: SuggestionsDrawerProps
 
   const getEstadoColor = (estado: string) => {
     switch (estado) {
-      case 'pendiente': return 'bg-status-draft text-muted-foreground';
-      case 'en_revision': return 'bg-secondary text-secondary-foreground';
-      case 'aprobada': return 'bg-status-approved text-success-foreground';
-      case 'rechazada': return 'bg-status-conflict text-destructive-foreground';
-      case 'aplicada': return 'bg-status-published text-primary-foreground';
-      default: return 'bg-muted text-muted-foreground';
+      case 'pendiente': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'en_revision': return 'bg-purple-100 text-purple-800 border-purple-200';
+      case 'aprobada': return 'bg-green-100 text-green-800 border-green-200';
+      case 'rechazada': return 'bg-red-100 text-red-800 border-red-200';
+      case 'aplicada': return 'bg-blue-100 text-blue-800 border-blue-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
@@ -179,7 +246,19 @@ export function SuggestionsDrawer({ open, onOpenChange }: SuggestionsDrawerProps
     return tipo === 'propuesta_docente' ? User : AlertTriangle;
   };
 
-  const filteredSugerencias = mockSugerencias.filter(s => {
+  // Separar sugerencias por estado
+  const sugerenciasPendientes = mockSugerencias.filter(s => 
+    s.estado === 'pendiente' || s.estado === 'en_revision'
+  );
+  
+  const sugerenciasHistorial = mockSugerencias.filter(s => 
+    s.estado === 'aprobada' || s.estado === 'rechazada' || s.estado === 'aplicada'
+  );
+
+  // Obtener sugerencias según el tab activo
+  const currentSugerencias = activeTab === 'pendientes' ? sugerenciasPendientes : sugerenciasHistorial;
+  
+  const filteredSugerencias = currentSugerencias.filter(s => {
     const matchesEstado = filterEstado === 'todas' || s.estado === filterEstado;
     const matchesTipo = filterTipo === 'todos' || s.tipo === filterTipo;
     const matchesSearch = searchTerm === '' || 
@@ -190,14 +269,25 @@ export function SuggestionsDrawer({ open, onOpenChange }: SuggestionsDrawerProps
     return matchesEstado && matchesTipo && matchesSearch;
   });
 
-  const handleApprove = (id: number) => {
+
+
+  const handleApprove = (id: number, comentario: string) => {
     // Implementar lógica de aprobación
-    console.log(`Aprobar sugerencia ${id}`);
+    console.log(`Aprobar sugerencia ${id} - Comentario: ${comentario}`);
+    setReviewModalOpen(false);
+    setSelectedSuggestion(null);
   };
 
-  const handleReject = (id: number, motivo: string) => {
+  const handleReject = (id: number, comentario: string) => {
     // Implementar lógica de rechazo
-    console.log(`Rechazar sugerencia ${id} - Motivo: ${motivo}`);
+    console.log(`Rechazar sugerencia ${id} - Comentario: ${comentario}`);
+    setReviewModalOpen(false);
+    setSelectedSuggestion(null);
+  };
+
+  const handleReviewSuggestion = (suggestion: Suggestion) => {
+    setSelectedSuggestion(suggestion);
+    setReviewModalOpen(true);
   };
 
   return (
@@ -241,215 +331,274 @@ export function SuggestionsDrawer({ open, onOpenChange }: SuggestionsDrawerProps
             )}
           </SheetHeader>
 
-          {!selectedSuggestion ? (
-            <div className="flex-1 flex flex-col p-6 space-y-4">
-              {/* Filtros y búsqueda */}
-              <div className="space-y-4">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Buscar por curso, docente o descripción..."
-                    className="pl-10"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-
-                <div className="flex gap-3">
-                  <Select value={filterTipo} onValueChange={setFilterTipo}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Tipo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="todos">Todos los tipos</SelectItem>
-                      <SelectItem value="propuesta_docente">Propuesta Docente</SelectItem>
-                      <SelectItem value="sugerencia_director">Sugerencia Director</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  <Select value={filterEstado} onValueChange={setFilterEstado}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Estado" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="todas">Todos los estados</SelectItem>
-                      <SelectItem value="pendiente">Pendiente</SelectItem>
-                      <SelectItem value="en_revision">En Revisión</SelectItem>
-                      <SelectItem value="aprobada">Aprobada</SelectItem>
-                      <SelectItem value="rechazada">Rechazada</SelectItem>
-                      <SelectItem value="aplicada">Aplicada</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+          <div className="flex-1 flex flex-col">
+            {/* Tabs para separar pendientes e historial */}
+            <Tabs value={activeTab} onValueChange={handleTabChange} defaultValue="pendientes" className="flex-1 flex flex-col">
+              <div className="px-6 pt-4">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="pendientes" className="flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4" />
+                    Pendientes ({sugerenciasPendientes.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="historial" className="flex items-center gap-2">
+                    <History className="h-4 w-4" />
+                    Historial ({sugerenciasHistorial.length})
+                  </TabsTrigger>
+                </TabsList>
               </div>
 
-              {/* Lista de sugerencias */}
-              <div className="flex-1 space-y-3 overflow-y-auto">
-                {filteredSugerencias.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <FileText className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                    <p>No hay sugerencias que coincidan con los filtros</p>
-                  </div>
-                ) : (
-                  filteredSugerencias.map((sugerencia) => {
-                    const TipoIcon = getTipoIcon(sugerencia.tipo);
-                    return (
-                      <Card 
-                        key={sugerencia.id}
-                        className="cursor-pointer hover:shadow-soft transition-all"
-                        onClick={() => setSelectedSuggestion(sugerencia)}
-                      >
-                        <CardContent className="p-4 space-y-3">
-                          <div className="flex items-start justify-between">
-                            <div className="flex items-center gap-2">
-                              <TipoIcon className="h-4 w-4 text-muted-foreground" />
-                              <Badge 
-                                variant="outline"
-                                className={getEstadoColor(sugerencia.estado)}
-                              >
-                                {sugerencia.estado.replace('_', ' ')}
-                              </Badge>
-                            </div>
-                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                          </div>
-
-                          <div>
-                            <h4 className="font-medium text-sm">
-                              {sugerencia.curso} - Grupo {sugerencia.grupo}
-                            </h4>
-                            <p className="text-xs text-muted-foreground mt-1">
-                              {sugerencia.resumen}
-                            </p>
-                          </div>
-
-                          <div className="flex items-center justify-between text-xs text-muted-foreground">
-                            <div className="flex items-center gap-2">
-                              <User className="h-3 w-3" />
-                              {sugerencia.solicitante}
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Calendar className="h-3 w-3" />
-                              {new Date(sugerencia.fechaAfectada).toLocaleDateString()}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    );
-                  })
-                )}
-              </div>
-            </div>
-          ) : (
-            // Vista de detalle
-            <div className="flex-1 flex flex-col p-6 space-y-6">
-              <div className="flex items-center gap-3">
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  onClick={() => setSelectedSuggestion(null)}
-                >
-                  ← Volver
-                </Button>
-                <Badge className={getEstadoColor(selectedSuggestion.estado)}>
-                  {selectedSuggestion.estado.replace('_', ' ')}
-                </Badge>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold">
-                    {selectedSuggestion.curso} - Grupo {selectedSuggestion.grupo}
-                  </h3>
-                  <p className="text-muted-foreground">{selectedSuggestion.resumen}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-muted-foreground">Solicitante:</span>
-                    <p className="font-medium">{selectedSuggestion.solicitante}</p>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Fecha afectada:</span>
-                    <p className="font-medium">
-                      {new Date(selectedSuggestion.fechaAfectada).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Tipo:</span>
-                    <p className="font-medium">
-                      {selectedSuggestion.tipo === 'propuesta_docente' ? 'Propuesta Docente' : 'Sugerencia Director'}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Creado:</span>
-                    <p className="font-medium">
-                      {new Date(selectedSuggestion.fechaCreacion).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-medium mb-2">Descripción</h4>
-                  <p className="text-sm text-muted-foreground bg-muted p-3 rounded-lg">
-                    {selectedSuggestion.descripcion}
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-medium mb-3">Comparación de Cambios</h4>
-                  <div className="space-y-3">
-                    <div className="bg-status-conflict p-3 rounded-lg">
-                      <div className="text-xs font-medium text-muted-foreground mb-1">ACTUAL</div>
-                      <div className="text-sm">{selectedSuggestion.cambiosPropuestos.actual}</div>
-                    </div>
-                    <div className="bg-status-approved p-3 rounded-lg">
-                      <div className="text-xs font-medium text-muted-foreground mb-1">PROPUESTO</div>
-                      <div className="text-sm">{selectedSuggestion.cambiosPropuestos.propuesto}</div>
-                    </div>
-                  </div>
-                </div>
-
-                {selectedSuggestion.adjuntos && selectedSuggestion.adjuntos > 0 && (
-                  <div>
-                    <h4 className="font-medium mb-2">Adjuntos ({selectedSuggestion.adjuntos})</h4>
-                    <Button variant="outline" size="sm">
-                      <FileText className="h-4 w-4 mr-2" />
-                      Ver adjuntos
-                    </Button>
-                  </div>
-                )}
-
-                {selectedSuggestion.estado === 'pendiente' && (
-                  <div className="flex flex-col gap-3 pt-4 border-t">
-                    <h4 className="font-medium">Acciones</h4>
-                    <div className="flex gap-2">
-                      <Button 
-                        className="flex-1"
-                        onClick={() => handleApprove(selectedSuggestion.id)}
-                      >
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Aprobar
-                      </Button>
-                      <Button 
-                        variant="destructive"
-                        className="flex-1"
-                        onClick={() => handleReject(selectedSuggestion.id, '')}
-                      >
-                        <XCircle className="h-4 w-4 mr-2" />
-                        Rechazar
-                      </Button>
-                    </div>
-                    <Textarea 
-                      placeholder="Comentarios adicionales (opcional para aprobación, requerido para rechazo)..."
-                      className="mt-2"
+              <TabsContent value="pendientes" className="flex-1 flex flex-col p-6 space-y-4">
+                {/* Filtros y búsqueda */}
+                <div className="space-y-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Buscar por curso, docente o descripción..."
+                      className="pl-10"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
-                )}
-              </div>
-            </div>
-          )}
+
+                  <div className="flex gap-3">
+                    <Select value={filterTipo} onValueChange={setFilterTipo}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Tipo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="todos">Todos los tipos</SelectItem>
+                        <SelectItem value="propuesta_docente">Propuesta Docente</SelectItem>
+                        <SelectItem value="sugerencia_director">Sugerencia Director</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    <Select value={filterEstado} onValueChange={setFilterEstado}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Estado" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="todas">Todos los estados</SelectItem>
+                        <SelectItem value="pendiente">Pendiente</SelectItem>
+                        <SelectItem value="en_revision">En Revisión</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {/* Lista de sugerencias */}
+                <div className="flex-1 space-y-3 overflow-y-auto min-h-0">
+                  {filteredSugerencias.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <FileText className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p>No hay sugerencias pendientes</p>
+                    </div>
+                  ) : (
+                    filteredSugerencias.map((sugerencia) => {
+                      const TipoIcon = getTipoIcon(sugerencia.tipo);
+                      return (
+                        <Card 
+                          key={sugerencia.id}
+                          className="cursor-pointer hover:shadow-soft transition-all"
+                          onClick={() => handleReviewSuggestion(sugerencia)}
+                        >
+                          <CardContent className="p-4 space-y-3">
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-center gap-2">
+                                <TipoIcon className="h-4 w-4 text-muted-foreground" />
+                                <Badge 
+                                  variant="outline"
+                                  className={getEstadoColor(sugerencia.estado)}
+                                >
+                                  {sugerencia.estado.replace('_', ' ')}
+                                </Badge>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleReviewSuggestion(sugerencia);
+                                  }}
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                              </div>
+                            </div>
+
+                            <div>
+                              <h4 className="font-medium text-sm">
+                                {sugerencia.curso} - Grupo {sugerencia.grupo}
+                              </h4>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {sugerencia.resumen}
+                              </p>
+                            </div>
+
+                            <div className="flex items-center justify-between text-xs text-muted-foreground">
+                              <div className="flex items-center gap-2">
+                                <User className="h-3 w-3" />
+                                {sugerencia.solicitante}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Calendar className="h-3 w-3" />
+                                {new Date(sugerencia.fechaAfectada).toLocaleDateString()}
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      );
+                    })
+                  )}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="historial" className="flex-1 flex flex-col p-6 space-y-4">
+                {/* Filtros y búsqueda */}
+                <div className="space-y-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Buscar en historial..."
+                      className="pl-10"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="flex gap-3">
+                    <Select value={filterTipo} onValueChange={setFilterTipo}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Tipo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="todos">Todos los tipos</SelectItem>
+                        <SelectItem value="propuesta_docente">Propuesta Docente</SelectItem>
+                        <SelectItem value="sugerencia_director">Sugerencia Director</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    <Select value={filterEstado} onValueChange={setFilterEstado}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Estado" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="todas">Todos los estados</SelectItem>
+                        <SelectItem value="aprobada">Aprobada</SelectItem>
+                        <SelectItem value="rechazada">Rechazada</SelectItem>
+                        <SelectItem value="aplicada">Aplicada</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {/* Lista de sugerencias */}
+                <div className="flex-1 space-y-3 overflow-y-auto min-h-0">
+                  {filteredSugerencias.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <History className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p>No hay sugerencias en el historial</p>
+                    </div>
+                  ) : (
+                    filteredSugerencias.map((sugerencia) => {
+                      const TipoIcon = getTipoIcon(sugerencia.tipo);
+                      return (
+                        <Card 
+                          key={sugerencia.id}
+                          className="cursor-pointer hover:shadow-soft transition-all"
+                          onClick={() => handleReviewSuggestion(sugerencia)}
+                        >
+                          <CardContent className="p-4 space-y-3">
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-center gap-2">
+                                <TipoIcon className="h-4 w-4 text-muted-foreground" />
+                                <Badge 
+                                  variant="outline"
+                                  className={getEstadoColor(sugerencia.estado)}
+                                >
+                                  {sugerencia.estado.replace('_', ' ')}
+                                </Badge>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleReviewSuggestion(sugerencia);
+                                  }}
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                              </div>
+                            </div>
+
+                            <div>
+                              <h4 className="font-medium text-sm">
+                                {sugerencia.curso} - Grupo {sugerencia.grupo}
+                              </h4>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {sugerencia.resumen}
+                              </p>
+                            </div>
+
+                            <div className="flex items-center justify-between text-xs text-muted-foreground">
+                              <div className="flex items-center gap-2">
+                                <User className="h-3 w-3" />
+                                {sugerencia.solicitante}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Calendar className="h-3 w-3" />
+                                {new Date(sugerencia.fechaAfectada).toLocaleDateString()}
+                              </div>
+                            </div>
+
+                            {/* Mostrar comentarios si existen */}
+                            {sugerencia.comentarios && (
+                              <div className="pt-2 border-t">
+                                <div className="text-xs text-muted-foreground">
+                                  {sugerencia.comentarios.aprobacion && (
+                                    <div className="flex items-center gap-1 text-green-600">
+                                      <CheckCircle className="h-3 w-3" />
+                                      <span>Aprobado</span>
+                                    </div>
+                                  )}
+                                  {sugerencia.comentarios.rechazo && (
+                                    <div className="flex items-center gap-1 text-red-600">
+                                      <XCircle className="h-3 w-3" />
+                                      <span>Rechazado</span>
+                                    </div>
+                                  )}
+                                  {sugerencia.comentarios.revisor && (
+                                    <span className="text-muted-foreground">
+                                      por {sugerencia.comentarios.revisor}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </CardContent>
+                        </Card>
+                      );
+                    })
+                  )}
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
       </SheetContent>
+      
+      {/* Modal de revisión detallada */}
+      <SuggestionReviewModal
+        open={reviewModalOpen}
+        onOpenChange={setReviewModalOpen}
+        suggestion={selectedSuggestion}
+        onApprove={handleApprove}
+        onReject={handleReject}
+      />
     </Sheet>
   );
 }
